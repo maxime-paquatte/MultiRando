@@ -1,0 +1,77 @@
+﻿@* Generator: MvcHelper *@
+@using Nancy.Helpers
+@inherits MultiRando.Web.Core.Helpers.RazorViewBase<dynamic>
+@{
+    Layout = "Views/Shared/_LayoutDefault.cshtml";
+    Reference("ScriptsApp/admin/Resources");
+    Reference("HtmlTemplates/PaginationTemplate.Htm");
+    Reference("HtmlTemplates/PromptFreeTxt.Htm");
+}
+
+<div class="container" data-bind="inject: ResourcesListController, with: Resources">
+
+    <div class="page-header clearfix">
+        <div class="col-xs-6 pull-right" data-bind="with: filter">
+            <form class="form-search" data-bind="submit: submit">
+                <div class="input-group">
+                    <input type="text" data-bind="value: filter" class="form-control" placeholder="* means any character" />
+                    <span class="input-group-btn">
+                        <button class="btn btn-default" type="submit">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </span>
+                </div>
+            </form>
+
+        </div>
+        <div class="clearfix pull-right">
+            @if (true)
+            { <a class="btn btn-default" href="/ChangeCulture/9?ReturnUrl=@HttpUtility.UrlEncode(Request.Url.ToString())">Back to english</a> }
+            else
+            { <a class="btn btn-default" href="/ChangeCulture/-1?ReturnUrl=@HttpUtility.UrlEncode(Request.Url.ToString())">Switch to debug</a> }
+            <button class="btn btn-default" onclick="localStorage.clear()">
+                Clear Cache
+            </button>
+        </div>
+        <h1>@Res("Res.Page.Resources.Title")</h1>
+    </div>
+
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th style="width: 16px"></th>
+                <th style="width: 20%">ResName</th>
+                <!-- ko foreach: cultures -->
+                <th data-bind="text: Name"></th>
+                <!-- /ko -->
+            </tr>
+        </thead>
+        <tbody data-bind="foreach: resources">
+            <tr>
+                <td>
+                    <a href="#" data-bind=" popover : Comment, click: $root.Resources.editComment">
+                        <i class="fa " data-bind="css: Comment() ? 'fa-comment' : 'fa-comment-o' "></i>
+                    </a>
+                </td>
+                <td>
+                    <span data-bind="text: ResName"></span>
+                    <i class="fa fa-code" data-bind="visible: TemplateKeys, popover : TemplateKeys"></i>
+                </td>
+                <!-- ko foreach: Values -->
+                <td>
+                    <div class="input-group">
+                        <input type="text" class="form-control" data-bind="value: Value, click: $root.Resources.fieldClick" />
+                        <span class="input-group-btn">
+                            <button class="btn btn-default" type="button" data-bind="click: save">
+                                <i class="fa fa-check"></i>
+                            </button>
+                        </span>
+                    </div>
+                </td>
+                <!-- /ko -->
+            </tr>
+        </tbody>
+    </table>
+    <div data-bind="template: { name: 'HtmlTemplates-PaginationTemplate', data: pagination }"></div>
+</div>

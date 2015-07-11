@@ -1,0 +1,7 @@
+*.log
+**/bin/
+**/obj/
+*.user
+*.suo
+packages/
+Private/Logs/

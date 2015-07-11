@@ -1,0 +1,51 @@
+﻿@* Generator: MvcHelper *@
+@inherits MultiRando.Web.Core.Helpers.RazorViewBase<dynamic>
+@{
+
+    // css
+    Reference("Content");
+    Reference("ContentApp/default.css");
+
+    // scripts
+    Reference("Scripts");
+
+
+    Reference("ScriptsApp/main.js");
+
+
+    Reference("ScriptsApp/ep.modal.js");
+}
+
+
+
+<!DOCTYPE html>
+
+<html kb-inject>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    <title></title>
+    @Html.RenderStylesheets()
+
+    <!--[if lt IE 9]>
+        <script src="/Content/ie6/warning.js"></script>
+        <script>window.onload=function(){e('/Content/ie6/');}</script>
+    <![endif]-->
+
+</head>
+<body  class="">
+
+    <!-- PAGE CONTENT BEGINS -->
+    @RenderBody()
+    <!-- PAGE CONTENT ENDS -->
+
+    @Html.Partial("Shared/_Modale")
+    @Html.RenderHtmlTemplates()
+
+    @Html.RenderScripts()
+    @Html.RenderScripts("post")
+    @RenderSection("scripts", false)
+</body>
+</html>

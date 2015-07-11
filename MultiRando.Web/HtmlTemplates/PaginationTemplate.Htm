@@ -1,0 +1,27 @@
+﻿<div class="row">
+    <div class="col-xs-12 col-sm-6" style="text-align: left">
+        <div class="centered-xs">
+            <span><span data-bind="text: FirstItemIndex"></span>- <span
+                data-bind="text: LastItemIndex"></span>of <span data-bind="    text: Total"></span>
+                items</span>
+            <select class="span2" data-bind="options: PageSizeList, value: PerPage">
+            </select>
+            <span>Per Page</span>
+        </div>
+    </div>
+
+    <div class="col-xs-12 col-sm-6" style="text-align: right">
+        <div class="centered-xs">
+            <button class="btn btn-sm btn-default" data-bind="click: prevPage, disable: !hasPrevPage()">
+                <i class="fa fa-angle-left"></i>
+            </button>
+            <span class="input-prepend input-append" style="display: inline">
+                <span class="add-on">Page</span><input class="input-mini" type="text" data-bind="value: Page"><span
+                    class="add-on" data-bind="text: ' / ' + TotalPageCount()"></span>
+            </span>
+            <button class="btn btn-default btn-sm" data-bind="click: nextPage, disable: !hasNextPage()">
+                <i class="fa fa-angle-right"></i>
+            </button>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,69 @@
+﻿@* Generator: MvcHelper *@
+@inherits MultiRando.Web.Core.Helpers.RazorViewBase<dynamic>
+
+@{
+    Layout = "Views/Shared/_LayoutDefault.cshtml";
+    Reference("ScriptsApp/admin/Messaging");
+}
+
+<div class="container-fluid" data-bind="inject: MessagingController, with: Messaging">
+
+    <div class="page-header ">
+        <div class="col-xs-3 pull-right">
+            <input type="text" class="form-control" id="companyIdToAdd" data-bind="textInput: filter" placeholder="filter" />
+        </div>
+        <h1>Messaging <a href="#" data-bind="click: refresh"><i class="fa fa-refresh" data-bind="css : loading() ? 'fa-spin' :''"></i></a></h1>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            <table>
+                <tbody data-bind="foreach: filtered">
+                    <tr>
+                        <td>
+                            <a href="#" data-bind="text: $data, click: $parent.openMessage"></a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="col-md-8">
+
+            <div data-bind="with: currentMessage">
+                <h3><span data-bind="text: name"></span> (<span data-bind="text: kind"></span>)</h3>
+
+                <div>
+                    <pre data-bind="html: $parent.sample"></pre>
+                </div>
+
+                <div data-bind="foreach: properties" class="form-horizontal">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label"><span data-bind="text: name"></span> (<span data-bind="text: propertyType"></span>)</label>
+                        <div class="col-sm-8">
+                            <!-- ko if: isXml -->
+                            <textarea class="form-control" data-bind="value: val"></textarea>
+                            <!-- /ko -->
+                            <!-- ko if: propertyType == 'System.DateTime' -->
+                            <div class="input-group input-group-sm">
+                                <input type="text" id="date" class="form-control input-sm" data-bind="datepicker: val, dateFormat: 'yyyy-mm-dd'">
+                                <span class="input-group-btn">
+                                    <button class="btn btn-white btn-sm" type="button">
+                                        <i class="fa fa-calendar"></i>
+                                    </button>
+                                </span>
+                            </div>
+                            <!-- /ko -->
+                            <!-- ko ifnot: isXml || propertyType == 'System.DateTime' -->
+                            <input type="text" class="form-control" data-bind="value: val" />
+                            <!-- /ko -->
+                        </div>
+                    </div>
+                </div>
+                <button class="btn btn-primary btn-block" data-bind="click: $parent.submit">Submit</button>
+
+
+
+            </div>
+            <pre data-bind="visible: result, text: result"></pre>
+        </div>
+    </div>
+</div>

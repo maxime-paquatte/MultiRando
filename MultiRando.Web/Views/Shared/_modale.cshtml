@@ -1,0 +1,43 @@
+﻿@* Generator: MvcHelper *@
+@using System
+
+@{
+    Html.Reference("ScriptsApp/ep.modal.js");
+}
+<div data-bind="inject: ModalController">
+    <!-- ko with: currentModal -->
+    <div id="default-modal" class="modal fade" data-bind="attr: { id: ModalId }">
+        <div class="modal-dialog" data-bind="css : { 'modal-lg' : isLarge }">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title" data-bind="text: ModalTitle"></h4>
+                </div>
+
+                <div data-bind="visible: loading" class="widget-box-overlay" style="height: 200px;"><i style="font-size: 100px;" class="fa fa-spinner fa-spin white"></i></div>
+                <!-- ko if: contentHtml -->
+                <div class="modal-body" style="max-height: 420px; overflow-y: auto;">
+                    <p class="modal-content" data-bind="html: contentHtml"></p>
+                </div>
+                <!-- /ko -->
+                <!-- ko ifnot: contentHtml -->
+                <div class="modal-body" style="max-height: 420px; overflow-y: auto;" data-bind="template: { name: contentTemplateName, data: contentModel, afterRender: afterRender }">
+                </div>
+                <!-- /ko -->
+                <div class="modal-footer">
+                    <!-- ko if: footerTemplateName -->
+                    <div class="pull-left" data-bind="template: { name: footerTemplateName, data: contentModel, afterRender: afterRender }"></div>
+                    <!-- /ko -->
+                    <!-- ko if: footerHtml -->
+                    <div class="pull-left" data-bind="html: footerHtml"></div>
+                    <!-- /ko -->
+                    <div class="pull-right">
+                        <button class="btn btn-default" data-bind="text: cancelButtonText, visible: cancelButtonText, click: cancelclick"></button>
+                        <button class="btn btn-default" data-bind="text: okButtonText, visible: okButtonText, click: okClick"></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /ko -->
+</div>
