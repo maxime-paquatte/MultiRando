@@ -232,6 +232,7 @@
     <Content Include="HtmlTemplates\PromptFreeTxt.Htm" />
     <Content Include="ScriptsApp\admin\Messaging\MessagingController.js" />
     <Content Include="ScriptsApp\admin\Resources\ResourcesListController.js" />
+    <Content Include="ScriptsApp\app\auth\LoginRegisterController.js" />
     <Content Include="ScriptsApp\app\urls.js" />
     <Content Include="ScriptsApp\main.js" />
     <Content Include="ScriptsApp\model\Resource.js" />
@@ -269,5 +270,4 @@ xcopy /s /y /R "$(SolutionDir)packages\Nancy.Viewengines.Razor.1.2.0\lib\Net40\N
   <Target Name="AfterBuild">
   </Target>
   -->
-
 </Project>

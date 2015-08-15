@@ -7,6 +7,7 @@ using MultiRando.Web.Core;
 using MultiRando.Web.Core.Helpers;
 using MultiRando.Web.Core.Services;
 using Nancy;
+using Nancy.Security;
 
 namespace MultiRando.Web.Modules
 {
@@ -15,6 +16,8 @@ namespace MultiRando.Web.Modules
 
         public MapModule(Config cfg)
         {
+            this.RequiresAuthentication();
+
             Get["/Map"] = x => View["Index"];
         }
     }
