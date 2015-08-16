@@ -204,6 +204,7 @@
     <Compile Include="Modules\Admin\MessagingModule.cs" />
     <Compile Include="Modules\Admin\ResourcesModule.cs" />
     <Compile Include="Modules\AuthModule.cs" />
+    <Compile Include="Modules\Api0Module.cs" />
     <Compile Include="Modules\MapModule.cs" />
     <Compile Include="Modules\HomeModule.cs" />
     <Compile Include="Modules\MessagingModule.cs" />
@@ -232,6 +233,7 @@
     <Content Include="HtmlTemplates\PromptFreeTxt.Htm" />
     <Content Include="ScriptsApp\admin\Messaging\MessagingController.js" />
     <Content Include="ScriptsApp\admin\Resources\ResourcesListController.js" />
+    <Content Include="ScriptsApp\app\map\MapController.js" />
     <Content Include="ScriptsApp\app\auth\LoginRegisterController.js" />
     <Content Include="ScriptsApp\app\urls.js" />
     <Content Include="ScriptsApp\main.js" />
@@ -242,6 +244,10 @@
     <ProjectReference Include="..\DbSetup\DbSetup.csproj">
       <Project>{8bc0b057-c78b-4fc4-98fe-a0e08001179b}</Project>
       <Name>DbSetup</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MultiRando.Message\MultiRando.Message.csproj">
+      <Project>{e06f5c09-845b-4c5d-b9e5-9b7220cccd57}</Project>
+      <Name>MultiRando.Message</Name>
     </ProjectReference>
     <ProjectReference Include="..\MultiRando.Model\MultiRando.Model.csproj">
       <Project>{44516e93-e863-4357-9eed-85e833a7f08c}</Project>

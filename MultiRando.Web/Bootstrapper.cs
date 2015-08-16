@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -35,6 +36,15 @@ namespace MultiRando.Web
 
             
             Discoverer.Discover(_store);
+
+
+            pipelines.BeforeRequest.AddItemToEndOfPipeline(ctx =>
+            {
+                var u = (ctx.CurrentUser as UserIdentity) ?? UserIdentity.GetAnonymous(ctx);
+                container.Resolve<IUserIdentityProvider>().CurrentUser = u;
+                ctx.Culture = CultureInfo.GetCultureInfo(u.CurrentCultureId == 12 ? "fr" : "en");
+                return null;
+            });
         }
 
         

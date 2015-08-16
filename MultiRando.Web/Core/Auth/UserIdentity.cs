@@ -23,6 +23,7 @@ namespace MultiRando.Web.Core.Auth
         public UserIdentity()
         {
             CurrentCultureId = 9;
+            Claims = Enumerable.Empty<string>();
         }
     }
 

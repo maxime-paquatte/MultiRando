@@ -30,6 +30,9 @@ namespace MultiRando.Web
             bundles.AddPerSubDirectory<ScriptBundle>("ScriptsApp/app");
             bundles.AddPerSubDirectory<ScriptBundle>("ScriptsApp/admin");
 
+
+            bundles.AddUrlWithAlias<ScriptBundle>("https://maps.googleapis.com/maps/api/js?key=AIzaSyCW6Uwlr80p8LYgGs2_t8ZFwmS9yyPIt9c", "scripts/google.map.js");
+
             bundles.AddUrlWithAlias(epcdnUrl + "scripts/ep.core.1.0.0.js", "ScriptsApp/ep.core.js", b => b.AddReference("~/Scripts"));
             bundles.AddUrlWithAlias(epcdnUrl + "scripts/ep.ModelBase.1.0.0.js", "ScriptsApp/ep.ModelBase.js", b => b.AddReference("~/Scripts"));
             bundles.AddUrlWithAlias(epcdnUrl + "scripts/ep.ViewModelBase.1.0.0.js", "ScriptsApp/ep.ViewModelBase.js", b => b.AddReference("~/Scripts"));

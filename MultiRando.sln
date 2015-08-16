@@ -16,6 +16,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DbSetup", "DbSetup\DbSetup.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MultiRando.Model", "MultiRando.Model\MultiRando.Model.csproj", "{44516E93-E863-4357-9EED-85E833A7F08C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MultiRando.Message", "MultiRando.Message\MultiRando.Message.csproj", "{E06F5C09-845B-4C5D-B9E5-9B7220CCCD57}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -34,6 +36,10 @@ Global
 		{44516E93-E863-4357-9EED-85E833A7F08C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{44516E93-E863-4357-9EED-85E833A7F08C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{44516E93-E863-4357-9EED-85E833A7F08C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E06F5C09-845B-4C5D-B9E5-9B7220CCCD57}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E06F5C09-845B-4C5D-B9E5-9B7220CCCD57}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E06F5C09-845B-4C5D-B9E5-9B7220CCCD57}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E06F5C09-845B-4C5D-B9E5-9B7220CCCD57}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
