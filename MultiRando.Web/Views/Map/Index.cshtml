@@ -8,8 +8,15 @@
 <div class="container-fluid" data-bind="inject : map.MapController">
     <div class="row" data-bind="with: Map">
         <div class="col-xs-3">
+            <div class="form-group">
+                <label class="col-lg-4 control-label">@Res("Res.Page.Map.CurrentActivity")</label>
+                <div class="col-lg-8">
+                    <select class="form-control" data-bind="value: currentActivity, options: activityFlags, optionsValue:'key', optionsText: function(v){return ep.res('Res.Page.Map.Segments.activityFlags.' + v.key);}"></select>
+                </div>
+            </div>
             <div>
                 <!-- ko ifnot: selectedRoute() -->
+                <!-- ko ifnot: editedSegment() -->
                 <button data-bind="click: addRoute" class="pull-right"><i class="fa fa-plus"></i></button>
                 <h2>@Res("Res.Page.Map.Routes")</h2>
                 <div class="list-group" data-bind="foreach: routes">
@@ -18,24 +25,65 @@
                         <span data-bind="text: Name"></span>
                     </a>
                 </div>
-
+                <!-- /ko -->
 
                 <button data-bind="click: addSegment" class="pull-right"><i class="fa fa-plus"></i></button>
                 <h2>@Res("Res.Page.Map.Segments")</h2>
-                <!-- ko if: editedSegment() -->
-                <div class="row">
+                <div class="row" data-bind="with: editedSegment">
+                    <h3>@Res("Res.Page.Map.Impassable")</h3>
+                    <!-- ko foreach: $root.Map.activityFlags -->
+                    <div class="checkbox">
+                        <label data-bind="click: function(){ $parent.ActivityFlag.toggleFlag(val); }">
+                            <i class="fa" data-bind="css: $parent.ActivityFlag.hasFlag(val) ? 'fa-check-square-o' : 'fa-square-o'"></i>
+                            <span data-bind="res : 'Res.Page.Map.Segments.activityFlags.' + key"></span>
+                        </label>
+                    </div>
+                    <!-- /ko -->
+                    <div class="checkbox">
+                        <label data-bind="click: function(){ ActivityFlag.toggleFlag(ActivityFlags.Private); }">
+                            <i class="fa" data-bind="css: ActivityFlag.hasFlag(ActivityFlags.Private) ? 'fa-check-square-o' : 'fa-square-o'"></i>
+                            <span data-bind="res : 'Res.Page.Map.Segments.activityFlags.Private' "></span>
+                        </label>
+                    </div>
+                    
+
+                    <h3>@Res("Res.Page.Map.Difficulty")</h3>
+                    <div class="form-group">
+                        <label class="col-lg-4 control-label">@Res("Res.Page.Map.Segments.Mudding")</label>
+                        <div class="col-lg-8">
+                            <div class="form-control-static">
+                                <span style=" font-size: 24px;" data-bind="starRating : Mudding"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-4 control-label">@Res("Res.Page.Map.Segments.Elevation")</label>
+                        <div class="col-lg-8">
+                            <div class="form-control-static">
+                                <span style=" font-size: 24px;" data-bind="starRating : Elevation"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-4 control-label">@Res("Res.Page.Map.Segments.Scree")</label>
+                        <div class="col-lg-8">
+                            <div class="form-control-static">
+                                <span style=" font-size: 24px;" data-bind="starRating : Scree"></span>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="col-xs-6">
-                        <button class="btn btn-block btn-default" data-bind="click: cancelSegment">
+                        <button class="btn btn-block btn-default" data-bind="click: $parent.cancelSegment">
                             @Res("Res.Page.Map.Segments.CancelButton")
                         </button>
                     </div>
                     <div class="col-xs-6">
-                        <button class="btn btn-block btn-primary" data-bind="click: saveSegment">
+                        <button class="btn btn-block btn-primary" data-bind="click: $parent.saveSegment">
                             @Res("Res.Page.Map.Segments.SaveButton")
                         </button>
                     </div>
                 </div>
-                <!-- /ko -->
                 <!-- /ko -->
                 <!-- ko if: selectedRoute() -->
                 <h2>
@@ -46,7 +94,7 @@
                 <button data-bind="click: saveRoute">@Res("Res.Std.Save")</button>
                 <button data-bind="click: deleteRoute">@Res("Res.Std.Delete")</button>
                 <!-- /ko -->
-               
+
             </div>
         </div>
         <div class="col-xs-9">
@@ -56,5 +104,44 @@
 </div>
 
 <script type="text/html" id="segment-details">
-    <h2 data-bind="text: SegmentId"></h2>
+    <div class="segment-popover">
+        <p>
+            <strong>@Res("Res.Page.Map.Impassable")</strong>
+            <!-- ko foreach: $root.Map.activityFlags -->
+            <!-- ko if:  $parent.ActivityFlag.hasFlag(val)-->
+            <span data-bind="res : 'Res.Page.Map.Segments.activityFlags.' + key"></span>
+            <!-- /ko -->
+            <!-- /ko -->
+            <!-- ko if:  ActivityFlag.hasFlag(ActivityFlags.Private)-->
+            <span data-bind="res : 'Res.Page.Map.Segments.activityFlags.Private'"></span>
+            <!-- /ko -->
+        </p>
+        <div>
+            <strong>@Res("Res.Page.Map.Difficulty")</strong>
+            <div class="form-group">
+                <label class="col-lg-4 control-label">@Res("Res.Page.Map.Segments.Mudding")</label>
+                <div class="col-lg-8">
+                    <div class="form-control-static">
+                        <span style=" font-size: 24px;" data-bind="starRating : Mudding"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-lg-4 control-label">@Res("Res.Page.Map.Segments.Elevation")</label>
+                <div class="col-lg-8">
+                    <div class="form-control-static">
+                        <span style=" font-size: 24px;" data-bind="starRating : Elevation"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-lg-4 control-label">@Res("Res.Page.Map.Segments.Scree")</label>
+                <div class="col-lg-8">
+                    <div class="form-control-static">
+                        <span style=" font-size: 24px;" data-bind="starRating : Scree"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </script>

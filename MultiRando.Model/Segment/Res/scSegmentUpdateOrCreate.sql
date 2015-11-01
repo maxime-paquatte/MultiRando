@@ -1,4 +1,4 @@
-﻿-- Version = 5.8.15, Package = MR.SegmentHome, Requires={   }
+﻿-- Version = 5.11.1, Package = MR.SegmentHome, Requires={   }
 
 
 ALTER procedure MR.scSegmentUpdateOrCreate
@@ -9,6 +9,12 @@ ALTER procedure MR.scSegmentUpdateOrCreate
 	@_CommandId			nvarchar(128),
 	
 	@SegmentId int,
+	@ActivityFlag int,
+
+	@Mudding tinyint,
+	@Scree tinyint,
+	@Elevation tinyint,
+
 	@Polylines	varchar(MAX)
 )
 as begin
@@ -20,12 +26,15 @@ as begin
 		declare @p varchar(MAX) = 'MULTIPOINT('+ @Polylines +')';
 		if @SegmentId = 0 
 		BEGIN
-			insert into MR.tSegment (Polylines, CreatorUserId) values(@p, @_ActorId);
+			insert into MR.tSegment (Polylines, CreatorUserId, ActivityFlag, Mudding, Scree, Elevation) 
+			values(@p, @_ActorId, @ActivityFlag, @Mudding, @Scree,@Elevation);
 			set @SegmentId = SCOPE_IDENTITY();
 		END 
 		ELSE
 		BEGIN
-			update MR.tSegment set Polylines = @p where SegmentId = @SegmentId
+			update MR.tSegment set Polylines = @p, ActivityFlag = @ActivityFlag,
+				Mudding = @Mudding, Scree = @Scree, Elevation = @Elevation
+			where SegmentId = @SegmentId
 		END
 
 

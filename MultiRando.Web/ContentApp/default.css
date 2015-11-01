@@ -15,3 +15,32 @@
         border-left: 1px solid #ddd;
         border-right: 1px solid #ddd;
     }
+
+
+
+.rating span.star {
+    font-family: FontAwesome;
+    font-weight: normal;
+    font-style: normal;
+    display: inline-block;
+}
+
+    .rating span.star:hover {
+        cursor: pointer;
+    }
+
+    .rating span.star:before {
+        content: "\f006";
+        padding-right: 5px;
+        color: #777777;
+    }
+
+    .rating span.star.chosen:before {
+        content: "\f005";
+        color: #e3cf7a;
+    }
+
+    .rating span.star.hoverChosen:before {
+        content: "\f005";
+        color: #e3cf7a;
+    }

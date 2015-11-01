@@ -3,7 +3,14 @@ CREATE TABLE MR.tSegment
 (
 	SegmentId		int not null identity(1,1),
 
+	ActivityFlag int not null constraint DF_tSegment_ActivityFlag default 0,
+	Mudding tinyint  not null constraint DF_tSegment_Mudding default 0,
+	Elevation tinyint  not null constraint DF_tSegment_Elevation default 0,
+	Scree tinyint  not null constraint DF_tSegment_Scree default 0,
+
+
 	Polylines		geography  not null ,
+
 	
 	CreatorUserId	int not null,
 	Creationdate	datetime2(0) not null

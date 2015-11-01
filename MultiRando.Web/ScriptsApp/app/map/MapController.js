@@ -2,13 +2,16 @@
 /// <reference path="~/ScriptsApp/main.js" />
 /// <reference path="~/scripts/google.map.js" />
 
-(function (w, ko, $, google, ep) {
+(function (w, ko,_, $, google, ep) {
 
     w.map = w.auth || {};
     w.map.MapController = function (viewModel, element, va, ava) {
         var _this = this;
+        var rootCtx = viewModel;
         viewModel = viewModel.Map = {};
         _this.CurrentPolylines = null;
+
+        viewModel.currentActivity = ko.observable();
 
         viewModel.pageHeight = ko.observable($(w).height());
         $(w).resize(function () {
@@ -36,7 +39,8 @@
                 _this.clearSegments();
                 if (_.isArray(r)) {
                     for (var i = 0; i < r.length; i++) {
-                        var segment = r[i];
+                        var segment = ko.mapping.fromJS(r[i], { 'copy': ["Polylines"] });
+                        segment.ActivityFlag.extend({ bitFlag: {} });
                         var e = viewModel.editedSegment();
                         if (!e || e.SegmentId != segment.SegmentId) 
                             _this.loadSegment(segment);
@@ -46,7 +50,10 @@
         }
         _this.loadSegment = function (segment) {
             var path = segment.Polylines ? _this.parsePolyLines(segment.Polylines) : [];
-            var polylines = _this.loadPolyline(path, {});
+
+            var color = segment.ActivityFlag.hasFlag(ActivityFlags.Private) || segment.ActivityFlag.hasFlag(ActivityFlags[viewModel.currentActivity()]) ?
+                '#FF0000' : '#FF751A';
+            var polylines = _this.loadPolyline(path, { strokeColor: color });
 
             segment.polylines = polylines;
             _this.segments.push(segment);
@@ -62,7 +69,7 @@
                         var center = path[0];
                         iw = new google.maps.InfoWindow({
                             position: center,
-                            content: ko.renderTemplateX('segment-details', segment)
+                            content: ko.renderTemplateX('segment-details', segment, rootCtx)
                         });
                         iw.open(_this.map);
                     }
@@ -116,12 +123,11 @@
             _this.loadBound();
         }
         viewModel.saveSegment = function () {
-            var s = viewModel.editedSegment();
-            var str = s.polylines.toCommandStr();
+            var data = ko.mapping.toJS(viewModel.editedSegment);
+            data.Polylines = viewModel.editedSegment().polylines.toCommandStr();
 
-            ep.messaging.send('MultiRando.Message.Segment.Commands.UpdateOrCreate', { SegmentId: s.SegmentId, Polylines: str }, {
+            ep.messaging.send('MultiRando.Message.Segment.Commands.UpdateOrCreate', data, {
                 'MultiRando.Message.Segment.Events.Changed': function (r) {
-                    console.log(r);
                     viewModel.cancelSegment();
                     ep.stdSuccessCallback();
                 }
@@ -300,7 +306,18 @@
             _this.initMap(mapOptions);
         });
 
+
+        viewModel.activityFlags = _.filter(ep.toKeyValues(w.ActivityFlags), function (v) { return v.key != 'Private'; });
     };
 
 
-}(window, window.ko, window.$, window.google, window.ep));
+    w.ActivityFlags = {
+        Pedestrian: Math.pow(2, 1),
+        Equestrian: Math.pow(2, 2),
+        Quad: Math.pow(2, 3),
+        Enduro: Math.pow(2, 4),
+        Car: Math.pow(2, 5),
+        Private: Math.pow(2, 30)
+    }
+
+}(window, window.ko, window._, window.$, window.google, window.ep));
