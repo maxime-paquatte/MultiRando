@@ -14,6 +14,7 @@ namespace MultiRando.Web.Core
         public string ConnectionString { get; private set; }
         public string ConnectionStringName { get { return "default"; } }
         public string AppPath { get; set; }
+        public string MailingRootUrl { get; set; }
 
         private Config()
         {

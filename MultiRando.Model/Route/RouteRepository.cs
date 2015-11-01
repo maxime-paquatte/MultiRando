@@ -20,7 +20,7 @@ namespace MultiRando.Model.Route
         public IEnumerable<Tuple<string, string>> GetPolygon(int routeId)
         {
             var db = new Database(_config.ConnectionString, "System.Data.SqlClient");
-            var str =  db.SingleOrDefault<string>("select Polygon.ToString() from MR.tRoute where RouteId = @0 ", routeId);
+            var str = db.SingleOrDefault<string>("select Polylines.ToString() from MR.tRoute where RouteId = @0 ", routeId);
             return str.Substring("MULTIPOINT (".Length).Replace("(", "").Replace(")", "").Split(',')
                 .Select(s =>
                 {

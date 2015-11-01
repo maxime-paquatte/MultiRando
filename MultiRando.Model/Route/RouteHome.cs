@@ -7,6 +7,7 @@ using CK.Setup;
 using CK.Setup.SqlServer;
 using MultiRando.Message.Route.Commands;
 using MultiRando.Message.Route.Queries;
+using MultiRando.Model.User;
 using Neva.Messaging;
 using Neva.Messaging.Sql;
 using NevaUtils;
@@ -18,7 +19,7 @@ namespace MultiRando.Model.Route
     [SqlObjectItem("scRouteCreate,scRouteSetPolyline,scRouteDelete")]
     public class RouteHome : SqlTable
     {
-        void Construct() { }
+        void Construct(UserHome user) { }
     }
 
 

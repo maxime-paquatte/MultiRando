@@ -11,7 +11,7 @@ ALTER procedure MR.svRouteGetPolyline
 as begin
 --[beginsp]
 	
-	select RouteId, Polygon = Polygon.ToString()
+	select RouteId, Polylines = Polylines.ToString()
 	from [MR].[tRoute]
 	where RouteId = @RouteId and UserId = @_ActorId
 	FOR XML PATH('data'), ELEMENTS

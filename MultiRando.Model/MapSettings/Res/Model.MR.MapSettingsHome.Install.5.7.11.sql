@@ -19,5 +19,5 @@ CREATE TABLE MR.tMapSettings
 --[endscript]
 
 --[beginscript]	
-insert into [MR].[tMapSettings] (UserId) values (1)
+insert into [MR].[tMapSettings] (UserId) values (0)
 --[endscript]

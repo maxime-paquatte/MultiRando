@@ -36,6 +36,19 @@ namespace MultiRando.Model.User
             return db.SingleOrDefault<Guid>("select AuthId from MR.tUser where Email = @0 AND Passwd = @1", email, passwordHash);
         }
 
+        public Guid GetAuthId(string email)
+        {
+            var db = new Database(_config.ConnectionString, "System.Data.SqlClient");
+            return db.SingleOrDefault<Guid>("select AuthId from MR.tUser where Email = @0", email);
+        }
+
+
+        public void SetPassword(string email, string passwordHash)
+        {
+            var db = new Database(_config.ConnectionString, "System.Data.SqlClient");
+            db.Execute("update MR.tUser set Passwd = @1 where Email = @0", email, passwordHash);
+        }
+
         public bool EmailExists(string email)
         {
             var db = new Database(_config.ConnectionString, "System.Data.SqlClient");

@@ -9,7 +9,7 @@ ALTER procedure MR.scRouteSetPolyline
 	@_CommandId			nvarchar(128),
 
 	@RouteId	int,
-	@Polygon	varchar(MAX)
+	@Polylines	varchar(MAX)
 )
 as begin
 --[beginsp]
@@ -17,9 +17,9 @@ as begin
 	set xact_abort on
 	Begin tran
 	
-	declare @p varchar(MAX) = 'MULTIPOINT('+ @Polygon +')';
+	declare @p varchar(MAX) = 'MULTIPOINT('+ @Polylines +')';
 
-	update [MR].[tRoute] set Polygon = geography::Parse(@p)	where RouteId = @RouteId
+	update [MR].[tRoute] set Polylines = geography::Parse(@p)	where RouteId = @RouteId
 
 	declare @event xml = (
 	select "@Name" = 'MultiRando.Message.Route.Events.Changed', RouteId  = @RouteId

@@ -4,36 +4,49 @@
     Layout = "Views/Shared/_LayoutDefault.cshtml";
     Reference("~/ScriptsApp/app/auth/LoginRegisterController.js");
 }
-<div class="loginRegisterContainer" data-bind="inject : auth.LoginRegisterController">
+<div class="loginRegisterContainer" data-bind="inject : auth.LoginRegisterController, email: '@(IsPropertyExist(Model, "Email") ? Model.Email : "")'">
     <ul id="loginRegisterTabs" class="nav nav-tabs nav-justified">
         <li role="presentation" class="@(Model.IsRegister ? "" : "active")"><a href="#loginTab">@Res("Res.Login.Title")</a></li>
         <li role="presentation" class="@(Model.IsRegister ? "active" : "")"><a href="#registerTab">@Res("Res.Register.Title")</a></li>
     </ul>
     <div class="tab-content">
         <div id="loginTab" role="tabpanel" class="tab-pane @(Model.IsRegister ? "" : "active")" data-bind="with: Login">
-            @if (!string.IsNullOrEmpty(Model.LoginErrorResMessage))
+            @if (IsPropertyExist(Model, "LoginErrorResMessage"))
             {
                 <div class="alert alert-danger" role="alert">
                     @Res(Model.LoginErrorResMessage)
                 </div>
             }
+            <div class="alert alert-danger" role="alert" style="display: none" data-bind="visible: failMessage, text: failMessage"></div>
+            <div class="alert alert-success" role="alert" style="display: none" data-bind="visible: succesMessage, text: succesMessage"></div>
             <form method="POST" action="/Auth/Login">
                 <input type="hidden" name="returnUrl" value="@Request.Query.returnUrl" />
                 <label for="email" class="sr-only">@Res("Res.Model.Email")</label>
-                <input type="email" id="email" class="form-control" placeholder="@Res("Res.Model.Email")" required="" autofocus="" data-bind="textInput: email">
+                <input type="email" id="email" name="email" class="form-control" placeholder="@Res("Res.Model.Email")" required="" autofocus="" data-bind="textInput: email">
                 <label for="password" class="sr-only">@Res("Res.Model.Password")</label>
-                <input type="password" id="password" class="form-control" placeholder="@Res("Res.Model.Password")" required="" data-bind="textInput: password">
-                <div class=" checkbox">
-                    <label>
-                        <input type="checkbox" value="remember-me"> @Res("Res.Login.RememberMe")
-                    </label>
+                <input type="password" id="password" name="password" class="form-control" placeholder="@Res("Res.Model.Password")" required="" data-bind="textInput: password">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class=" checkbox">
+                            <label>
+                                <input type="checkbox" value="remember-me"> @Res("Res.Login.RememberMe")
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <p class="text-right form-control-static">
+                            <a href="#" data-bind="click: forgotPassword">@Res("Res.Login.ForgotPassword")</a>
+                        </p>
+                       
+                    </div>
+                    
                 </div>
                 <button class="btn btn-lg btn-primary btn-block" type="submit">@Res("Res.Login.Submit")</button>
             </form>
         </div>
         <div id="registerTab" role="tabpanel" class="tab-pane @(Model.IsRegister ? "active" : "")" data-bind="with: Register">
-            @if (!string.IsNullOrEmpty(Model.RegisterErrorResMessage))
-            {
+           @if (IsPropertyExist(Model, "RegisterErrorResMessage"))
+           {
                 <div class="alert alert-danger" role="alert">
                     @Res(Model.RegisterErrorResMessage)
                 </div>

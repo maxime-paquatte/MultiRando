@@ -6,6 +6,6 @@ namespace MultiRando.Message.Route.Commands
     {
         public int RouteId { get; set; }
 
-        public string Polygon { get; set; }
+        public string Polylines { get; set; }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Dynamic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -66,6 +67,14 @@ namespace MultiRando.Web.Core.Helpers
         {
             Html.Reference(bundle, name);
         }
+
+        public bool IsPropertyExist(dynamic settings, string name)
+        {
+            if (settings is ExpandoObject)
+                return ((IDictionary<String, object>)settings).ContainsKey(name);
+            return settings.GetType().GetProperty(name) != null;
+        }
+
     }
 
     public abstract class EpRazorViewBase : RazorViewBase<dynamic>
@@ -79,5 +88,5 @@ namespace MultiRando.Web.Core.Helpers
         public string Prefix { get; set; }
     }
 
-   
+
 }

@@ -1,7 +1,7 @@
 ﻿--[beginscript]	
 CREATE TABLE MR.tUser 
 (
-	UserId			int not null IDENTITY (1,1),
+	UserId			int not null IDENTITY (0,1),
 
 	AuthId			uniqueidentifier not null constraint DF_tUser_AuthId default(NEWID()),
 	Email			nvarchar(256) not null UNIQUE,
@@ -18,4 +18,9 @@ CREATE TABLE MR.tUser
 )
 
 
+
+--[endscript]
+
+--[beginscript]	
+insert into MR.tUser (Email) values ('')
 --[endscript]

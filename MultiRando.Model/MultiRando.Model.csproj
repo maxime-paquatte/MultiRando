@@ -82,6 +82,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Segment\SegmentHome.cs" />
     <Compile Include="Route\RouteHome.cs" />
     <Compile Include="MapSettings\MapSettingsHome.cs" />
     <Compile Include="Package.cs" />
@@ -127,6 +128,15 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Route\Res\scRouteDelete.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Segment\Res\Model.MR.SegmentHome.Install.5.7.11.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Segment\Res\scSegmentUpdateOrCreate.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Segment\Res\svSegmentGetInBound.sql" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

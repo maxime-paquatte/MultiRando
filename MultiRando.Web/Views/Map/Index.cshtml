@@ -8,25 +8,46 @@
 <div class="container-fluid" data-bind="inject : map.MapController">
     <div class="row" data-bind="with: Map">
         <div class="col-xs-3">
-            <!-- ko ifnot: selectedRoute() -->
-            <button data-bind="click: addRoute" class="pull-right"><i class="fa fa-plus"></i></button>
-            <h2>@Res("Res.Page.Map.Routes")</h2>
-            <div class="list-group" data-bind="foreach: routes">
-                <a href="#" class="list-group-item" data-bind="css: { active: $data == $parent.selectedRoute() }, click: $parent.selectRoute">
-                    <span data-bind="text: RouteId" class="badge" >14</span>
-                    <span data-bind="text: Name"></span>
-                </a>
-            </div>            
-            <!-- /ko -->
-            <!-- ko if: selectedRoute() -->
-            <h2>
-                <span data-bind="text: selectedRoute().RouteId" class="badge pull-right">4</span>
-                <span data-bind="text: selectedRoute().Name"></span>
-            </h2>
-            <button data-bind="click: cancelRoute">@Res("Res.Std.Cancel")</button>
-            <button data-bind="click: saveRoute">@Res("Res.Std.Save")</button>
-            <button data-bind="click: deleteRoute">@Res("Res.Std.Delete")</button>
-            <!-- /ko -->
+            <div>
+                <!-- ko ifnot: selectedRoute() -->
+                <button data-bind="click: addRoute" class="pull-right"><i class="fa fa-plus"></i></button>
+                <h2>@Res("Res.Page.Map.Routes")</h2>
+                <div class="list-group" data-bind="foreach: routes">
+                    <a href="#" class="list-group-item" data-bind="css: { active: $data == $parent.selectedRoute() }, click: $parent.selectRoute">
+                        <span data-bind="text: RouteId" class="badge">14</span>
+                        <span data-bind="text: Name"></span>
+                    </a>
+                </div>
+
+
+                <button data-bind="click: addSegment" class="pull-right"><i class="fa fa-plus"></i></button>
+                <h2>@Res("Res.Page.Map.Segments")</h2>
+                <!-- ko if: editedSegment() -->
+                <div class="row">
+                    <div class="col-xs-6">
+                        <button class="btn btn-block btn-default" data-bind="click: cancelSegment">
+                            @Res("Res.Page.Map.Segments.CancelButton")
+                        </button>
+                    </div>
+                    <div class="col-xs-6">
+                        <button class="btn btn-block btn-primary" data-bind="click: saveSegment">
+                            @Res("Res.Page.Map.Segments.SaveButton")
+                        </button>
+                    </div>
+                </div>
+                <!-- /ko -->
+                <!-- /ko -->
+                <!-- ko if: selectedRoute() -->
+                <h2>
+                    <span data-bind="text: selectedRoute().RouteId" class="badge pull-right">4</span>
+                    <span data-bind="text: selectedRoute().Name"></span>
+                </h2>
+                <button data-bind="click: cancelRoute">@Res("Res.Std.Cancel")</button>
+                <button data-bind="click: saveRoute">@Res("Res.Std.Save")</button>
+                <button data-bind="click: deleteRoute">@Res("Res.Std.Delete")</button>
+                <!-- /ko -->
+               
+            </div>
         </div>
         <div class="col-xs-9">
             <div id="map-canvas" style="width: 100%; height: 500px" data-bind="style: { height : pageHeight() - 5 + 'px' }"></div>
@@ -34,3 +55,6 @@
     </div>
 </div>
 
+<script type="text/html" id="segment-details">
+    <h2 data-bind="text: SegmentId"></h2>
+</script>

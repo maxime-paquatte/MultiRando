@@ -17,7 +17,7 @@ as begin
 		s.MapZoom,
 		s.MapTypeId
 	from [MR].[tMapSettings] s
-	where UserId = @_ActorId OR UserId = 1
+	where UserId = @_ActorId OR UserId = 0
 	order by UserId DESC
 	FOR XML PATH('data'), root('data'),  ELEMENTS, TYPE
 

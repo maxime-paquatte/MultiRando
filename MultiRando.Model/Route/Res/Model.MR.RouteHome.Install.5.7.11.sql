@@ -5,7 +5,7 @@ CREATE TABLE MR.tRoute
 	UserId			int not null,
 		
 	Name			varchar(128) not null,
-	Polygon			geography null ,
+	Polylines		geography null ,
 
 	CreationDate	datetime2(0) not null
 		constraint DF_tRoute_CreationDate DEFAULT(GETUTCDATE()),

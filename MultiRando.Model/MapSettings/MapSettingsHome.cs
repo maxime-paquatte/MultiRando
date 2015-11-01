@@ -7,6 +7,7 @@ using CK.Setup;
 using CK.Setup.SqlServer;
 using MultiRando.Message.MapSettings.Commands;
 using MultiRando.Message.MapSettings.Queries;
+using MultiRando.Model.User;
 using Neva.Messaging;
 using Neva.Messaging.Sql;
 using NevaUtils;
@@ -18,7 +19,7 @@ namespace MultiRando.Model.MapSettings
     [SqlObjectItem("scMapSettingsSet")]
     public class MapSettingsHome : SqlTable
     {
-        void Construct() { }
+        void Construct(UserHome user) { }
     }
 
 

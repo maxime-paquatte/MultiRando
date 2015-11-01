@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -31,6 +32,8 @@ namespace MultiRando.Web
             CookieBasedSessions.Enable(pipelines);
             FormsAuthentication.Enable(pipelines, new AuthenticationConfiguration(container));
 
+
+            Config.Current.MailingRootUrl = ConfigurationManager.AppSettings["multiRando:mailing:RootUrl"];
             Config.Current.AppPath = container.Resolve<IRootPathProvider>().GetRootPath();
 
 

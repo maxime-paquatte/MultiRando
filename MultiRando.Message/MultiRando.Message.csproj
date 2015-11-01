@@ -51,6 +51,9 @@
     <Compile Include="MapSettings\Events\Changed.cs" />
     <Compile Include="MapSettings\Queries\Get.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Segment\Commands\UpdateOrCreate.cs" />
+    <Compile Include="Segment\Events\Changed.cs" />
+    <Compile Include="Segment\Queries\GetInBound.cs" />
     <Compile Include="Route\Commands\Delete.cs" />
     <Compile Include="Route\Commands\SetPolyline.cs" />
     <Compile Include="Route\Commands\Create.cs" />

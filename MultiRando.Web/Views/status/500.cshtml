@@ -1,0 +1,12 @@
+﻿@inherits MultiRando.Web.Core.Helpers.RazorViewBase<dynamic>
+@{ Layout = "Views/Shared/_LayoutDefault.cshtml"; }
+
+<div class="container content">
+    <div class="alert alert-danger" role="alert">
+        <strong>@Res("Res.StatusPage.ServerError.title")</strong>
+        <p>@Res("Res.StatusPage.ServerError.Message")</p>
+        <p><small>@Res("Res.StatusPage.ServerError.StatusCode", (HttpStatusCode)Model.StatusCode)</small></p>
+        
+    </div>
+    <p style="text-align: center"><a href="/" class="btn btn-lg btn-default">@Res("Res.Std.BackToHome")</a></p>
+</div>

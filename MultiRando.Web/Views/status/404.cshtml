@@ -1,0 +1,12 @@
+﻿@using Nancy
+@inherits MultiRando.Web.Core.Helpers.RazorViewBase<dynamic>
+@{ Layout = "Views/Shared/_LayoutDefault.cshtml"; }
+
+<div class="container content">
+    <div class="alert alert-warning" role="alert">
+        <strong>@Res("Res.StatusPage.NotFound.title")</strong>
+        <p>@Res("Res.StatusPage.NotFound.Message")</p>
+        <p><small>@Res("Res.StatusPage.NotFound.StatusCode", (HttpStatusCode)Model.StatusCode)</small></p>
+    </div>
+    <p style="text-align: center"><a href="/" class="btn btn-lg btn-default">@Res("Res.Std.BackToHome")</a></p>
+</div>

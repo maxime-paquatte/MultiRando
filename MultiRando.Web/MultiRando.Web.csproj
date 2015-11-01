@@ -200,6 +200,7 @@
     <Compile Include="Core\Messaging\Discoverer.cs" />
     <Compile Include="Core\Messaging\IoCActivator.cs" />
     <Compile Include="Core\Services\ExceptionLoggerService.cs" />
+    <Compile Include="Core\Services\MailService.cs" />
     <Compile Include="Modules\Admin\DatabaseModule.cs" />
     <Compile Include="Modules\Admin\MessagingModule.cs" />
     <Compile Include="Modules\Admin\ResourcesModule.cs" />
@@ -208,6 +209,7 @@
     <Compile Include="Modules\MapModule.cs" />
     <Compile Include="Modules\HomeModule.cs" />
     <Compile Include="Modules\MessagingModule.cs" />
+    <Compile Include="Modules\StatusCodeHandlers.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
@@ -217,11 +219,16 @@
     <None Include="packages.config" />
     <None Include="Views\Admin\Messaging\Index.cshtml" />
     <None Include="Views\Admin\Resources\Index.cshtml" />
+    <None Include="Views\Auth\AskPassword.cshtml" />
     <None Include="Views\Auth\Login.cshtml" />
     <None Include="Views\Home\Index.cshtml" />
     <None Include="Views\Map\Index.cshtml" />
+    <None Include="Views\Shared\ErrorMessage.cshtml" />
+    <None Include="Views\Shared\SuccessMessage.cshtml" />
     <None Include="Views\Shared\_modale.cshtml" />
     <None Include="Views\Shared\_LayoutDefault.cshtml" />
+    <None Include="Views\status\404.cshtml" />
+    <None Include="Views\status\500.cshtml" />
     <None Include="web.config" />
   </ItemGroup>
   <ItemGroup>
@@ -233,6 +240,7 @@
     <Content Include="HtmlTemplates\PromptFreeTxt.Htm" />
     <Content Include="ScriptsApp\admin\Messaging\MessagingController.js" />
     <Content Include="ScriptsApp\admin\Resources\ResourcesListController.js" />
+    <Content Include="ScriptsApp\app\auth\AskPasswordController.js" />
     <Content Include="ScriptsApp\app\map\MapController.js" />
     <Content Include="ScriptsApp\app\auth\LoginRegisterController.js" />
     <Content Include="ScriptsApp\app\urls.js" />
