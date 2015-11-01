@@ -1,6 +1,6 @@
-﻿-- Version = 5.11.1, Package = MR.SegmentHome, Requires={  }
+﻿-- Version = 5.11.1, Package = MR.InterestHome, Requires={  }
 
-ALTER procedure MR.svSegmentGetInBound
+ALTER procedure MR.svInterestGetInBound
 (
 	@_ApplicationId	int,
 	@_ActorId		int,
@@ -26,10 +26,10 @@ as begin
 
 
 	WITH XMLNAMESPACES ('http://james.newtonking.com/projects/json' as json)
-	select "@json:Array" = 'true', s.SegmentId, Creator= u.Email, s.Creationdate, s.ActivityFlag,
+	select "@json:Array" = 'true', s.InterestId, Creator= u.Email, s.Creationdate, s.ActivityFlag,
 		Mudding,Scree,Elevation,
 		 Polylines = Polylines.ToString()
-	from MR.tSegment s
+	from MR.tInterest s
 	inner join MR.tUser u on u.UserId = s.CreatorUserId
 	where @boundingRect.STIntersects  ( s.Polylines ) = 1
 	FOR XML PATH('data'), root('data'),  ELEMENTS, TYPE

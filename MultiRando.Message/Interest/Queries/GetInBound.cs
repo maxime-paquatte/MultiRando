@@ -1,6 +1,6 @@
 ﻿using Neva.Messaging;
 
-namespace MultiRando.Message.Segment.Queries
+namespace MultiRando.Message.Interest.Queries
 {
     public class GetInBound : IQuery
     {

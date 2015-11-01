@@ -1,10 +1,10 @@
 ﻿using Neva.Messaging;
 
-namespace MultiRando.Message.Segment.Commands
+namespace MultiRando.Message.Interest.Commands
 {
     public class UpdateOrCreate : ICommand
     {
-        public int SegmentId { get; set; }
+        public int InterestId { get; set; }
 
         public int ActivityFlag { get; set; }
         public byte Mudding { get; set; }

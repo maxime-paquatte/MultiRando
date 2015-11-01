@@ -1,14 +1,14 @@
-﻿-- Version = 5.11.1, Package = MR.SegmentHome, Requires={   }
+﻿-- Version = 5.11.1, Package = MR.InterestHome, Requires={   }
 
 
-ALTER procedure MR.scSegmentUpdateOrCreate
+ALTER procedure MR.scInterestUpdateOrCreate
 (
 	@_ApplicationId		int,
 	@_ActorId			int,
 	@_CultureId			int,
 	@_CommandId			nvarchar(128),
 	
-	@SegmentId int,
+	@InterestId int,
 	@ActivityFlag int,
 
 	@Mudding tinyint,
@@ -24,22 +24,22 @@ as begin
 	Begin tran
 	
 		declare @p varchar(MAX) = 'MULTIPOINT('+ @Polylines +')';
-		if @SegmentId = 0 
+		if @InterestId = 0 
 		BEGIN
-			insert into MR.tSegment (Polylines, CreatorUserId, ActivityFlag, Mudding, Scree, Elevation) 
+			insert into MR.tInterest (Polylines, CreatorUserId, ActivityFlag, Mudding, Scree, Elevation) 
 			values(@p, @_ActorId, @ActivityFlag, @Mudding, @Scree,@Elevation);
-			set @SegmentId = SCOPE_IDENTITY();
+			set @InterestId = SCOPE_IDENTITY();
 		END 
 		ELSE
 		BEGIN
-			update MR.tSegment set Polylines = @p, ActivityFlag = @ActivityFlag,
+			update MR.tInterest set Polylines = @p, ActivityFlag = @ActivityFlag,
 				Mudding = @Mudding, Scree = @Scree, Elevation = @Elevation
-			where SegmentId = @SegmentId
+			where InterestId = @InterestId
 		END
 
 
 		declare @event xml = (
-		select "@Name" = 'MultiRando.Message.Segment.Events.Changed', SegmentId  = @SegmentId
+		select "@Name" = 'MultiRando.Message.Interest.Events.Changed', InterestId  = @InterestId
 		FOR XML PATH('Event'), ELEMENTS )
 		exec Neva.sFireCommandEvents @_CommandId, @event
 

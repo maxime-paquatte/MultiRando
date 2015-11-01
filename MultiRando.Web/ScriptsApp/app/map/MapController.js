@@ -28,48 +28,48 @@
 
         viewModel.bound = ko.observable({}).extend({ rateLimit: { timeout: 1000, method: "notifyWhenChangesStop" } });
         viewModel.bound.subscribe(function (nv) {
-            _this.loadSegments(nv);
+            _this.loadInterests(nv);
         });
 
 
-        _this.segments = [];
-        _this.loadSegments = function (bounds) {
-            ep.messaging.read('MultiRando.Message.Segment.Queries.GetInBound', bounds, function (r) {
+        _this.interests = [];
+        _this.loadInterests = function (bounds) {
+            ep.messaging.read('MultiRando.Message.Interest.Queries.GetInBound', bounds, function (r) {
 
-                _this.clearSegments();
+                _this.clearInterests();
                 if (_.isArray(r)) {
                     for (var i = 0; i < r.length; i++) {
-                        var segment = ko.mapping.fromJS(r[i], { 'copy': ["Polylines"] });
-                        segment.ActivityFlag.extend({ bitFlag: {} });
-                        var e = viewModel.editedSegment();
-                        if (!e || e.SegmentId != segment.SegmentId)
-                            _this.loadSegment(segment);
+                        var interest = ko.mapping.fromJS(r[i], { 'copy': ["Polylines"] });
+                        interest.ActivityFlag.extend({ bitFlag: {} });
+                        var e = viewModel.editedInterest();
+                        if (!e || e.InterestId != interest.InterestId)
+                            _this.loadInterest(interest);
                     }
                 }
             });
         }
-        _this.loadSegment = function (segment) {
-            var path = segment.Polylines ? _this.parsePolyLines(segment.Polylines) : [];
+        _this.loadInterest = function (interest) {
+            var path = interest.Polylines ? _this.parsePolyLines(interest.Polylines) : [];
 
-            var color = segment.ActivityFlag.hasFlag(ActivityFlags.Private) || segment.ActivityFlag.hasFlag(ActivityFlags[viewModel.currentActivity()]) ?
+            var color = interest.ActivityFlag.hasFlag(ActivityFlags.Private) || interest.ActivityFlag.hasFlag(ActivityFlags[viewModel.currentActivity()]) ?
                 '#FF0000' : '#FFCC00';
             var polylines = _this.loadPolyline(path, { strokeColor: color });
 
-            segment.polylines = polylines;
-            _this.segments.push(segment);
+            interest.polylines = polylines;
+            _this.interests.push(interest);
 
-            if (segment.SegmentId) {
+            if (interest.InterestId) {
                 var iw = null;
                 polylines.addListener('mouseover', function () {
-                    var e = viewModel.editedSegment();
-                    if (!e || e.SegmentId != segment.SegmentId) {
+                    var e = viewModel.editedInterest();
+                    if (!e || e.InterestId != interest.InterestId) {
                         polylines.setOptions({ strokeWeight: 5 });
 
                         if (iw) iw.close();
                         var center = path[0];
                         iw = new google.maps.InfoWindow({
                             position: center,
-                            content: ko.renderTemplateX('segment-details', segment, rootCtx)
+                            content: ko.renderTemplateX('interest-details', interest, rootCtx)
                         });
                         iw.open(_this.map);
                     }
@@ -81,54 +81,54 @@
                 });
 
                 polylines.addListener('click', function () {
-                    viewModel.editSegment(segment);
+                    viewModel.editInterest(interest);
                 });
             }
 
 
-            return segment;
+            return interest;
         }
-        _this.clearSegments = function () {
-            var e = viewModel.editedSegment();
+        _this.clearInterests = function () {
+            var e = viewModel.editedInterest();
 
-            for (var i = 0; i < _this.segments.length; i++) {
-                var segment = _this.segments[i];
-                if (!e || e.SegmentId != segment.SegmentId) {
+            for (var i = 0; i < _this.interests.length; i++) {
+                var interest = _this.interests[i];
+                if (!e || e.InterestId != interest.InterestId) {
 
-                    segment.polylines.setMap(null);
-                    google.maps.event.clearInstanceListeners(segment.polylines);
+                    interest.polylines.setMap(null);
+                    google.maps.event.clearInstanceListeners(interest.polylines);
                 }
             }
-            _this.segments = [];
+            _this.interests = [];
         }
 
 
-        viewModel.editedSegment = ko.observable(null);
+        viewModel.editedInterest = ko.observable(null);
 
-        viewModel.addSegment = function () {
-            var s = _this.loadSegment({ SegmentId: 0 });
-            viewModel.editSegment(s);
+        viewModel.addInterest = function () {
+            var s = _this.loadInterest({ InterestId: 0 });
+            viewModel.editInterest(s);
         }
-        viewModel.editSegment = function (s) {
+        viewModel.editInterest = function (s) {
 
-            viewModel.editedSegment(s);
+            viewModel.editedInterest(s);
             s.polylines.setEditable(true);
         }
-        viewModel.cancelSegment = function () {
-            var s = viewModel.editedSegment();
+        viewModel.cancelInterest = function () {
+            var s = viewModel.editedInterest();
             s.polylines.setMap(null);
 
 
-            viewModel.editedSegment(null);
+            viewModel.editedInterest(null);
             _this.loadBound();
         }
-        viewModel.saveSegment = function () {
-            var data = ko.mapping.toJS(viewModel.editedSegment);
-            data.Polylines = viewModel.editedSegment().polylines.toCommandStr();
+        viewModel.saveInterest = function () {
+            var data = ko.mapping.toJS(viewModel.editedInterest);
+            data.Polylines = viewModel.editedInterest().polylines.toCommandStr();
 
-            ep.messaging.send('MultiRando.Message.Segment.Commands.UpdateOrCreate', data, {
-                'MultiRando.Message.Segment.Events.Changed': function (r) {
-                    viewModel.cancelSegment();
+            ep.messaging.send('MultiRando.Message.Interest.Commands.UpdateOrCreate', data, {
+                'MultiRando.Message.Interest.Events.Changed': function (r) {
+                    viewModel.cancelInterest();
                     ep.stdSuccessCallback();
                 }
             });
@@ -320,8 +320,8 @@
                 var p = _this.CurrentPolylines.getPath();
                 p.insertAt(0, latLng);
                 _this.CurrentPolylines.setPath(p);
-            } else if (viewModel.editedSegment()) {
-                var polylines = viewModel.editedSegment().polylines;
+            } else if (viewModel.editedInterest()) {
+                var polylines = viewModel.editedInterest().polylines;
 
                 var p = polylines.getPath();
                 if (atFirst) p.insertAt(0, latLng);

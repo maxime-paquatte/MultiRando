@@ -82,7 +82,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Segment\SegmentHome.cs" />
+    <Compile Include="Interest\InterestHome.cs" />
     <Compile Include="Route\RouteHome.cs" />
     <Compile Include="MapSettings\MapSettingsHome.cs" />
     <Compile Include="Package.cs" />
@@ -130,13 +130,13 @@
     <EmbeddedResource Include="Route\Res\scRouteDelete.sql" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Segment\Res\Model.MR.SegmentHome.Install.5.7.11.sql" />
+    <EmbeddedResource Include="Interest\Res\Model.MR.InterestHome.Install.5.7.11.sql" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Segment\Res\scSegmentUpdateOrCreate.sql" />
+    <EmbeddedResource Include="Interest\Res\scInterestUpdateOrCreate.sql" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Segment\Res\svSegmentGetInBound.sql" />
+    <EmbeddedResource Include="Interest\Res\svInterestGetInBound.sql" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Route\Res\scRouteUpdate.sql" />
