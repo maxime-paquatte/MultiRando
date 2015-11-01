@@ -138,6 +138,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Segment\Res\svSegmentGetInBound.sql" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Route\Res\scRouteUpdate.sql" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

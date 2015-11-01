@@ -4,6 +4,7 @@ using System.Dynamic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Cassette.Owin.ViewEngines.NancyRazor;
 using MultiRando.Web.Core.Auth;
@@ -39,17 +40,25 @@ namespace MultiRando.Web.Core.Helpers
 
             return RenderContext.Context.Res(a.Prefix + Enum.GetName(t, enumVal));
         }
-
-        public string Res(string resName)
+        public IHtmlString Res(string resName)
         {
-            return RenderContext.Context.Res(resName);
+            var res = RenderContext.Context.Res(resName);
+            if (string.IsNullOrEmpty(res)) return Html.Raw(string.Empty);
+            if (res[0] == '?') return Html.Raw("?" + res.Substring(res.LastIndexOf('.') + 1));
+
+            if (res.Contains("<p>")) return Html.Raw(res);
+            res = Regex.Replace(res, @"\r\n?|\n", "<br />");
+            return Html.Raw(res.Replace("  ", " &nbsp;"));
         }
 
-        public string Res(string resName, object templateValues)
+        public IHtmlString Res(string resName, object templateValues)
         {
-            return RenderContext.Context.Res(resName, templateValues);
+            var res = RenderContext.Context.Res(resName, templateValues);
+            if (res == null) return Html.Raw(string.Empty);
+            if (res.Contains("<p>")) return Html.Raw(res);
+            res = Regex.Replace(res, @"\r\n?|\n", "<br />");
+            return Html.Raw(res.Replace("  ", " &nbsp;"));
         }
-
         public string JSon<T>(T o)
         {
             return JsonConvert.SerializeObject(o);

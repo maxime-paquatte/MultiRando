@@ -8,12 +8,14 @@
 <div class="container-fluid" data-bind="inject : map.MapController">
     <div class="row" data-bind="with: Map">
         <div class="col-xs-3">
+            <h1>@Res("Res.Std.SiteTitle")</h1>
             <div class="form-group">
                 <label class="col-lg-4 control-label">@Res("Res.Page.Map.CurrentActivity")</label>
                 <div class="col-lg-8">
                     <select class="form-control" data-bind="value: currentActivity, options: activityFlags, optionsValue:'key', optionsText: function(v){return ep.res('Res.Page.Map.Segments.activityFlags.' + v.key);}"></select>
                 </div>
             </div>
+            <div class="clearfix"></div>
             <div>
                 <!-- ko ifnot: selectedRoute() -->
                 <!-- ko ifnot: editedSegment() -->
@@ -21,8 +23,8 @@
                 <h2>@Res("Res.Page.Map.Routes")</h2>
                 <div class="list-group" data-bind="foreach: routes">
                     <a href="#" class="list-group-item" data-bind="css: { active: $data == $parent.selectedRoute() }, click: $parent.selectRoute">
-                        <span data-bind="text: RouteId" class="badge">14</span>
-                        <span data-bind="text: Name"></span>
+                        <span data-bind="text: PathLength() + 'km'" class="badge"></span>
+                        <span data-bind="text: Name, attr:{ title : 'Route ID: ' + RouteId() }"></span>
                     </a>
                 </div>
                 <!-- /ko -->
@@ -85,14 +87,40 @@
                     </div>
                 </div>
                 <!-- /ko -->
-                <!-- ko if: selectedRoute() -->
-                <h2>
-                    <span data-bind="text: selectedRoute().RouteId" class="badge pull-right">4</span>
-                    <span data-bind="text: selectedRoute().Name"></span>
-                </h2>
-                <button data-bind="click: cancelRoute">@Res("Res.Std.Cancel")</button>
-                <button data-bind="click: saveRoute">@Res("Res.Std.Save")</button>
-                <button data-bind="click: deleteRoute">@Res("Res.Std.Delete")</button>
+                <!-- ko ifnot: isRoutePolylinesEdit -->
+                <!-- ko with: selectedRoute() -->
+                <h2>@Res("Res.Page.Map.Route.Edit.Title")</h2>
+                <div class="form-group">
+                    <label class="col-lg-4 control-label">@Res("Res.Page.Map.Route.Name")</label>
+                    <div class="col-lg-8">
+                        <input type="text" class="form-control" data-bind="value: Name" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label >@Res("Res.Page.Map.Route.Comment")</label>
+                    <textarea class="form-control" data-bind="value: Comment"></textarea>
+                </div>
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" data-bind="checked: IsPublic"/>
+                        @Res("Res.Page.Map.Route.IsPublic")
+                    </label>
+                </div>
+                <div class="pull-right">
+                    <button class="btn btn-default" data-bind="click: $parent.cancelRoute">@Res("Res.Std.Cancel")</button>
+                    <button class="btn btn-primary" data-bind="click: $parent.saveRoute">@Res("Res.Std.Save")</button>
+                </div>
+                <button class="btn btn-danger" data-bind="click: $parent.deleteRoute">@Res("Res.Std.Delete")</button>
+                <button class="btn btn-default" data-bind="click: $parent.editRoutePolylines">@Res("Res.Page.Map.Route.EditPolylines")</button>
+                
+                <!-- /ko -->
+                <!-- /ko -->
+                <!-- ko if: isRoutePolylinesEdit -->
+                <!-- ko with: selectedRoute() -->
+                <h2>@Res("Res.Page.Map.Route.EditPolylines.Title")</h2>
+                <button class="btn btn-default" data-bind="click: $parent.cancelRoutePolylines">@Res("Res.Std.Cancel")</button>
+                <button class="btn btn-primary" data-bind="click: $parent.saveRoutePolylines">@Res("Res.Std.Save")</button>
+                <!-- /ko -->
                 <!-- /ko -->
 
             </div>

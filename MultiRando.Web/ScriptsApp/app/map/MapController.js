@@ -2,7 +2,7 @@
 /// <reference path="~/ScriptsApp/main.js" />
 /// <reference path="~/scripts/google.map.js" />
 
-(function (w, ko,_, $, google, ep) {
+(function (w, ko, _, $, google, ep) {
 
     w.map = w.auth || {};
     w.map.MapController = function (viewModel, element, va, ava) {
@@ -42,7 +42,7 @@
                         var segment = ko.mapping.fromJS(r[i], { 'copy': ["Polylines"] });
                         segment.ActivityFlag.extend({ bitFlag: {} });
                         var e = viewModel.editedSegment();
-                        if (!e || e.SegmentId != segment.SegmentId) 
+                        if (!e || e.SegmentId != segment.SegmentId)
                             _this.loadSegment(segment);
                     }
                 }
@@ -52,7 +52,7 @@
             var path = segment.Polylines ? _this.parsePolyLines(segment.Polylines) : [];
 
             var color = segment.ActivityFlag.hasFlag(ActivityFlags.Private) || segment.ActivityFlag.hasFlag(ActivityFlags[viewModel.currentActivity()]) ?
-                '#FF0000' : '#FF751A';
+                '#FF0000' : '#FFCC00';
             var polylines = _this.loadPolyline(path, { strokeColor: color });
 
             segment.polylines = polylines;
@@ -90,7 +90,7 @@
         }
         _this.clearSegments = function () {
             var e = viewModel.editedSegment();
-           
+
             for (var i = 0; i < _this.segments.length; i++) {
                 var segment = _this.segments[i];
                 if (!e || e.SegmentId != segment.SegmentId) {
@@ -140,7 +140,12 @@
         viewModel.routes = ko.observableArray();
         _this.fetchRoutes = function () {
             return ep.messaging.read('MultiRando.Message.Route.Queries.GetPage', { Skip: 0, Take: 10, Total: -1 }, function (r) {
-                viewModel.routes(r.items);
+                var routes = _.map(r.items, function (i) {
+                    return ko.mapping.fromJS(i, {
+                        'IsPublic': { create: function (options) { return ko.observable(parseInt(options.data)); } }
+                    });
+                });
+                viewModel.routes(routes);
             });
         }
         _this.fetchRoutes();
@@ -152,9 +157,9 @@
                 ep.messaging.read('MultiRando.Message.Route.Queries.GetPolyline', { RouteId: nv.RouteId }, function (r) {
                     if (r.Polylines) {
                         var path = _this.parsePolyLines(r.Polylines);
-                        _this.CurrentPolylines = _this.loadPolyline(path, { editable: true });
+                        _this.CurrentPolylines = _this.loadPolyline(path, { editable: false, strokeColor: '#00FFFF' });
                     } else {
-                        _this.CurrentPolylines = _this.loadPolyline([], { editable: true });
+                        _this.CurrentPolylines = _this.loadPolyline([], { editable: false });
                     }
                 });
             } else {
@@ -184,13 +189,37 @@
         viewModel.cancelRoute = function (r) {
             viewModel.selectedRoute(null);
         }
-        viewModel.saveRoute = function (r) {
-            var str = _this.CurrentPolylines.toCommandStr();
-
-            ep.messaging.send('MultiRando.Message.Route.Commands.SetPolyline', { RouteId: viewModel.selectedRoute().RouteId, Polylines: str }, {
-                'MultiRando.Message.Route.Events.Changed': ep.stdSuccessCallback
+        viewModel.saveRoute = function (d) {
+            ep.messaging.send('MultiRando.Message.Route.Commands.Update', { RouteId: d.RouteId, Name: d.Name, Comment: d.Comment, IsPublic: d.IsPublic ? true: false }, {
+                'MultiRando.Message.Route.Events.Changed': function(r) {
+                    ep.stdSuccessCallback();
+                    viewModel.selectedRoute(null);
+                }
             });
         }
+
+        viewModel.isRoutePolylinesEdit = ko.observable(false);
+        viewModel.isRoutePolylinesEdit.subscribe(function (nv) {
+            _this.CurrentPolylines.setEditable(nv);
+        });
+        viewModel.cancelRoutePolylines = function () {
+            viewModel.isRoutePolylinesEdit(false);
+        }
+        viewModel.editRoutePolylines = function (d) {
+            viewModel.isRoutePolylinesEdit(true);
+        };
+        viewModel.saveRoutePolylines = function (r) {
+            var str = _this.CurrentPolylines.toCommandStr();
+
+            var pathLength = google.maps.geometry.spherical.computeLength(_this.CurrentPolylines.getPath()) / 1000;
+            ep.messaging.send('MultiRando.Message.Route.Commands.SetPolyline', { RouteId: viewModel.selectedRoute().RouteId, Polylines: str, PathLength: parseInt(pathLength) }, {
+                'MultiRando.Message.Route.Events.Changed': function () {
+                    ep.stdSuccessCallback();
+                    viewModel.isRoutePolylinesEdit(false);
+                }
+            });
+        }
+
         viewModel.deleteRoute = function (r) {
             w.alertify.confirm(ep.res('Res.Std.ConfirmDelete'), function () {
                 ep.messaging.send('MultiRando.Message.Route.Commands.Delete', { RouteId: viewModel.selectedRoute().RouteId }, {

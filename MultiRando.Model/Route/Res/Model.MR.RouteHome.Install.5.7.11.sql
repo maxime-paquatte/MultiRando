@@ -1,4 +1,5 @@
 ﻿--[beginscript]	
+
 CREATE TABLE MR.tRoute 
 (
 	RouteId			int not null IDENTITY(1,1),
@@ -6,6 +7,10 @@ CREATE TABLE MR.tRoute
 		
 	Name			varchar(128) not null,
 	Polylines		geography null ,
+
+	PathLength		int not null constraint DF_tRoute_PathLength DEFAULT(0),
+	IsPublic		bit	not null constraint DF_tRoute_IsPublic DEFAULT(0),
+	Comment			varchar(MAX) not null constraint DF_tRoute_Comment DEFAULT(''),
 
 	CreationDate	datetime2(0) not null
 		constraint DF_tRoute_CreationDate DEFAULT(GETUTCDATE()),

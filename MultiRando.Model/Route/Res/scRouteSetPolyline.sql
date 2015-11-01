@@ -1,4 +1,4 @@
-﻿-- Version = 5.8.15, Package = MR.RouteHome, Requires={   }
+﻿-- Version = 5.11.1, Package = MR.RouteHome, Requires={   }
 
 
 ALTER procedure MR.scRouteSetPolyline
@@ -9,6 +9,7 @@ ALTER procedure MR.scRouteSetPolyline
 	@_CommandId			nvarchar(128),
 
 	@RouteId	int,
+	@PathLength	int,
 	@Polylines	varchar(MAX)
 )
 as begin
@@ -19,7 +20,7 @@ as begin
 	
 	declare @p varchar(MAX) = 'MULTIPOINT('+ @Polylines +')';
 
-	update [MR].[tRoute] set Polylines = geography::Parse(@p)	where RouteId = @RouteId
+	update [MR].[tRoute] set Polylines = geography::Parse(@p), PathLength = @PathLength	where RouteId = @RouteId
 
 	declare @event xml = (
 	select "@Name" = 'MultiRando.Message.Route.Events.Changed', RouteId  = @RouteId

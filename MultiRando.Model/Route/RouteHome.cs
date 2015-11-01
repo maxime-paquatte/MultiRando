@@ -16,14 +16,14 @@ namespace MultiRando.Model.Route
 {
     [SqlTable("tRoute", Package = typeof(Package), ResourcePath = "Route.Res"), Versions("5.7.11")]
     [SqlObjectItem("svRouteGetPage,svRouteGetPolyline")]
-    [SqlObjectItem("scRouteCreate,scRouteSetPolyline,scRouteDelete")]
+    [SqlObjectItem("scRouteCreate,scRouteSetPolyline,scRouteDelete,scRouteUpdate")]
     public class RouteHome : SqlTable
     {
         void Construct(UserHome user) { }
     }
 
 
-    public class CommandHandler : SqlCommandHandlerBase, ICommandHandler<Create>, ICommandHandler<Delete>, ICommandHandler<SetPolyline>
+    public class CommandHandler : SqlCommandHandlerBase, ICommandHandler<Create>, ICommandHandler<Delete>, ICommandHandler<SetPolyline>, ICommandHandler<Update>
     {
         public CommandHandler(IDbConfig config, IBus bus)
             : base(bus, config.ConnectionString)
@@ -43,6 +43,11 @@ namespace MultiRando.Model.Route
         public void Handle(IEventDispatcher d, IMessageContext context, string commandId, Delete command)
         {
             Handle(d, context, commandId, command, "MR.scRouteDelete");
+        }
+
+        public void Handle(IEventDispatcher d, IMessageContext context, string commandId, Update command)
+        {
+            Handle(d, context, commandId, command, "MR.scRouteUpdate");
         }
     }
 
