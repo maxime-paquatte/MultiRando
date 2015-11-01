@@ -51,18 +51,18 @@
     <Compile Include="MapSettings\Events\Changed.cs" />
     <Compile Include="MapSettings\Queries\Get.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Route\Commands\Update.cs" />
+    <Compile Include="Segment\Commands\Update.cs" />
     <Compile Include="Interest\Commands\UpdateOrCreate.cs" />
     <Compile Include="Interest\Events\Changed.cs" />
     <Compile Include="Interest\Queries\GetInBound.cs" />
-    <Compile Include="Route\Commands\Delete.cs" />
-    <Compile Include="Route\Commands\SetPolyline.cs" />
-    <Compile Include="Route\Commands\Create.cs" />
-    <Compile Include="Route\Events\Changed.cs" />
-    <Compile Include="Route\Events\Deleted.cs" />
-    <Compile Include="Route\Events\Created.cs" />
-    <Compile Include="Route\Queries\GetPolyline.cs" />
-    <Compile Include="Route\Queries\GetPage.cs" />
+    <Compile Include="Segment\Commands\Delete.cs" />
+    <Compile Include="Segment\Commands\SetPolyline.cs" />
+    <Compile Include="Segment\Commands\Create.cs" />
+    <Compile Include="Segment\Events\Changed.cs" />
+    <Compile Include="Segment\Events\Deleted.cs" />
+    <Compile Include="Segment\Events\Created.cs" />
+    <Compile Include="Segment\Queries\GetPolyline.cs" />
+    <Compile Include="Segment\Queries\GetPage.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

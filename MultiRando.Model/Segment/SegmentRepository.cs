@@ -6,21 +6,21 @@ using System.Threading.Tasks;
 using NevaUtils;
 using PetaPoco;
 
-namespace MultiRando.Model.Route
+namespace MultiRando.Model.Segment
 {
-    public class RouteRepository
+    public class SegmentRepository
     {
         private readonly IDbConfig _config;
 
-        public RouteRepository(IDbConfig config)
+        public SegmentRepository(IDbConfig config)
         {
             _config = config;
         }
 
-        public IEnumerable<Tuple<string, string>> GetPolygon(int routeId)
+        public IEnumerable<Tuple<string, string>> GetPolygon(int segmentId)
         {
             var db = new Database(_config.ConnectionString, "System.Data.SqlClient");
-            var str = db.SingleOrDefault<string>("select Polylines.ToString() from MR.tRoute where RouteId = @0 ", routeId);
+            var str = db.SingleOrDefault<string>("select Polylines.ToString() from MR.tSegment where SegmentId = @0 ", segmentId);
             return str.Substring("MULTIPOINT (".Length).Replace("(", "").Replace(")", "").Split(',')
                 .Select(s =>
                 {

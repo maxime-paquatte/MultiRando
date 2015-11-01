@@ -1,10 +1,10 @@
 ﻿using Neva.Messaging;
 
-namespace MultiRando.Message.Route.Commands
+namespace MultiRando.Message.Segment.Commands
 {
     public class SetPolyline : ICommand
     {
-        public int RouteId { get; set; }
+        public int SegmentId { get; set; }
 
         public int PathLength { get; set; }
 

@@ -1,14 +1,14 @@
-﻿-- Version = 5.11.1, Package = MR.RouteHome, Requires={   }
+﻿-- Version = 5.11.1, Package = MR.SegmentHome, Requires={   }
 
 
-ALTER procedure MR.scRouteUpdate
+ALTER procedure MR.scSegmentUpdate
 (
 	@_ApplicationId		int,
 	@_ActorId			int,
 	@_CultureId			int,
 	@_CommandId			nvarchar(128),
 	
-	@RouteId	int,
+	@SegmentId	int,
 	@Name		varchar(128),
 	@IsPublic	bit,
 	@Comment	varchar(MAX) = ''
@@ -19,16 +19,16 @@ as begin
 	set xact_abort on
 	Begin tran
 	
-	update [MR].[tRoute] set
+	update [MR].[tSegment] set
 		Name = @Name,
 		Comment = @Comment,
 		IsPublic = @IsPublic
-	where RouteId = @RouteId
+	where SegmentId = @SegmentId
 
 	IF @@ROWCOUNT > 0
 	BEGIN
 		declare @event xml = (
-		select "@Name" = 'MultiRando.Message.Route.Events.Changed', RouteId  = @RouteId
+		select "@Name" = 'MultiRando.Message.Segment.Events.Changed', SegmentId  = @SegmentId
 		FOR XML PATH('Event'), ELEMENTS )
 		exec Neva.sFireCommandEvents @_CommandId, @event
 	END

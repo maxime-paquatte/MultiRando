@@ -1,6 +1,6 @@
 ﻿using Neva.Messaging;
 
-namespace MultiRando.Message.Route.Commands
+namespace MultiRando.Message.Segment.Commands
 {
     public class Create : ICommand
     {

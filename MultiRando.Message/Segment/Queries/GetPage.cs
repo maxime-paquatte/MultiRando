@@ -1,6 +1,6 @@
 ﻿using Neva.Messaging;
 
-namespace MultiRando.Message.Route.Queries
+namespace MultiRando.Message.Segment.Queries
 {
     public class GetPage : IQuery
     {

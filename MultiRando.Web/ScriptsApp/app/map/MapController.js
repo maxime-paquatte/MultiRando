@@ -137,24 +137,24 @@
 
 
 
-        viewModel.routes = ko.observableArray();
-        _this.fetchRoutes = function () {
-            return ep.messaging.read('MultiRando.Message.Route.Queries.GetPage', { Skip: 0, Take: 10, Total: -1 }, function (r) {
-                var routes = _.map(r.items, function (i) {
+        viewModel.segments = ko.observableArray();
+        _this.fetchSegments = function () {
+            return ep.messaging.read('MultiRando.Message.Segment.Queries.GetPage', { Skip: 0, Take: 10, Total: -1 }, function (r) {
+                var segments = _.map(r.items, function (i) {
                     return ko.mapping.fromJS(i, {
                         'IsPublic': { create: function (options) { return ko.observable(parseInt(options.data)); } }
                     });
                 });
-                viewModel.routes(routes);
+                viewModel.segments(segments);
             });
         }
-        _this.fetchRoutes();
+        _this.fetchSegments();
 
 
-        viewModel.selectedRoute = ko.observable();
-        viewModel.selectedRoute.subscribe(function (nv) {
+        viewModel.selectedSegment = ko.observable();
+        viewModel.selectedSegment.subscribe(function (nv) {
             if (nv) {
-                ep.messaging.read('MultiRando.Message.Route.Queries.GetPolyline', { RouteId: nv.RouteId }, function (r) {
+                ep.messaging.read('MultiRando.Message.Segment.Queries.GetPolyline', { SegmentId: nv.SegmentId }, function (r) {
                     if (r.Polylines) {
                         var path = _this.parsePolyLines(r.Polylines);
                         _this.CurrentPolylines = _this.loadPolyline(path, { editable: false, strokeColor: '#00FFFF' });
@@ -167,65 +167,65 @@
             }
         });
 
-        viewModel.addRoute = function () {
-            w.alertify.prompt(ep.res('Res.Page.Map.PromptRouteName'), '', function (ok, str) {
+        viewModel.addSegment = function () {
+            w.alertify.prompt(ep.res('Res.Page.Map.PromptSegmentName'), '', function (ok, str) {
                 if (ok) {
-                    ep.messaging.send('MultiRando.Message.Route.Commands.Create', { Name: str }, {
-                        'MultiRando.Message.Route.Events.Created': function (r) {
-                            _this.fetchRoutes().then(function () {
-                                var s = _.find(viewModel.routes(), function (a) {
-                                    return a.RouteId == r.routeId;
+                    ep.messaging.send('MultiRando.Message.Segment.Commands.Create', { Name: str }, {
+                        'MultiRando.Message.Segment.Events.Created': function (r) {
+                            _this.fetchSegments().then(function () {
+                                var s = _.find(viewModel.segments(), function (a) {
+                                    return a.SegmentId == r.segmentId;
                                 });
-                                viewModel.selectedRoute(s);
+                                viewModel.selectedSegment(s);
                             });
                         }
                     });
                 }
             });
         }
-        viewModel.selectRoute = function (r) {
-            viewModel.selectedRoute(r);
+        viewModel.selectSegment = function (r) {
+            viewModel.selectedSegment(r);
         }
-        viewModel.cancelRoute = function (r) {
-            viewModel.selectedRoute(null);
+        viewModel.cancelSegment = function (r) {
+            viewModel.selectedSegment(null);
         }
-        viewModel.saveRoute = function (d) {
-            ep.messaging.send('MultiRando.Message.Route.Commands.Update', { RouteId: d.RouteId, Name: d.Name, Comment: d.Comment, IsPublic: d.IsPublic ? true: false }, {
-                'MultiRando.Message.Route.Events.Changed': function(r) {
+        viewModel.saveSegment = function (d) {
+            ep.messaging.send('MultiRando.Message.Segment.Commands.Update', { SegmentId: d.SegmentId, Name: d.Name, Comment: d.Comment, IsPublic: d.IsPublic ? true: false }, {
+                'MultiRando.Message.Segment.Events.Changed': function(r) {
                     ep.stdSuccessCallback();
-                    viewModel.selectedRoute(null);
+                    viewModel.selectedSegment(null);
                 }
             });
         }
 
-        viewModel.isRoutePolylinesEdit = ko.observable(false);
-        viewModel.isRoutePolylinesEdit.subscribe(function (nv) {
+        viewModel.isSegmentPolylinesEdit = ko.observable(false);
+        viewModel.isSegmentPolylinesEdit.subscribe(function (nv) {
             _this.CurrentPolylines.setEditable(nv);
         });
-        viewModel.cancelRoutePolylines = function () {
-            viewModel.isRoutePolylinesEdit(false);
+        viewModel.cancelSegmentPolylines = function () {
+            viewModel.isSegmentPolylinesEdit(false);
         }
-        viewModel.editRoutePolylines = function (d) {
-            viewModel.isRoutePolylinesEdit(true);
+        viewModel.editSegmentPolylines = function (d) {
+            viewModel.isSegmentPolylinesEdit(true);
         };
-        viewModel.saveRoutePolylines = function (r) {
+        viewModel.saveSegmentPolylines = function (r) {
             var str = _this.CurrentPolylines.toCommandStr();
 
             var pathLength = google.maps.geometry.spherical.computeLength(_this.CurrentPolylines.getPath()) / 1000;
-            ep.messaging.send('MultiRando.Message.Route.Commands.SetPolyline', { RouteId: viewModel.selectedRoute().RouteId, Polylines: str, PathLength: parseInt(pathLength) }, {
-                'MultiRando.Message.Route.Events.Changed': function () {
+            ep.messaging.send('MultiRando.Message.Segment.Commands.SetPolyline', { SegmentId: viewModel.selectedSegment().SegmentId, Polylines: str, PathLength: parseInt(pathLength) }, {
+                'MultiRando.Message.Segment.Events.Changed': function () {
                     ep.stdSuccessCallback();
-                    viewModel.isRoutePolylinesEdit(false);
+                    viewModel.isSegmentPolylinesEdit(false);
                 }
             });
         }
 
-        viewModel.deleteRoute = function (r) {
+        viewModel.deleteSegment = function (r) {
             w.alertify.confirm(ep.res('Res.Std.ConfirmDelete'), function () {
-                ep.messaging.send('MultiRando.Message.Route.Commands.Delete', { RouteId: viewModel.selectedRoute().RouteId }, {
-                    'MultiRando.Message.Route.Events.Deleted': function (e) {
-                        viewModel.selectedRoute(null);
-                        _this.fetchRoutes().then(ep.stdSuccessCallback);
+                ep.messaging.send('MultiRando.Message.Segment.Commands.Delete', { SegmentId: viewModel.selectedSegment().SegmentId }, {
+                    'MultiRando.Message.Segment.Events.Deleted': function (e) {
+                        viewModel.selectedSegment(null);
+                        _this.fetchSegments().then(ep.stdSuccessCallback);
                     }
                 });
             });

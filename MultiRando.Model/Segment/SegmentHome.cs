@@ -5,19 +5,19 @@ using System.Text;
 using System.Threading.Tasks;
 using CK.Setup;
 using CK.Setup.SqlServer;
-using MultiRando.Message.Route.Commands;
-using MultiRando.Message.Route.Queries;
+using MultiRando.Message.Segment.Commands;
+using MultiRando.Message.Segment.Queries;
 using MultiRando.Model.User;
 using Neva.Messaging;
 using Neva.Messaging.Sql;
 using NevaUtils;
 
-namespace MultiRando.Model.Route
+namespace MultiRando.Model.Segment
 {
-    [SqlTable("tRoute", Package = typeof(Package), ResourcePath = "Route.Res"), Versions("5.7.11")]
-    [SqlObjectItem("svRouteGetPage,svRouteGetPolyline")]
-    [SqlObjectItem("scRouteCreate,scRouteSetPolyline,scRouteDelete,scRouteUpdate")]
-    public class RouteHome : SqlTable
+    [SqlTable("tSegment", Package = typeof(Package), ResourcePath = "Segment.Res"), Versions("5.7.11")]
+    [SqlObjectItem("svSegmentGetPage,svSegmentGetPolyline")]
+    [SqlObjectItem("scSegmentCreate,scSegmentSetPolyline,scSegmentDelete,scSegmentUpdate")]
+    public class SegmentHome : SqlTable
     {
         void Construct(UserHome user) { }
     }
@@ -32,22 +32,22 @@ namespace MultiRando.Model.Route
 
         public void Handle(IEventDispatcher d, IMessageContext context, string commandId, Create command)
         {
-            Handle(d, context, commandId, command, "MR.scRouteCreate");
+            Handle(d, context, commandId, command, "MR.scSegmentCreate");
         }
 
         public void Handle(IEventDispatcher d, IMessageContext context, string commandId, SetPolyline command)
         {
-            Handle(d, context, commandId, command, "MR.scRouteSetPolyline");
+            Handle(d, context, commandId, command, "MR.scSegmentSetPolyline");
         }
 
         public void Handle(IEventDispatcher d, IMessageContext context, string commandId, Delete command)
         {
-            Handle(d, context, commandId, command, "MR.scRouteDelete");
+            Handle(d, context, commandId, command, "MR.scSegmentDelete");
         }
 
         public void Handle(IEventDispatcher d, IMessageContext context, string commandId, Update command)
         {
-            Handle(d, context, commandId, command, "MR.scRouteUpdate");
+            Handle(d, context, commandId, command, "MR.scSegmentUpdate");
         }
     }
 
@@ -60,12 +60,12 @@ namespace MultiRando.Model.Route
 
         public string Read(IMessageContext context, GetPage query)
         {
-            return Read(context, query, "MR.svRouteGetPage");
+            return Read(context, query, "MR.svSegmentGetPage");
         }
 
         public string Read(IMessageContext context, GetPolyline query)
         {
-            return Read(context, query, "MR.svRouteGetPolyline");
+            return Read(context, query, "MR.svSegmentGetPolyline");
         }
     }
 }
