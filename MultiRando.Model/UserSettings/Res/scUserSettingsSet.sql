@@ -1,7 +1,7 @@
-﻿-- Version = 5.8.15, Package = MR.MapSettingsHome, Requires={   }
+﻿-- Version = 5.8.15, Package = MR.UserSettingsHome, Requires={   }
 
 
-ALTER procedure MR.scMapSettingsSet
+ALTER procedure MR.scUserSettingsSet
 (
 	@_ApplicationId		int,
 	@_ActorId			int,
@@ -20,15 +20,15 @@ as begin
 	set xact_abort on
 	Begin tran
 	
-	if not exists (select 1 from [MR].[tMapSettings] where UserId = @_ActorId)
-		insert into [MR].[tMapSettings] (UserId) values(@_ActorId);
+	if not exists (select 1 from [MR].[tUserSettings] where UserId = @_ActorId)
+		insert into [MR].[tUserSettings] (UserId) values(@_ActorId);
 
-	update [MR].[tMapSettings] 
+	update [MR].[tUserSettings] 
 	set MapCenter = geography::Point(@Lat, @Long, 4326), MapZoom = @Zoom, MapTypeId = @MapTypeId
 	where UserId = @_ActorId
 
 	declare @event xml = (
-	select "@Name" = 'MultiRando.Message.MapSettings.Events.Changed', UserId = @_ActorId
+	select "@Name" = 'MultiRando.Message.UserSettings.Events.Changed', UserId = @_ActorId
 	FOR XML PATH('Event'), ELEMENTS )
 	exec Neva.sFireCommandEvents @_CommandId, @event
 

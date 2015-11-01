@@ -84,7 +84,7 @@
   <ItemGroup>
     <Compile Include="Interest\InterestHome.cs" />
     <Compile Include="Segment\SegmentHome.cs" />
-    <Compile Include="MapSettings\MapSettingsHome.cs" />
+    <Compile Include="UserSettings\UserSettingsHome.cs" />
     <Compile Include="Package.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Segment\SegmentRepository.cs" />
@@ -97,7 +97,7 @@
     <EmbeddedResource Include="User\Res\Model.MR.UserHome.Install.5.7.11.sql" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="MapSettings\Res\Model.MR.MapSettingsHome.Install.5.7.11.sql" />
+    <EmbeddedResource Include="UserSettings\Res\Model.MR.UserSettingsHome.Install.5.7.11.sql" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MultiRando.Message\MultiRando.Message.csproj">
@@ -106,10 +106,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="MapSettings\Res\scMapSettingsSet.sql" />
+    <EmbeddedResource Include="UserSettings\Res\scUserSettingsSet.sql" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="MapSettings\Res\svMapSettingsGet.sql" />
+    <EmbeddedResource Include="UserSettings\Res\svUserSettingsGet.sql" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Segment\Res\Model.MR.SegmentHome.Install.5.7.11.sql" />

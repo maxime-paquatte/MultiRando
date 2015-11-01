@@ -5,19 +5,19 @@ using System.Text;
 using System.Threading.Tasks;
 using CK.Setup;
 using CK.Setup.SqlServer;
-using MultiRando.Message.MapSettings.Commands;
-using MultiRando.Message.MapSettings.Queries;
+using MultiRando.Message.UserSettings.Commands;
+using MultiRando.Message.UserSettings.Queries;
 using MultiRando.Model.User;
 using Neva.Messaging;
 using Neva.Messaging.Sql;
 using NevaUtils;
 
-namespace MultiRando.Model.MapSettings
+namespace MultiRando.Model.UserSettings
 {
-    [SqlTable("tMapSettings", Package = typeof(Package), ResourcePath = "MapSettings.Res"), Versions("5.7.11")]
-    [SqlObjectItem("svMapSettingsGet")]    
-    [SqlObjectItem("scMapSettingsSet")]
-    public class MapSettingsHome : SqlTable
+    [SqlTable("tUserSettings", Package = typeof(Package), ResourcePath = "UserSettings.Res"), Versions("5.7.11")]
+    [SqlObjectItem("svUserSettingsGet")]    
+    [SqlObjectItem("scUserSettingsSet")]
+    public class UserSettingsHome : SqlTable
     {
         void Construct(UserHome user) { }
     }
@@ -32,7 +32,7 @@ namespace MultiRando.Model.MapSettings
 
         public void Handle(IEventDispatcher d, IMessageContext context, string commandId, Set command)
         {
-            Handle(d, context, commandId, command, "MR.scMapSettingsSet");
+            Handle(d, context, commandId, command, "MR.scUserSettingsSet");
         }
 
     }
@@ -46,7 +46,7 @@ namespace MultiRando.Model.MapSettings
 
         public string Read(IMessageContext context, Get query)
         {
-            return Read(context, query, "MR.svMapSettingsGet");
+            return Read(context, query, "MR.svUserSettingsGet");
         }
     }
 }

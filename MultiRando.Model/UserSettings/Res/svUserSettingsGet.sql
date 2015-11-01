@@ -1,6 +1,6 @@
-﻿-- Version = 5.3.31, Package = MR.MapSettingsHome, Requires={  }
+﻿-- Version = 5.3.31, Package = MR.UserSettingsHome, Requires={  }
 
-ALTER procedure MR.svMapSettingsGet
+ALTER procedure MR.svUserSettingsGet
 (
 	@_ApplicationId	int,
 	@_ActorId		int,
@@ -16,7 +16,7 @@ as begin
 		MapCenterLong = CAST(s.MapCenter.Long as decimal(18,16)),
 		s.MapZoom,
 		s.MapTypeId
-	from [MR].[tMapSettings] s
+	from [MR].[tUserSettings] s
 	where UserId = @_ActorId OR UserId = 0
 	order by UserId DESC
 	FOR XML PATH('data'), root('data'),  ELEMENTS, TYPE

@@ -6,6 +6,8 @@
 
     w.map = w.auth || {};
     w.map.MapController = function (viewModel, element, va, ava) {
+        console.log("MapController loaded");
+
         var _this = this;
         var rootCtx = viewModel;
         viewModel = viewModel.Map = {};
@@ -21,7 +23,7 @@
 
         viewModel.mapCenter = ko.observable({}).extend({ rateLimit: { timeout: 5000, method: "notifyWhenChangesStop" } });
         viewModel.mapCenter.subscribe(function (nv) {
-            ep.messaging.send('MultiRando.Message.MapSettings.Commands.Set', nv, {
+            ep.messaging.send('MultiRando.Message.UserSettings.Commands.Set', nv, {
             });
         });
 
@@ -330,7 +332,7 @@
             }
         }
 
-        ep.messaging.read('MultiRando.Message.MapSettings.Queries.Get', {}, function (r) {
+        ep.messaging.read('MultiRando.Message.UserSettings.Queries.Get', {}, function (r) {
             var mapOptions = { center: { lat: parseFloat(r.MapCenterLat), lng: parseFloat(r.MapCenterLong) }, zoom: parseFloat(r.MapZoom), mapTypeId: r.MapTypeId };
             _this.initMap(mapOptions);
         });

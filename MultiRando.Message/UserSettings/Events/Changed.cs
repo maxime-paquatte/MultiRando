@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Neva.Messaging;
 
-namespace MultiRando.Message.MapSettings.Events
+namespace MultiRando.Message.UserSettings.Events
 {
     public class Changed : IEvent
     {

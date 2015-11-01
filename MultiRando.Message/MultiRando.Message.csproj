@@ -47,9 +47,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MapSettings\Commands\Set.cs" />
-    <Compile Include="MapSettings\Events\Changed.cs" />
-    <Compile Include="MapSettings\Queries\Get.cs" />
+    <Compile Include="UserSettings\Commands\Set.cs" />
+    <Compile Include="UserSettings\Events\Changed.cs" />
+    <Compile Include="UserSettings\Queries\Get.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Segment\Commands\Update.cs" />
     <Compile Include="Interest\Commands\UpdateOrCreate.cs" />
