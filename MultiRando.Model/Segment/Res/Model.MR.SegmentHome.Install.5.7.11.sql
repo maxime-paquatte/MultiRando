@@ -7,7 +7,6 @@ CREATE TABLE MR.tSegment
 	CreatorId		int not null,
 	Polylines		geography null ,
 
-	PathLength		int not null constraint DF_tSegment_PathLength DEFAULT(0),
 	IsPublic		bit	not null constraint DF_tSegment_IsPublic DEFAULT(0),
 
 	CreationDate	datetime2(0) not null

@@ -12,6 +12,10 @@
         _this.defaultColor = '#00FFFF';
         _this.isCut = ko.observable(false);
         _this.ActivityFlag = ko.observable(0).extend({ bitFlag: {} });
+
+        _this.Mudding = ko.observable(0);
+        _this.Elevation = ko.observable(0);
+        _this.Scree = ko.observable(0);
         
         ko.mapping.fromJS(data, {
             'IsPublic': { create: function (o) { return ko.observable(parseInt(o.data)); } },
@@ -19,7 +23,7 @@
         }, _this);
 
 
-        var path = mapCtrl.parsePolyLines(data.Polylines);
+        var path = data.Polylines ? mapCtrl.parsePolyLines(data.Polylines) : [];
         _this.polylines = mapCtrl.loadPolyline(path, {
             editable: false,
             strokeColor: _this.defaultColor
@@ -35,21 +39,13 @@
                     'MultiRando.Message.Segment.Events.Cloned': function (r) {
 
                         var strA = mapCtrl.toCommandStr(a);
-                        var pA = mapCtrl.loadPolyline(a);
-                        var pathLengthA = google.maps.geometry.spherical.computeLength(pA);
                         ep.messaging.send('MultiRando.Message.Segment.Commands.SetPolyline', {
-                            SegmentId: _this.SegmentId,
-                            Polylines: strA,
-                            PathLength: parseInt(pathLengthA)
+                            SegmentId: _this.SegmentId,Polylines: strA
                         });
 
                         var strB = mapCtrl.toCommandStr(b);
-                        var pB = mapCtrl.loadPolyline(b);
-                        var pathLengthB = google.maps.geometry.spherical.computeLength(pB);
                         ep.messaging.send('MultiRando.Message.Segment.Commands.SetPolyline', {
-                            SegmentId: r.newSegmentId,
-                            Polylines: strB,
-                            PathLength: parseInt(pathLengthB)
+                            SegmentId: r.newSegmentId,Polylines: strB
                         }, {
                             'MultiRando.Message.Segment.Events.Changed': function (r) {
                                   mapCtrl.segmentController.fetchSegments(null, true);

@@ -9,7 +9,6 @@ ALTER procedure MR.scSegmentSetPolyline
 	@_CommandId			nvarchar(128),
 
 	@SegmentId	int,
-	@PathLength	int,
 	@Polylines	varchar(MAX)
 )
 as begin
@@ -19,12 +18,23 @@ as begin
 	Begin tran
 	
 	declare @p varchar(MAX) = 'MULTIPOINT('+ @Polylines +')';
+	declare @event xml;
+	IF @SegmentId > 0
+	BEGIN
+		update [MR].[tSegment] set Polylines = geography::Parse(@p)	where SegmentId = @SegmentId
 
-	update [MR].[tSegment] set Polylines = geography::Parse(@p), PathLength = @PathLength	where SegmentId = @SegmentId
+		set @event = ( select "@Name" = 'MultiRando.Message.Segment.Events.Changed', SegmentId  = @SegmentId
+		FOR XML PATH('Event'), ELEMENTS )
+	END
+	ELSE
+	BEGIN
+		insert into [MR].[tSegment] (CreatorId, Polylines) values(@_ActorId, geography::Parse(@p))
+		set @SegmentId = SCOPE_IDENTITY();
+		set @event = ( select "@Name" = 'MultiRando.Message.Segment.Events.Created', SegmentId  = @SegmentId
+		FOR XML PATH('Event'), ELEMENTS )
+	END
 
-	declare @event xml = (
-	select "@Name" = 'MultiRando.Message.Segment.Events.Changed', SegmentId  = @SegmentId
-	FOR XML PATH('Event'), ELEMENTS )
+	
 	exec Neva.sFireCommandEvents @_CommandId, @event
 
 	commit

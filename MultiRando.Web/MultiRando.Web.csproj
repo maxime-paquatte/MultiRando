@@ -225,7 +225,6 @@
     <None Include="Views\Map\_InterestDetails.cshtml" />
     <None Include="Views\Map\_Interests.cshtml" />
     <None Include="Views\Map\_SegmentsEdit.cshtml" />
-    <None Include="Views\Map\_SegmentsList.cshtml" />
     <None Include="Views\Map\Index.cshtml" />
     <None Include="Views\Shared\ErrorMessage.cshtml" />
     <None Include="Views\Shared\SuccessMessage.cshtml" />

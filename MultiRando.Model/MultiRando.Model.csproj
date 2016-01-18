@@ -115,9 +115,6 @@
     <EmbeddedResource Include="Segment\Res\Model.MR.SegmentHome.Install.5.7.11.sql" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Segment\Res\scSegmentCreate.sql" />
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="Segment\Res\scSegmentSetPolyline.sql" />
   </ItemGroup>
   <ItemGroup>

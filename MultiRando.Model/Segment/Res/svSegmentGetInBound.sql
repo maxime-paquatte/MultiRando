@@ -28,7 +28,6 @@ as begin
 	select "@json:Array" = 'true',	
 		r.SegmentId, 
 		r.CreationDate, 
-		PathLength,
 		CreatorId, IsPublic, 
 		CanEdit = IIF(CreatorId = @_ActorId OR r.IsPublic = 1, 1, 0),
 

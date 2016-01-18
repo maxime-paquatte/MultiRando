@@ -16,25 +16,21 @@ namespace MultiRando.Model.Segment
 {
     [SqlTable("tSegment", Package = typeof(Package), ResourcePath = "Segment.Res"), Versions("5.7.11")]
     [SqlObjectItem("svSegmentGetInBound")]
-    [SqlObjectItem("scSegmentCreate,scSegmentSetPolyline,scSegmentDelete,scSegmentUpdate,scSegmentClone")]
+    [SqlObjectItem("scSegmentSetPolyline,scSegmentDelete,scSegmentUpdate,scSegmentClone")]
     public class SegmentHome : SqlTable
     {
         void Construct(UserHome user) { }
     }
 
 
-    public class CommandHandler : SqlCommandHandlerBase, ICommandHandler<Create>, ICommandHandler<Delete>, 
+    public class CommandHandler : SqlCommandHandlerBase,  ICommandHandler<Delete>, 
         ICommandHandler<SetPolyline>, ICommandHandler<Update>, ICommandHandler<Clone>
     {
         public CommandHandler(IDbConfig config, IBus bus)
             : base(bus, config.ConnectionString)
         {
         }
-
-        public void Handle(IEventDispatcher d, IMessageContext context, string commandId, Create command)
-        {
-            Handle(d, context, commandId, command, "MR.scSegmentCreate");
-        }
+        
 
         public void Handle(IEventDispatcher d, IMessageContext context, string commandId, SetPolyline command)
         {

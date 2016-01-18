@@ -36,20 +36,11 @@
         viewModel.selectedSegment = ko.observable();
 
         viewModel.addSegment = function () {
-            w.alertify.prompt(ep.res('Res.Page.Map.PromptSegmentName'), '', function (ok, str) {
-                if (ok) {
-                    ep.messaging.send('MultiRando.Message.Segment.Commands.Create', { Name: str }, {
-                        'MultiRando.Message.Segment.Events.Created': function (r) {
-                            _this.fetchSegments().then(function () {
-                                var s = _.find(viewModel.segments(), function (a) {
-                                    return a.SegmentId == r.segmentId;
-                                });
-                                viewModel.selectedSegment(s);
-                            });
-                        }
-                    });
-                }
-            });
+            var s = new vm.Map.Segment(mapCtrl, { SegmentId: 0 }, { onClick: _this.segmentClick });
+            viewModel.segments.push(s);
+            viewModel.selectedSegment(s);
+            viewModel.isSegmentPolylinesEdit(true);
+            mapCtrl.CurrentPolylines = s.polylines;
         }
         viewModel.selectSegment = function (r) {
             if (viewModel.selectedSegment())
@@ -83,20 +74,28 @@
             var s = viewModel.selectedSegment();
             if (s) s.polylines.setEditable(false);
             viewModel.isSegmentPolylinesEdit(false);
+
+            mapCtrl.CurrentPolylines = null;
         }
         viewModel.editSegmentPolylines = function (d) {
             var s = viewModel.selectedSegment();
             if (s) s.polylines.setEditable(true);
             viewModel.isSegmentPolylinesEdit(true);
+
+            mapCtrl.CurrentPolylines = s.polylines;
         };
         viewModel.saveSegmentPolylines = function (r) {
             var s = viewModel.selectedSegment();
             if (s){
                 var str = s.polylines.toCommandStr();
-
-                var pathLength = google.maps.geometry.spherical.computeLength(s.polylines.getPath());
-                ep.messaging.send('MultiRando.Message.Segment.Commands.SetPolyline', { SegmentId: viewModel.selectedSegment().SegmentId, Polylines: str, PathLength: parseInt(pathLength) }, {
+                ep.messaging.send('MultiRando.Message.Segment.Commands.SetPolyline', {
+                    SegmentId: viewModel.selectedSegment().SegmentId, Polylines: str}, {
                     'MultiRando.Message.Segment.Events.Changed': function () {
+                        ep.stdSuccessCallback();
+                        viewModel.cancelSegmentPolylines();
+                    },
+                    'MultiRando.Message.Segment.Events.Created': function (r) {
+                        s.SegmentId = r.segmentId;
                         ep.stdSuccessCallback();
                         viewModel.cancelSegmentPolylines();
                     }
