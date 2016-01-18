@@ -9,9 +9,10 @@ ALTER procedure MR.scSegmentUpdate
 	@_CommandId			nvarchar(128),
 	
 	@SegmentId	int,
-	@Name		varchar(128),
-	@IsPublic	bit,
-	@Comment	varchar(MAX) = ''
+	@ActivityFlag		int,
+	@Mudding	tinyint,
+	@Elevation	tinyint,
+	@Scree	tinyint
 )
 as begin
 --[beginsp]
@@ -20,9 +21,10 @@ as begin
 	Begin tran
 	
 	update [MR].[tSegment] set
-		Name = @Name,
-		Comment = @Comment,
-		IsPublic = @IsPublic
+		ActivityFlag = @ActivityFlag,
+		Mudding = @Mudding,
+		Elevation = @Elevation,
+		Scree = @Scree
 	where SegmentId = @SegmentId
 
 	IF @@ROWCOUNT > 0

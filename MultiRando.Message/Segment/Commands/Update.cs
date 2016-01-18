@@ -6,8 +6,9 @@ namespace MultiRando.Message.Segment.Commands
     {
         public int SegmentId { get; set; }
 
-        public string Name { get; set; }
-        public string Comment { get; set; }
-        public bool IsPublic { get; set; }
+        public int ActivityFlag { get; set; }
+        public byte Mudding { get; set; }
+        public byte Scree { get; set; }
+        public byte Elevation { get; set; }
     }
 }

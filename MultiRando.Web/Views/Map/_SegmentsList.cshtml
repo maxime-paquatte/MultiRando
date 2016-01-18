@@ -1,0 +1,22 @@
+﻿@inherits MultiRando.Web.Core.Helpers.RazorViewBase<dynamic>
+
+<div class="panel panel-default">
+    <div class="panel-heading" role="tab" id="headingOne">
+        <button data-bind="click: addSegment" class="pull-right"><i class="fa fa-plus"></i></button>
+        <h4 class="panel-title">
+            <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                @Res("Res.Page.Map.Segments")
+            </a>
+        </h4>
+    </div>
+    <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+
+        <div class="list-group" data-bind="foreach: segments">
+            <a href="#" class="list-group-item" data-bind="css: { active: $data == $parent.selectedSegment() }, click: $parent.selectSegment">
+                <span data-bind="text: PathLength() + 'km'" class="badge"></span>
+                <span data-bind="text: Name, attr:{ title : 'Segment ID: ' + SegmentId() }"></span>
+            </a>
+        </div>
+    </div>
+</div>
+

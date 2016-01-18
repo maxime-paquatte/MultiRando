@@ -1,0 +1,65 @@
+﻿@using Nancy
+@inherits MultiRando.Web.Core.Helpers.RazorViewBase<dynamic>
+
+ <!-- ko ifnot: isSegmentPolylinesEdit -->
+<!-- ko with: selectedSegment() -->
+<h2>@Res("Res.Page.Map.Segment.Edit.Title")</h2>
+ <!-- ko foreach: $root.Map.activityFlags -->
+<div class="checkbox">
+    <label data-bind="click: function(){ $parent.ActivityFlag.toggleFlag(val); }">
+        <i class="fa" data-bind="css: $parent.ActivityFlag.hasFlag(val) ? 'fa-check-square-o' : 'fa-square-o'"></i>
+        <span data-bind="res : 'Res.Page.Map.Interests.activityFlags.' + key"></span>
+    </label>
+</div>
+<!-- /ko -->
+<div class="checkbox">
+    <label data-bind="click: function(){ ActivityFlag.toggleFlag(ActivityFlags.Private); }">
+        <i class="fa" data-bind="css: ActivityFlag.hasFlag(ActivityFlags.Private) ? 'fa-check-square-o' : 'fa-square-o'"></i>
+        <span data-bind="res : 'Res.Page.Map.Interests.activityFlags.Private' "></span>
+    </label>
+</div>
+
+
+<h3>@Res("Res.Page.Map.Difficulty")</h3>
+<div class="form-group">
+    <label class="col-lg-4 control-label">@Res("Res.Page.Map.Interests.Mudding")</label>
+    <div class="col-lg-8">
+        <div class="form-control-static">
+            <span style=" font-size: 24px;" data-bind="starRating : Mudding"></span>
+        </div>
+    </div>
+</div>
+<div class="form-group">
+    <label class="col-lg-4 control-label">@Res("Res.Page.Map.Interests.Elevation")</label>
+    <div class="col-lg-8">
+        <div class="form-control-static">
+            <span style=" font-size: 24px;" data-bind="starRating : Elevation"></span>
+        </div>
+    </div>
+</div>
+<div class="form-group">
+    <label class="col-lg-4 control-label">@Res("Res.Page.Map.Interests.Scree")</label>
+    <div class="col-lg-8">
+        <div class="form-control-static">
+            <span style=" font-size: 24px;" data-bind="starRating : Scree"></span>
+        </div>
+    </div>
+</div>
+<div class="pull-right">
+    <button class="btn btn-default" data-bind="click: $parent.cancelSegment">@Res("Res.Std.Cancel")</button>
+    <button class="btn btn-primary" data-bind="click: $parent.saveSegment">@Res("Res.Std.Save")</button>
+</div>
+<button class="btn btn-danger" data-bind="click: $parent.deleteSegment">@Res("Res.Std.Delete")</button>
+<button class="btn btn-default" data-bind="click: $parent.editSegmentPolylines">@Res("Res.Page.Map.Segment.EditPolylines")</button>
+
+<!-- /ko -->
+<!-- /ko -->
+<!-- ko if: isSegmentPolylinesEdit -->
+<!-- ko with: selectedSegment() -->
+<h2>@Res("Res.Page.Map.Segment.EditPolylines.Title")</h2>
+<button class="btn btn-default" data-bind="click: function(){ isCut(!isCut()); }, css : { active : isCut }">@Res("Res.Page.Map.Segment.Cut")</button>
+
+<button class="btn btn-default" data-bind="click: $parent.cancelSegmentPolylines">@Res("Res.Std.Cancel")</button>
+<button class="btn btn-primary" data-bind="click: $parent.saveSegmentPolylines">@Res("Res.Std.Save")</button>
+<!-- /ko -->
+<!-- /ko -->

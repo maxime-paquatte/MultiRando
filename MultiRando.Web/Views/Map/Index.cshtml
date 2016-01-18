@@ -8,122 +8,37 @@
 <div class="container-fluid" data-bind="inject : map.MapController">
     <div class="row" data-bind="with: Map">
         <div class="col-xs-3">
-            <h1>@Res("Res.Std.SiteTitle")</h1>
-            <div class="form-group">
-                <label class="col-lg-4 control-label">@Res("Res.Page.Map.CurrentActivity")</label>
-                <div class="col-lg-8">
-                    <select class="form-control" data-bind="value: currentActivity, options: activityFlags, optionsValue:'key', optionsText: function(v){return ep.res('Res.Page.Map.Interests.activityFlags.' + v.key);}"></select>
+            <div class="row">
+                <div class="col-sm-8">
+                    <h1>@Res("Res.Std.SiteTitle")</h1>
+                </div>
+                <div class="col-sm-4">
+                    <div style="margin-top: 22px;">
+                        <button class="btn btn-default" title="@Res("Res.Page.Map.AddInterest.Tooltip")" data-bind="click: addInterest">
+                            <i class="fa fa-map-marker"></i>
+                            <sup class="fa fa-plus"></sup>
+                        </button>
+                        <button id="dLabel" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn btn-default">
+                            <i class="fa fa-cog"></i>
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dLabel">
+                            <li><a href="#">Action</a></li>
+                            <li role="separator" class="divider"></li>
+                            <li class="dropdown-header">@Res("Res.Page.Map.CurrentActivity")</li>
+                            <!-- ko foreach: activityFlags -->
+                            <li data-bind="css: { disabled : $parent.currentActivity() == key }">
+                                <a href="#" data-bind="click: function(){ $parent.currentActivity(key); }">
+                                    <span data-bind="text: ep.res('Res.Page.Map.Interests.activityFlags.' + key)"></span>
+                                </a>
+                            </li>
+                            <!-- /ko -->
+                        </ul>
+
+                    </div>
                 </div>
             </div>
-            <div class="clearfix"></div>
-            <div>
-                <!-- ko ifnot: selectedSegment() -->
-                <!-- ko ifnot: editedInterest() -->
-                <button data-bind="click: addSegment" class="pull-right"><i class="fa fa-plus"></i></button>
-                <h2>@Res("Res.Page.Map.Segments")</h2>
-                <div class="list-group" data-bind="foreach: segments">
-                    <a href="#" class="list-group-item" data-bind="css: { active: $data == $parent.selectedSegment() }, click: $parent.selectSegment">
-                        <span data-bind="text: PathLength() + 'km'" class="badge"></span>
-                        <span data-bind="text: Name, attr:{ title : 'Segment ID: ' + SegmentId() }"></span>
-                    </a>
-                </div>
-                <!-- /ko -->
-
-                <button data-bind="click: addInterest" class="pull-right"><i class="fa fa-plus"></i></button>
-                <h2>@Res("Res.Page.Map.Interests")</h2>
-                <div class="row" data-bind="with: editedInterest">
-                    <h3>@Res("Res.Page.Map.Impassable")</h3>
-                    <!-- ko foreach: $root.Map.activityFlags -->
-                    <div class="checkbox">
-                        <label data-bind="click: function(){ $parent.ActivityFlag.toggleFlag(val); }">
-                            <i class="fa" data-bind="css: $parent.ActivityFlag.hasFlag(val) ? 'fa-check-square-o' : 'fa-square-o'"></i>
-                            <span data-bind="res : 'Res.Page.Map.Interests.activityFlags.' + key"></span>
-                        </label>
-                    </div>
-                    <!-- /ko -->
-                    <div class="checkbox">
-                        <label data-bind="click: function(){ ActivityFlag.toggleFlag(ActivityFlags.Private); }">
-                            <i class="fa" data-bind="css: ActivityFlag.hasFlag(ActivityFlags.Private) ? 'fa-check-square-o' : 'fa-square-o'"></i>
-                            <span data-bind="res : 'Res.Page.Map.Interests.activityFlags.Private' "></span>
-                        </label>
-                    </div>
-                    
-
-                    <h3>@Res("Res.Page.Map.Difficulty")</h3>
-                    <div class="form-group">
-                        <label class="col-lg-4 control-label">@Res("Res.Page.Map.Interests.Mudding")</label>
-                        <div class="col-lg-8">
-                            <div class="form-control-static">
-                                <span style=" font-size: 24px;" data-bind="starRating : Mudding"></span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-lg-4 control-label">@Res("Res.Page.Map.Interests.Elevation")</label>
-                        <div class="col-lg-8">
-                            <div class="form-control-static">
-                                <span style=" font-size: 24px;" data-bind="starRating : Elevation"></span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-lg-4 control-label">@Res("Res.Page.Map.Interests.Scree")</label>
-                        <div class="col-lg-8">
-                            <div class="form-control-static">
-                                <span style=" font-size: 24px;" data-bind="starRating : Scree"></span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-xs-6">
-                        <button class="btn btn-block btn-default" data-bind="click: $parent.cancelInterest">
-                            @Res("Res.Page.Map.Interests.CancelButton")
-                        </button>
-                    </div>
-                    <div class="col-xs-6">
-                        <button class="btn btn-block btn-primary" data-bind="click: $parent.saveInterest">
-                            @Res("Res.Page.Map.Interests.SaveButton")
-                        </button>
-                    </div>
-                </div>
-                <!-- /ko -->
-                <!-- ko ifnot: isSegmentPolylinesEdit -->
-                <!-- ko with: selectedSegment() -->
-                <h2>@Res("Res.Page.Map.Segment.Edit.Title")</h2>
-                <div class="form-group">
-                    <label class="col-lg-4 control-label">@Res("Res.Page.Map.Segment.Name")</label>
-                    <div class="col-lg-8">
-                        <input type="text" class="form-control" data-bind="value: Name" />
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label >@Res("Res.Page.Map.Segment.Comment")</label>
-                    <textarea class="form-control" data-bind="value: Comment"></textarea>
-                </div>
-                <div class="checkbox">
-                    <label>
-                        <input type="checkbox" data-bind="checked: IsPublic"/>
-                        @Res("Res.Page.Map.Segment.IsPublic")
-                    </label>
-                </div>
-                <div class="pull-right">
-                    <button class="btn btn-default" data-bind="click: $parent.cancelSegment">@Res("Res.Std.Cancel")</button>
-                    <button class="btn btn-primary" data-bind="click: $parent.saveSegment">@Res("Res.Std.Save")</button>
-                </div>
-                <button class="btn btn-danger" data-bind="click: $parent.deleteSegment">@Res("Res.Std.Delete")</button>
-                <button class="btn btn-default" data-bind="click: $parent.editSegmentPolylines">@Res("Res.Page.Map.Segment.EditPolylines")</button>
-                
-                <!-- /ko -->
-                <!-- /ko -->
-                <!-- ko if: isSegmentPolylinesEdit -->
-                <!-- ko with: selectedSegment() -->
-                <h2>@Res("Res.Page.Map.Segment.EditPolylines.Title")</h2>
-                <button class="btn btn-default" data-bind="click: $parent.cancelSegmentPolylines">@Res("Res.Std.Cancel")</button>
-                <button class="btn btn-primary" data-bind="click: $parent.saveSegmentPolylines">@Res("Res.Std.Save")</button>
-                <!-- /ko -->
-                <!-- /ko -->
-
-            </div>
+            @Html.Partial("Views/Map/_SegmentsEdit")
         </div>
         <div class="col-xs-9">
             <div id="map-canvas" style="width: 100%; height: 500px" data-bind="style: { height : pageHeight() - 5 + 'px' }"></div>
@@ -132,44 +47,5 @@
 </div>
 
 <script type="text/html" id="interest-details">
-    <div class="interest-popover">
-        <p>
-            <strong>@Res("Res.Page.Map.Impassable")</strong>
-            <!-- ko foreach: $root.Map.activityFlags -->
-            <!-- ko if:  $parent.ActivityFlag.hasFlag(val)-->
-            <span data-bind="res : 'Res.Page.Map.Interests.activityFlags.' + key"></span>
-            <!-- /ko -->
-            <!-- /ko -->
-            <!-- ko if:  ActivityFlag.hasFlag(ActivityFlags.Private)-->
-            <span data-bind="res : 'Res.Page.Map.Interests.activityFlags.Private'"></span>
-            <!-- /ko -->
-        </p>
-        <div>
-            <strong>@Res("Res.Page.Map.Difficulty")</strong>
-            <div class="form-group">
-                <label class="col-lg-4 control-label">@Res("Res.Page.Map.Interests.Mudding")</label>
-                <div class="col-lg-8">
-                    <div class="form-control-static">
-                        <span style=" font-size: 24px;" data-bind="starRating : Mudding"></span>
-                    </div>
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="col-lg-4 control-label">@Res("Res.Page.Map.Interests.Elevation")</label>
-                <div class="col-lg-8">
-                    <div class="form-control-static">
-                        <span style=" font-size: 24px;" data-bind="starRating : Elevation"></span>
-                    </div>
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="col-lg-4 control-label">@Res("Res.Page.Map.Interests.Scree")</label>
-                <div class="col-lg-8">
-                    <div class="form-control-static">
-                        <span style=" font-size: 24px;" data-bind="starRating : Scree"></span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+    @Html.Partial("Views/Map/_InterestDetails")
 </script>

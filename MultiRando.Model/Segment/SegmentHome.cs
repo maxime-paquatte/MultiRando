@@ -15,15 +15,16 @@ using NevaUtils;
 namespace MultiRando.Model.Segment
 {
     [SqlTable("tSegment", Package = typeof(Package), ResourcePath = "Segment.Res"), Versions("5.7.11")]
-    [SqlObjectItem("svSegmentGetPage,svSegmentGetPolyline")]
-    [SqlObjectItem("scSegmentCreate,scSegmentSetPolyline,scSegmentDelete,scSegmentUpdate")]
+    [SqlObjectItem("svSegmentGetInBound")]
+    [SqlObjectItem("scSegmentCreate,scSegmentSetPolyline,scSegmentDelete,scSegmentUpdate,scSegmentClone")]
     public class SegmentHome : SqlTable
     {
         void Construct(UserHome user) { }
     }
 
 
-    public class CommandHandler : SqlCommandHandlerBase, ICommandHandler<Create>, ICommandHandler<Delete>, ICommandHandler<SetPolyline>, ICommandHandler<Update>
+    public class CommandHandler : SqlCommandHandlerBase, ICommandHandler<Create>, ICommandHandler<Delete>, 
+        ICommandHandler<SetPolyline>, ICommandHandler<Update>, ICommandHandler<Clone>
     {
         public CommandHandler(IDbConfig config, IBus bus)
             : base(bus, config.ConnectionString)
@@ -49,23 +50,22 @@ namespace MultiRando.Model.Segment
         {
             Handle(d, context, commandId, command, "MR.scSegmentUpdate");
         }
+        public void Handle(IEventDispatcher d, IMessageContext context, string commandId, Clone command)
+        {
+            Handle(d, context, commandId, command, "MR.scSegmentClone");
+        }
     }
 
-    public class QueryReader : SqlQueryJSonReader, IQueryJSonReader<GetPage>, IQueryJSonReader<GetPolyline>
+    public class QueryReader : SqlQueryJSonReader, IQueryJSonReader<GetInBound>
     {
         public QueryReader(IDbConfig config)
             : base(config.ConnectionString)
         {
         }
-
-        public string Read(IMessageContext context, GetPage query)
+        
+        public string Read(IMessageContext context, GetInBound query)
         {
-            return Read(context, query, "MR.svSegmentGetPage");
-        }
-
-        public string Read(IMessageContext context, GetPolyline query)
-        {
-            return Read(context, query, "MR.svSegmentGetPolyline");
+            return Read(context, query, "MR.svSegmentGetInBound");
         }
     }
 }

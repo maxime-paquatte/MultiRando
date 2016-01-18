@@ -47,6 +47,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Segment\Commands\Clone.cs" />
+    <Compile Include="Segment\Events\Cloned.cs" />
+    <Compile Include="Segment\Queries\GetInBound.cs" />
     <Compile Include="UserSettings\Commands\Set.cs" />
     <Compile Include="UserSettings\Events\Changed.cs" />
     <Compile Include="UserSettings\Queries\Get.cs" />
@@ -61,8 +64,6 @@
     <Compile Include="Segment\Events\Changed.cs" />
     <Compile Include="Segment\Events\Deleted.cs" />
     <Compile Include="Segment\Events\Created.cs" />
-    <Compile Include="Segment\Queries\GetPolyline.cs" />
-    <Compile Include="Segment\Queries\GetPage.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
