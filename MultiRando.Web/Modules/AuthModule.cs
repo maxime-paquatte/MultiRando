@@ -52,14 +52,14 @@ namespace MultiRando.Web.Modules
 
         dynamic Login(dynamic x)
         {
+            var u = _userRepository.GetUser((string)Request.Form.email);
+            if (u != null) { 
+                var hash = PasswordHash.CreateHash(Request.Form.password);
+                if (PasswordHash.ValidatePassword(Request.Form.password, hash))
+                    return this.LoginAndRedirect(u.AuthId, fallbackRedirectUrl: FallbackRedirectUrl);
+            }
 
-            var hash = PasswordHash.CreateHash(Request.Form.password);
-            Guid authId = _userRepository.AuthUser(Request.Form.email, hash);
-            if (Guid.Empty ==  authId)
-                return View["Login", new { Email = Request.Form.email, IsRegister = false, LoginErrorResMessage = "Res.Login.Messages.BadLogin" }];
-
-            return this.LoginAndRedirect(authId, fallbackRedirectUrl: FallbackRedirectUrl);
-
+            return View["Login", new { Email = Request.Form.email, IsRegister = false, LoginErrorResMessage = "Res.Login.Messages.BadLogin" }];
         }
 
         dynamic RecoverPassword(dynamic x)

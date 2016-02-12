@@ -30,9 +30,9 @@
                             <li><a href="#">Action</a></li>
                             <li role="separator" class="divider"></li>
                             <li class="dropdown-header">@Res("Res.Page.Map.CurrentActivity")</li>
-                            <!-- ko foreach: activityFlags -->
-                            <li data-bind="css: { disabled : $parent.currentActivity() == key }">
-                                <a href="#" data-bind="click: function(){ $parent.currentActivity(key); }">
+                            <!-- ko foreach: ep.toKeyValues(ActivityFlags) -->
+                            <li data-bind="css: { disabled : $parent.currentActivity() == val }">
+                                <a href="#" data-bind="click: function(){ $parent.currentActivity(val); }">
                                     <span data-bind="text: ep.res('Res.Page.Map.Interests.activityFlags.' + key)"></span>
                                 </a>
                             </li>

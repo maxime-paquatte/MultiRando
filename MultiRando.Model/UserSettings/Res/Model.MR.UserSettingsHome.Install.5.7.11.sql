@@ -9,6 +9,9 @@ CREATE TABLE MR.tUserSettings
 		constraint DF_tUserSettings_MapZoom default(9),
 	MapTypeId			varchar(128) not null 
 		constraint DF_tUserSettings_MapTypeId default('satellite'),
+
+	Activity	int not null
+		constraint DF_tUserSettings_Activity default(0),
 	
 	constraint PK_tUserSettings primary key clustered ( UserId ),
 	CONSTRAINT FK_tUserSettings_UserId FOREIGN KEY(UserId)

@@ -106,7 +106,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="UserSettings\Res\scUserSettingsSet.sql" />
+    <EmbeddedResource Include="UserSettings\Res\scUserSettingsSetMap.sql" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="UserSettings\Res\svUserSettingsGet.sql" />
@@ -137,6 +137,9 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Segment\Res\scSegmentClone.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="UserSettings\Res\scUserSettingsSetActivity.sql" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

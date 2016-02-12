@@ -50,7 +50,8 @@
     <Compile Include="Segment\Commands\Clone.cs" />
     <Compile Include="Segment\Events\Cloned.cs" />
     <Compile Include="Segment\Queries\GetInBound.cs" />
-    <Compile Include="UserSettings\Commands\Set.cs" />
+    <Compile Include="UserSettings\Commands\SetActivity.cs" />
+    <Compile Include="UserSettings\Commands\SetMap.cs" />
     <Compile Include="UserSettings\Events\Changed.cs" />
     <Compile Include="UserSettings\Queries\Get.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

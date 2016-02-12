@@ -16,25 +16,29 @@ namespace MultiRando.Model.UserSettings
 {
     [SqlTable("tUserSettings", Package = typeof(Package), ResourcePath = "UserSettings.Res"), Versions("5.7.11")]
     [SqlObjectItem("svUserSettingsGet")]    
-    [SqlObjectItem("scUserSettingsSet")]
+    [SqlObjectItem("scUserSettingsSetMap,scUserSettingsSetActivity")]
     public class UserSettingsHome : SqlTable
     {
         void Construct(UserHome user) { }
     }
 
 
-    public class CommandHandler : SqlCommandHandlerBase, ICommandHandler<Set>
+    public class CommandHandler : SqlCommandHandlerBase, ICommandHandler<SetMap>, ICommandHandler<SetActivity>
     {
         public CommandHandler(IDbConfig config, IBus bus)
             : base(bus, config.ConnectionString)
         {
         }
 
-        public void Handle(IEventDispatcher d, IMessageContext context, string commandId, Set command)
+        public void Handle(IEventDispatcher d, IMessageContext context, string commandId, SetMap command)
         {
-            Handle(d, context, commandId, command, "MR.scUserSettingsSet");
+            Handle(d, context, commandId, command, "MR.scUserSettingsSetMap");
         }
 
+        public void Handle(IEventDispatcher d, IMessageContext context, string commandId, SetActivity command)
+        {
+            Handle(d, context, commandId, command, "MR.scUserSettingsSetActivity");
+        }
     }
 
     public class QueryReader : SqlQueryJSonReader, IQueryJSonReader<Get>

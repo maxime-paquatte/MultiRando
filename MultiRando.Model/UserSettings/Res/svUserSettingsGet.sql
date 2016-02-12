@@ -1,4 +1,4 @@
-﻿-- Version = 5.3.31, Package = MR.UserSettingsHome, Requires={  }
+﻿-- Version = 6.2.12, Package = MR.UserSettingsHome, Requires={  }
 
 ALTER procedure MR.svUserSettingsGet
 (
@@ -15,7 +15,8 @@ as begin
 		MapCenterLat =  CAST(s.MapCenter.Lat as decimal(18,16)),
 		MapCenterLong = CAST(s.MapCenter.Long as decimal(18,16)),
 		s.MapZoom,
-		s.MapTypeId
+		s.MapTypeId,
+		s.Activity
 	from [MR].[tUserSettings] s
 	where UserId = @_ActorId OR UserId = 0
 	order by UserId DESC

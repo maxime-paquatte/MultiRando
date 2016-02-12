@@ -2,21 +2,32 @@
 /// <reference path="~/ScriptsApp/main.js" />
 /// <reference path="~/scripts/google.map.js" />
 
-(function (w, ko, _, $, google, ep) {
+(function (w, ko, _, $, Backbone, google, ep) {
 
     w.map = w.auth || {};
     w.map.MapController = function (rootCtx, element, va, ava) {
         console.log("MapController loaded");
 
+      
         var _this = this;
         _this.rootCtx = rootCtx;
+
+        _.extend(_this, Backbone.Events);
+
 
         var viewModel = rootCtx.Map = {};
         _this.interestsCtrl = new map.InterestController(_this, viewModel);
         _this.segmentController = new map.SegmentController(_this, viewModel);
 
         _this.CurrentPolylines = null;
+
+        var initActivity = 0;
         viewModel.currentActivity = ko.observable();
+        viewModel.currentActivity.subscribe(function(nv) {
+            _this.trigger("changed.currentActivity.map", { activity: nv });
+            if (nv != initActivity)
+                ep.messaging.send('MultiRando.Message.UserSettings.Commands.SetActivity', { Activity: nv }, {});
+        });
 
         viewModel.pageHeight = ko.observable($(w).height());
         $(w).resize(function () { viewModel.pageHeight($(w).height()); });
@@ -24,7 +35,7 @@
 
         viewModel.mapCenter = ko.observable({}).extend({ rateLimit: { timeout: 5000, method: "notifyWhenChangesStop" } });
         viewModel.mapCenter.subscribe(function (nv) {
-            ep.messaging.send('MultiRando.Message.UserSettings.Commands.Set', nv, {
+            ep.messaging.send('MultiRando.Message.UserSettings.Commands.SetMap', nv, {
             });
         });
 
@@ -50,9 +61,9 @@
             var settings = _.defaults(options, {
                 path: path,
                 geodesic: true,
-                strokeColor: '#FF0000',
+                strokeColor: w.map.MapController.constants.ColorSegmentDefault,
+                strokeWeight: w.map.MapController.constants.StrokeWeightSegmentDefault,
                 strokeOpacity: 1.0,
-                strokeWeight: 2,
                 editable: false
             });
 
@@ -137,12 +148,22 @@
         ep.messaging.read('MultiRando.Message.UserSettings.Queries.Get', {}, function (r) {
             var mapOptions = { center: { lat: parseFloat(r.MapCenterLat) || 46.3240998, lng: parseFloat(r.MapCenterLong) || 2.5689203 }, zoom: parseFloat(r.MapZoom) || 15, mapTypeId: r.MapTypeId || google.maps.MapTypeId.SATELLITE };
             _this.initMap(mapOptions);
+            initActivity = r.Activity;
+            viewModel.currentActivity(r.Activity);
         });
 
 
         viewModel.activityFlags = _.filter(ep.toKeyValues(w.ActivityFlags), function (v) { return v.key != 'Private'; });
     };
 
+    w.map.MapController.constants = {
+        ColorSegmentEdit: '#9900ff',
+        ColorSegmentWrongActivityFlag: '#FF0000',
+        ColorSegmentDefault: '#00FFFF',
+        StrokeWeightSegmentDefault: 2,
+        StrokeWeightSegmentEdit: 2,
+        StrokeWeightSegmentOver: 3
+    };
 
     w.ActivityFlags = {
         Pedestrian: Math.pow(2, 1),
@@ -153,4 +174,4 @@
         Private: Math.pow(2, 30)
     }
 
-}(window, window.ko, window._, window.$, window.google, window.ep));
+}(window, window.ko, window._, window.$, window.Backbone, window.google, window.ep));

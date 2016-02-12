@@ -55,6 +55,12 @@ namespace MultiRando.Model.User
             return db.Single<bool>("select count(*) from MR.tUser where Email = @0", email);
         }
 
+        public User GetUser(string eamil)
+        {
+            var db = new Database(_config.ConnectionString, "System.Data.SqlClient");
+            return db.SingleOrDefault<User>("select * from MR.tUser where Email = @0", eamil);
+        }
+
         public User GetUser(Guid authId)
         {
             var db = new Database(_config.ConnectionString, "System.Data.SqlClient");
@@ -64,6 +70,8 @@ namespace MultiRando.Model.User
 
         public class User
         {
+            public Guid AuthId { get; set; }
+
             public int UserId { get; set; }
 
             public string Email { get; set; }
