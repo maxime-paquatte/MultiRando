@@ -16,7 +16,7 @@
         _this.fetchSegments = function (bounds, clear) {
             
             if (!bounds) bounds = mapCtrl.bound();
-            //if (clear) _this.clearSegments();
+            if (clear) _this.clearSegments();
             var segmentIds = {};
             _.each(viewModel.segments(), function (s) { segmentIds[s.SegmentId()] = s; });
             return ep.messaging.read('MultiRando.Message.Segment.Queries.GetInBound', bounds, function (r) {
@@ -38,81 +38,60 @@
         _this.segmentClick = function (s) {
             viewModel.selectSegment(s);
         };
+        _this.clearSegments = function () {
+            var ss = viewModel.segments();
+            for (var i = 0; i < ss.length; i++) {
+                ss[i].isSelected(true);
+                ss[i].polylines.setMap(null);
+            }
+            viewModel.segments.removeAll();
+            viewModel.selectedSegment(null);
+        }
 
         viewModel.selectedSegment = ko.observable();
 
         viewModel.addSegment = function () {
             //Save current before create new
-            if (viewModel.selectedSegment()) {
-                viewModel.saveSegmentPolylines();
-                viewModel.cancelSegment(viewModel.selectedSegment());
+            var s = viewModel.selectedSegment();
+            if (s) {
+                viewModel.saveSegment(s);
+                viewModel.cancelSegment(s);
             }
 
-            var s = new vm.Map.Segment(mapCtrl,{ onClick: _this.segmentClick });
+            s = new vm.Map.Segment(mapCtrl,{ onClick: _this.segmentClick });
             viewModel.segments.push(s);
             viewModel.selectSegment(s);
-            viewModel.editSegmentPolylines();
         }
         viewModel.selectSegment = function (r) {
             if (viewModel.selectedSegment())
                 viewModel.cancelSegment(viewModel.selectedSegment());
-            r.polylines.setOptions({
-                strokeColor: w.map.MapController.constants.ColorSegmentEdit,
-                strokeWeight: w.map.MapController.constants.StrokeWeightSegmentEdit,
-                zIndex : 99
-            });
+
+
+            mapCtrl.CurrentPolylines = r.polylines;
             viewModel.selectedSegment(r);
+            r.isSelected(true);
+            r.polylines.setEditable(true);
         }
         viewModel.cancelSegment = function (r) {
             r.cancel();
-           
+            r.isSelected(false);
+            r.polylines.setEditable(false);
             viewModel.selectedSegment(null);
-            viewModel.isSegmentPolylinesEdit(false);
+            mapCtrl.CurrentPolylines = null;
         }
         viewModel.saveSegment = function (d) {
-            ep.messaging.send('MultiRando.Message.Segment.Commands.Update', { SegmentId: d.SegmentId(), ActivityFlag: d.ActivityFlag(), Mudding: d.Mudding, Elevation: d.Elevation, Scree: d.Scree, IsRoad: d.IsRoad }, {
+            var str = d.polylines.toCommandStr();
+            ep.messaging.send('MultiRando.Message.Segment.Commands.Update', { SegmentId: d.SegmentId(), ActivityFlag: d.ActivityFlag(), Mudding: d.Mudding, Elevation: d.Elevation, Scree: d.Scree, IsRoad: d.IsRoad, Polylines: str }, {
                 'MultiRando.Message.Segment.Events.Changed': function (r) {
+                    ep.stdSuccessCallback();
+                    viewModel.cancelSegment(d);
+                },
+                'MultiRando.Message.Segment.Events.Created': function (r) {
+                    d.SegmentId(r.segmentId);
                     ep.stdSuccessCallback();
                     viewModel.cancelSegment(d);
                 }
             });
-        }
-
-        viewModel.isSegmentPolylinesEdit = ko.observable(false);
-
-        viewModel.cancelSegmentPolylines = function () {
-            var s = viewModel.selectedSegment();
-            if (s) s.polylines.setEditable(false);
-            viewModel.isSegmentPolylinesEdit(false);
-
-            mapCtrl.CurrentPolylines = null;
-        }
-        viewModel.editSegmentPolylines = function (d) {
-            var s = viewModel.selectedSegment();
-            if (s) s.polylines.setEditable(true);
-            viewModel.isSegmentPolylinesEdit(true);
-
-            mapCtrl.CurrentPolylines = s.polylines;
-        };
-        viewModel.saveSegmentPolylines = function (r) {
-            var s = viewModel.selectedSegment();
-            if (s){
-                var str = s.polylines.toCommandStr();
-                ep.messaging.send('MultiRando.Message.Segment.Commands.SetPolyline', {
-                    SegmentId: viewModel.selectedSegment().SegmentId(), Polylines: str}, {
-                    'MultiRando.Message.Segment.Events.Changed': function () {
-                        ep.stdSuccessCallback();
-                        if (viewModel.selectedSegment() == s)
-                            viewModel.cancelSegmentPolylines();
-                    },
-                    'MultiRando.Message.Segment.Events.Created': function (r) {
-                        s.SegmentId(r.segmentId);
-                        ep.stdSuccessCallback();
-                        if (viewModel.selectedSegment() == s)
-                            viewModel.cancelSegmentPolylines();
-                    }
-                });
-            }
         }
 
         viewModel.deleteSegment = function (r) {
@@ -126,14 +105,6 @@
             });
         }
 
-        _this.clearSegments = function() {
-            var ss = viewModel.segments();
-            for (var i = 0; i < ss.length; i++)
-                ss[i].polylines.setMap(null);
-            viewModel.segments.removeAll();
-            viewModel.selectedSegment(null);
-            viewModel.isSegmentPolylinesEdit(false);
-        }
     };
 
 

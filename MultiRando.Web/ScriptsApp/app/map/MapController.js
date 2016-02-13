@@ -175,7 +175,7 @@
         ColorSegmentDefault: '#00FFFF',
         StrokeWeightSegmentDefault: 3,
         StrokeWeightSegmentEdit: 3,
-        StrokeWeightSegmentOver: 4
+        StrokeWeightSegmentOver: 5
     };
 
     w.ActivityFlags = {

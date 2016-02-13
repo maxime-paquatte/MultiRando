@@ -11,6 +11,7 @@
 
         _this.defaultColor = '#00FFFF';
         _this.SegmentId = ko.observable(0);
+        _this.isSelected = ko.observable(false);
         _this.isCut = ko.observable(false);
         _this.ActivityFlag = ko.observable(0).extend({ bitFlag: {} });
 
@@ -20,6 +21,7 @@
         _this.IsRoad = ko.observable(false);
 
         _this.getColor = function () {
+            if (_this.isSelected()) return w.map.MapController.constants.ColorSegmentEdit;
             if (_this.IsRoad()) return w.map.MapController.constants.ColorSegmentRoad;
             var max = Math.max(parseInt(_this.Mudding()) , parseInt(_this.Elevation()) , parseInt(_this.Scree()));
 
@@ -27,6 +29,22 @@
                 ? w.map.MapController.constants.ColorSegmentWrongActivityFlag
                 : ep.getGreenToRedColor(max / 5);
         }
+
+        _this.isSelected.subscribe(function(nv) {
+            if (nv) {
+                _this.polylines.setOptions({
+                    strokeColor: w.map.MapController.constants.ColorSegmentEdit,
+                    strokeWeight: w.map.MapController.constants.StrokeWeightSegmentEdit,
+                    zIndex: 99
+                });
+            } else {
+                _this.polylines.setOptions({
+                    strokeColor: _this.getColor(),
+                    strokeWeight: w.map.MapController.constants.StrokeWeightSegmentDefault,
+                    zIndex: 1
+                });
+            }
+        });
 
         _this.polylines = mapCtrl.loadPolyline([], {
             editable: false,
@@ -38,13 +56,21 @@
             else options.onClick(_this);
         });
 
+        _this.polylines.addListener('rightclick', function (e) {
+            if (!_.isUndefined(e.vertex)) {
+                var p = _this.polylines.getPath().getArray();
+                p.splice(e.vertex, 1);
+                _this.polylines.setPath(p);
+            }
+        });
+
         _this.polylines.addListener('mouseover', function (e) {
-            _this.polylines.setOptions({ strokeWeight: w.map.MapController.constants.StrokeWeightSegmentOver });
-            mapCtrl.showInfo("<h1>TEST</h1>", new google.maps.LatLng( e.latLng.lat() + 0.00005, e.latLng.lng() + 0.00005));
+            _this.polylines.setOptions({ strokeColor: w.map.MapController.constants.ColorSegmentEdit });
+            if (!mapCtrl.CurrentPolylines) mapCtrl.showInfo("<h1>TEST</h1>", new google.maps.LatLng(e.latLng.lat() +0.00005, e.latLng.lng() +0.00005));
         });
         _this.polylines.addListener('mouseout', function (e) {
             _this.polylines.setOptions({
-                strokeWeight: w.map.MapController.constants.StrokeWeightSegmentDefault
+                strokeColor: _this.getColor(),
             });
             mapCtrl.closeInfo();
         });
@@ -80,24 +106,13 @@
                     b = c;
                 }
 
-                ep.messaging.send('MultiRando.Message.Segment.Commands.Clone', { SegmentId: _this.SegmentId() }, {
-                    'MultiRando.Message.Segment.Events.Cloned': function(r) {
-
-                        var strA = mapCtrl.toCommandStr(a);
-                        ep.messaging.send('MultiRando.Message.Segment.Commands.SetPolyline', {
-                            SegmentId: _this.SegmentId,
-                            Polylines: strA
-                        });
-
-                        var strB = mapCtrl.toCommandStr(b);
-                        ep.messaging.send('MultiRando.Message.Segment.Commands.SetPolyline', {
-                            SegmentId: r.newSegmentId,
-                            Polylines: strB
-                        }, {
-                            'MultiRando.Message.Segment.Events.Changed': function(r) {
-                                mapCtrl.segmentController.fetchSegments(null, true);
-                            }
-                        });
+                var strA = mapCtrl.toCommandStr(a);
+                var strB = mapCtrl.toCommandStr(b);
+                ep.messaging.send('MultiRando.Message.Segment.Commands.Split', {
+                    SegmentId: _this.SegmentId(), PolylinesA: strA, PolylinesB: strB
+                }, {
+                    'MultiRando.Message.Segment.Events.Splitted': function(r) {
+                        mapCtrl.segmentController.fetchSegments(null, false);
                     }
                 });
             }

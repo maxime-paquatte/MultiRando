@@ -2,7 +2,7 @@
 
 namespace MultiRando.Message.Segment.Events
 {
-    public class Cloned : IEvent
+    public class Splitted : IEvent
     {
         public string Source { get; set; }
 

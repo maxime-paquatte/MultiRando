@@ -12,5 +12,8 @@ namespace MultiRando.Message.Segment.Commands
         public byte Elevation { get; set; }
 
         public bool IsRoad { get; set; }
+
+        public string Polylines { get; set; }
+
     }
 }

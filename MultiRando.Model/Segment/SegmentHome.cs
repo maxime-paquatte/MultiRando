@@ -16,7 +16,7 @@ namespace MultiRando.Model.Segment
 {
     [SqlTable("tSegment", Package = typeof(Package), ResourcePath = "Segment.Res"), Versions("5.7.11")]
     [SqlObjectItem("svSegmentGetInBound")]
-    [SqlObjectItem("scSegmentSetPolyline,scSegmentDelete,scSegmentUpdate,scSegmentClone")]
+    [SqlObjectItem("scSegmentSetPolyline,scSegmentDelete,scSegmentUpdate,scSegmentSplit")]
     public class SegmentHome : SqlTable
     {
         void Construct(UserHome user) { }
@@ -24,19 +24,13 @@ namespace MultiRando.Model.Segment
 
 
     public class CommandHandler : SqlCommandHandlerBase,  ICommandHandler<Delete>, 
-        ICommandHandler<SetPolyline>, ICommandHandler<Update>, ICommandHandler<Clone>
+        ICommandHandler<Update>, ICommandHandler<Split>
     {
         public CommandHandler(IDbConfig config, IBus bus)
             : base(bus, config.ConnectionString)
         {
         }
         
-
-        public void Handle(IEventDispatcher d, IMessageContext context, string commandId, SetPolyline command)
-        {
-            Handle(d, context, commandId, command, "MR.scSegmentSetPolyline");
-        }
-
         public void Handle(IEventDispatcher d, IMessageContext context, string commandId, Delete command)
         {
             Handle(d, context, commandId, command, "MR.scSegmentDelete");
@@ -46,9 +40,9 @@ namespace MultiRando.Model.Segment
         {
             Handle(d, context, commandId, command, "MR.scSegmentUpdate");
         }
-        public void Handle(IEventDispatcher d, IMessageContext context, string commandId, Clone command)
+        public void Handle(IEventDispatcher d, IMessageContext context, string commandId, Split command)
         {
-            Handle(d, context, commandId, command, "MR.scSegmentClone");
+            Handle(d, context, commandId, command, "MR.scSegmentSplit");
         }
     }
 

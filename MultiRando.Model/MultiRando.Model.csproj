@@ -115,9 +115,6 @@
     <EmbeddedResource Include="Segment\Res\Model.MR.SegmentHome.Install.5.7.11.sql" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Segment\Res\scSegmentSetPolyline.sql" />
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="Segment\Res\scSegmentDelete.sql" />
   </ItemGroup>
   <ItemGroup>
@@ -136,7 +133,7 @@
     <EmbeddedResource Include="Segment\Res\svSegmentGetInBound.sql" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Segment\Res\scSegmentClone.sql" />
+    <EmbeddedResource Include="Segment\Res\scSegmentSplit.sql" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="UserSettings\Res\scUserSettingsSetActivity.sql" />
