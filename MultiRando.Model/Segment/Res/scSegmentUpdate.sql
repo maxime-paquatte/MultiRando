@@ -1,4 +1,4 @@
-﻿-- Version = 5.11.1, Package = MR.SegmentHome, Requires={   }
+﻿-- Version = 6.2.13, Package = MR.SegmentHome, Requires={   }
 
 
 ALTER procedure MR.scSegmentUpdate
@@ -12,7 +12,8 @@ ALTER procedure MR.scSegmentUpdate
 	@ActivityFlag		int,
 	@Mudding	tinyint,
 	@Elevation	tinyint,
-	@Scree	tinyint
+	@Scree	tinyint,
+	@IsRoad bit
 )
 as begin
 --[beginsp]
@@ -24,7 +25,8 @@ as begin
 		ActivityFlag = @ActivityFlag,
 		Mudding = @Mudding,
 		Elevation = @Elevation,
-		Scree = @Scree
+		Scree = @Scree,
+		IsRoad = @IsRoad
 	where SegmentId = @SegmentId
 
 	IF @@ROWCOUNT > 0

@@ -29,8 +29,9 @@ $(function() {
 ko.bindingHandlers.starRating = {
     init: function (element, valueAccessor) {
         $(element).addClass("rating");
+        $("<span class='none' title='0'>").appendTo(element);
         for (var i = 0; i < 5; i++)
-            $("<span class='star'>").appendTo(element);
+            $("<span class='star' title='"+ (i+1) +"'>").appendTo(element);
 
         // Handle mouse events on the stars
         $("span", element).each(function (index) {
@@ -39,7 +40,7 @@ ko.bindingHandlers.starRating = {
                 function () { $(this).prevAll().add(this).removeClass("hoverChosen") }
             ).click(function () {
                 var observable = valueAccessor();  // Get the associated observable
-                observable(index + 1);               // Write the new rating to it
+                observable(index);               // Write the new rating to it
             });
         });
     },
@@ -47,7 +48,7 @@ ko.bindingHandlers.starRating = {
         // Give the first x stars the "chosen" class, where x <= rating
         var observable = valueAccessor();
         $("span", element).each(function (index) {
-            $(this).toggleClass("chosen", index < observable());
+            $(this).toggleClass("chosen", index <= observable());
         });
     }
 };

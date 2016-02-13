@@ -1,4 +1,4 @@
-﻿-- Version = 5.8.15, Package = MR.SegmentHome, Requires={   }
+﻿-- Version = 6.2.13, Package = MR.SegmentHome, Requires={   }
 
 
 ALTER procedure MR.scSegmentClone
@@ -16,8 +16,8 @@ as begin
 	set xact_abort on
 	Begin tran
 	
-	insert into [MR].[tSegment] (CreatorId, ActivityFlag, Mudding, Elevation, Scree)
-	select @_ActorId, ActivityFlag, Mudding, Elevation, Scree
+	insert into [MR].[tSegment] (CreatorId, ActivityFlag, Mudding, Elevation, Scree, IsRoad)
+	select @_ActorId, ActivityFlag, Mudding, Elevation, Scree, IsRoad
 	from [MR].[tSegment] where SegmentId = @SegmentId
 
 	declare @NewSegmentId int = SCOPE_IDENTITY();

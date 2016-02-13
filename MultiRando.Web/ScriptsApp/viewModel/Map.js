@@ -5,7 +5,7 @@
 
     vm.Map = vm.Resource || {};
 
-    vm.Map.Segment = function(mapCtrl, data, options) {
+    vm.Map.Segment = function(mapCtrl, options) {
 
         var _this = this;
 
@@ -17,25 +17,55 @@
         _this.Mudding = ko.observable(0);
         _this.Elevation = ko.observable(0);
         _this.Scree = ko.observable(0);
+        _this.IsRoad = ko.observable(false);
 
-        ko.mapping.fromJS(data, {
-            'IsPublic': { create: function(o) { return ko.observable(parseInt(o.data)); } },
-            'ignore': ["Polylines"]
-        }, _this);
+        _this.getColor = function () {
+            if (_this.IsRoad()) return w.map.MapController.constants.ColorSegmentRoad;
+            var max = Math.max(parseInt(_this.Mudding()) , parseInt(_this.Elevation()) , parseInt(_this.Scree()));
 
-        _this.getColor = function() {
-            var score = (_this.Mudding() + _this.Elevation() + _this.Scree()) / (3 * 5 / 2);
             return _this.ActivityFlag.hasFlag(options.currentActivity)
                 ? w.map.MapController.constants.ColorSegmentWrongActivityFlag
-                : ep.getGreenToRedColor(score * 0.85);
+                : ep.getGreenToRedColor(max / 5);
         }
 
-
-        var path = data.Polylines ? mapCtrl.parsePolyLines(data.Polylines) : [];
-        _this.polylines = mapCtrl.loadPolyline(path, {
+        _this.polylines = mapCtrl.loadPolyline([], {
             editable: false,
             strokeColor: _this.getColor()
         });
+
+        _this.polylines.addListener('click', function (e) {
+            if (_this.isCut()) _this.cut(e.vertex);
+            else options.onClick(_this);
+        });
+
+        _this.polylines.addListener('mouseover', function (e) {
+            _this.polylines.setOptions({ strokeWeight: w.map.MapController.constants.StrokeWeightSegmentOver });
+            mapCtrl.showInfo("<h1>TEST</h1>", new google.maps.LatLng( e.latLng.lat() + 0.00005, e.latLng.lng() + 0.00005));
+        });
+        _this.polylines.addListener('mouseout', function (e) {
+            _this.polylines.setOptions({
+                strokeWeight: w.map.MapController.constants.StrokeWeightSegmentDefault
+            });
+            mapCtrl.closeInfo();
+        });
+
+
+
+        _this.loadData = function(data) {
+            ko.mapping.fromJS(data, {
+                'IsPublic': { create: function (o) { return parseInt(o.data); } },
+                'IsRoad': { update: function(o) {return o.data !== "0" ? true : false;} },
+                'ignore': ["Polylines"]
+            }, _this);
+
+            var path = data.Polylines ? mapCtrl.parsePolyLines(data.Polylines) : [];
+            _this.polylines.setPath(path);
+            _this.polylines.setOptions({ strokeColor : _this.getColor()});
+        };
+
+
+
+
 
         _this.cut = function(cutPos) {
             if (cutPos) {
@@ -65,7 +95,6 @@
                             Polylines: strB
                         }, {
                             'MultiRando.Message.Segment.Events.Changed': function(r) {
-                                _this.cancel();
                                 mapCtrl.segmentController.fetchSegments(null, true);
                             }
                         });
@@ -74,10 +103,6 @@
             }
         }
 
-        _this.polylines.addListener('click', function(e) {
-            if (_this.isCut()) _this.cut(e.vertex);
-            else options.onClick(_this);
-        });
 
         _this.cancel = function() {
             _this.polylines.setOptions({
@@ -86,13 +111,6 @@
                 editable: false
             });
         }
-
-        _this.polylines.addListener('mouseover', function(e) {
-            _this.polylines.setOptions({ strokeWeight: w.map.MapController.constants.StrokeWeightSegmentOver });
-        });
-        _this.polylines.addListener('mouseout', function(e) {
-            _this.polylines.setOptions({ strokeWeight: w.map.MapController.constants.StrokeWeightSegmentDefault });
-        });
 
 
         mapCtrl.on('changed.currentActivity.map', function(e) {

@@ -1,4 +1,4 @@
-﻿-- Version = 5.11.1, Package = MR.SegmentHome, Requires={  }
+﻿-- Version = 6.2.13, Package = MR.SegmentHome, Requires={  }
 
 ALTER procedure MR.svSegmentGetInBound
 (
@@ -31,7 +31,7 @@ as begin
 		CreatorId, IsPublic, 
 		CanEdit = IIF(CreatorId = @_ActorId OR r.IsPublic = 1, 1, 0),
 
-		r.ActivityFlag, r.Mudding,r.Scree,r.Elevation,
+		r.ActivityFlag, r.Mudding,r.Scree,r.Elevation, r.IsRoad,
 
 		Polylines = Polylines.ToString()
 	from  [MR].[tSegment] r 

@@ -16,18 +16,20 @@
         _this.fetchSegments = function (bounds, clear) {
             
             if (!bounds) bounds = mapCtrl.bound();
-            if (clear) _this.clearSegments();
-            var segmentIds = _.map(viewModel.segments(), function (s){ return s.SegmentId() });
+            //if (clear) _this.clearSegments();
+            var segmentIds = {};
+            _.each(viewModel.segments(), function (s) { segmentIds[s.SegmentId()] = s; });
             return ep.messaging.read('MultiRando.Message.Segment.Queries.GetInBound', bounds, function (r) {
                 for (var j = 0; j < r.length; j++) {
                     var d = r[j];
-                    if (segmentIds.indexOf(d.SegmentId) == -1) {
-                        var s = new vm.Map.Segment(mapCtrl, d, {
+                    if (!segmentIds[d.SegmentId]) {
+                        var s = new vm.Map.Segment(mapCtrl, {
                             onClick: _this.segmentClick,
                             currentActivity: viewModel.currentActivity()
                         });
+                        s.loadData(d);
                         viewModel.segments.push(s);
-                    }
+                    } else segmentIds[d.SegmentId].loadData(d);
                 }
 
             });
@@ -40,7 +42,13 @@
         viewModel.selectedSegment = ko.observable();
 
         viewModel.addSegment = function () {
-            var s = new vm.Map.Segment(mapCtrl, { SegmentId: ko.observable(0) }, { onClick: _this.segmentClick });
+            //Save current before create new
+            if (viewModel.selectedSegment()) {
+                viewModel.saveSegmentPolylines();
+                viewModel.cancelSegment(viewModel.selectedSegment());
+            }
+
+            var s = new vm.Map.Segment(mapCtrl,{ onClick: _this.segmentClick });
             viewModel.segments.push(s);
             viewModel.selectSegment(s);
             viewModel.editSegmentPolylines();
@@ -62,11 +70,10 @@
             viewModel.isSegmentPolylinesEdit(false);
         }
         viewModel.saveSegment = function (d) {
-            ep.messaging.send('MultiRando.Message.Segment.Commands.Update', { SegmentId: d.SegmentId(), ActivityFlag: d.ActivityFlag(), Mudding: d.Mudding, Elevation: d.Elevation, Scree: d.Scree }, {
+            ep.messaging.send('MultiRando.Message.Segment.Commands.Update', { SegmentId: d.SegmentId(), ActivityFlag: d.ActivityFlag(), Mudding: d.Mudding, Elevation: d.Elevation, Scree: d.Scree, IsRoad: d.IsRoad }, {
                 'MultiRando.Message.Segment.Events.Changed': function (r) {
                     ep.stdSuccessCallback();
                     viewModel.cancelSegment(d);
-                    d.SegmentId(r.SegmentId);
                 }
             });
         }
@@ -95,12 +102,14 @@
                     SegmentId: viewModel.selectedSegment().SegmentId(), Polylines: str}, {
                     'MultiRando.Message.Segment.Events.Changed': function () {
                         ep.stdSuccessCallback();
-                        viewModel.cancelSegmentPolylines();
+                        if (viewModel.selectedSegment() == s)
+                            viewModel.cancelSegmentPolylines();
                     },
                     'MultiRando.Message.Segment.Events.Created': function (r) {
                         s.SegmentId(r.segmentId);
                         ep.stdSuccessCallback();
-                        viewModel.cancelSegmentPolylines();
+                        if (viewModel.selectedSegment() == s)
+                            viewModel.cancelSegmentPolylines();
                     }
                 });
             }

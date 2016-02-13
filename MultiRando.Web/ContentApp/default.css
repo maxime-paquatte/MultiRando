@@ -18,14 +18,15 @@
 
 
 
-.rating span.star {
+.rating span.star, .rating span.none {
     font-family: FontAwesome;
     font-weight: normal;
     font-style: normal;
     display: inline-block;
 }
 
-    .rating span.star:hover {
+    .rating span.star:hover,  
+    .rating span.none:hover {
         cursor: pointer;
     }
 
@@ -42,5 +43,22 @@
 
     .rating span.star.hoverChosen:before {
         content: "\f005";
+        color: #e3cf7a;
+    }
+
+
+    .rating span.none:before {
+        content: "\f123";
+        padding-right: 5px;
+        color: #e3cf7a;
+    }
+
+    .rating span.none.chosen:before {
+        content: "\f123";
+        color: #e3cf7a;
+    }
+
+    .rating span.none.hoverChosen:before {
+        content: "\f123";
         color: #e3cf7a;
     }

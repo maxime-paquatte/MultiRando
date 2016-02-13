@@ -10,5 +10,7 @@ namespace MultiRando.Message.Segment.Commands
         public byte Mudding { get; set; }
         public byte Scree { get; set; }
         public byte Elevation { get; set; }
+
+        public bool IsRoad { get; set; }
     }
 }

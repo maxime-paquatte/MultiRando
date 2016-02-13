@@ -15,10 +15,15 @@
 <div class="checkbox">
     <label data-bind="click: function(){ ActivityFlag.toggleFlag(ActivityFlags.Private); }">
         <i class="fa" data-bind="css: ActivityFlag.hasFlag(ActivityFlags.Private) ? 'fa-check-square-o' : 'fa-square-o'"></i>
-        <span data-bind="res : 'Res.Page.Map.Interests.activityFlags.Private' "></span>
+        <span>@Res("Res.Page.Map.Interests.activityFlags.Private")</span>
     </label>
 </div>
-
+<div class="checkbox">
+    <label data-bind="click: function(){ IsRoad(!IsRoad()); }">
+        <i class="fa" data-bind="css: IsRoad() ? 'fa-check-square-o' : 'fa-square-o'"></i>
+        <span>@Res("Res.Page.Map.Interests.activityFlags.IsRoad")</span>
+    </label>
+</div>
 
 <h3>@Res("Res.Page.Map.Difficulty")</h3>
 <div class="form-group">

@@ -16,11 +16,11 @@ CREATE TABLE MR.tSegment
 	Mudding tinyint  not null constraint DF_tSegment_Mudding default 0,
 	Elevation tinyint  not null constraint DF_tSegment_Elevation default 0,
 	Scree tinyint  not null constraint DF_tSegment_Scree default 0,
+	IsRoad bit not null constraint DF_tSegment_IsRoad default 0,
 
 	constraint PK_tSegment primary key clustered ( SegmentId ),
 	CONSTRAINT FK_tSegment_UserId FOREIGN KEY(CreatorId)
 		REFERENCES [MR].[tUser](UserId)
 )
-
 
 --[endscript]

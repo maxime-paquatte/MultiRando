@@ -145,6 +145,18 @@
             } 
         }
 
+        var infowindow = null;
+        _this.showInfo = function (contentString, latLng) {
+            infowindow = new google.maps.InfoWindow({
+                content: contentString,
+                position: latLng
+            });
+            infowindow.open(_this.map);
+        }
+        _this.closeInfo = function () {
+            if (infowindow) infowindow.close();
+        }
+
         ep.messaging.read('MultiRando.Message.UserSettings.Queries.Get', {}, function (r) {
             var mapOptions = { center: { lat: parseFloat(r.MapCenterLat) || 46.3240998, lng: parseFloat(r.MapCenterLong) || 2.5689203 }, zoom: parseFloat(r.MapZoom) || 15, mapTypeId: r.MapTypeId || google.maps.MapTypeId.SATELLITE };
             _this.initMap(mapOptions);
@@ -157,12 +169,13 @@
     };
 
     w.map.MapController.constants = {
-        ColorSegmentEdit: '#9900ff',
-        ColorSegmentWrongActivityFlag: '#FF0000',
+        ColorSegmentRoad: '#9900ff',
+        ColorSegmentEdit: '#33ccff',
+        ColorSegmentWrongActivityFlag: '#000',
         ColorSegmentDefault: '#00FFFF',
-        StrokeWeightSegmentDefault: 2,
-        StrokeWeightSegmentEdit: 2,
-        StrokeWeightSegmentOver: 3
+        StrokeWeightSegmentDefault: 3,
+        StrokeWeightSegmentEdit: 3,
+        StrokeWeightSegmentOver: 4
     };
 
     w.ActivityFlags = {
