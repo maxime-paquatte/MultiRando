@@ -47,6 +47,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Track\Queries\Line.cs" />
+    <Compile Include="Track\Queries\ForActor.cs" />
     <Compile Include="Segment\Commands\Split.cs" />
     <Compile Include="Segment\Events\Splitted.cs" />
     <Compile Include="Segment\Queries\GetInBound.cs" />
@@ -64,7 +66,9 @@
     <Compile Include="Segment\Events\Deleted.cs" />
     <Compile Include="Segment\Events\Created.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Track\Commands\" />
+  </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />

@@ -25,6 +25,8 @@ namespace MultiRando.Web.Core.Auth
             CurrentCultureId = 9;
             Claims = Enumerable.Empty<string>();
         }
+
+        public bool IsAnonymous => UserId == 0;
     }
 
 
@@ -36,5 +38,20 @@ namespace MultiRando.Web.Core.Auth
     public class UserIdentityProvider : IUserIdentityProvider
     {
         public IUserIdentity CurrentUser { get; set; }
+    }
+
+    public static class UserIdentityExt
+    {
+        public static bool IsAnonymous(this IUserIdentity i)
+        {
+            var epIdentity = i as UserIdentity;
+            if (epIdentity == null) return true;
+            return epIdentity.IsAnonymous;
+        }
+
+        public static UserIdentity CurrentUser(this NancyContext c)
+        {
+            return (c.CurrentUser as UserIdentity) ?? UserIdentity.GetAnonymous(c);
+        }
     }
 }

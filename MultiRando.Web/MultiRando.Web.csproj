@@ -223,6 +223,7 @@
     <None Include="Views\Auth\Login.cshtml" />
     <None Include="Views\Home\Index.cshtml" />
     <None Include="Views\Map\_InterestDetails.cshtml" />
+    <None Include="Views\Map\_Tracks.cshtml" />
     <None Include="Views\Map\_Interests.cshtml" />
     <None Include="Views\Map\_SegmentsEdit.cshtml" />
     <None Include="Views\Map\Index.cshtml" />
@@ -244,6 +245,7 @@
     <Content Include="ScriptsApp\admin\Messaging\MessagingController.js" />
     <Content Include="ScriptsApp\admin\Resources\ResourcesListController.js" />
     <Content Include="ScriptsApp\app\auth\AskPasswordController.js" />
+    <Content Include="ScriptsApp\app\map\TrackController.js" />
     <Content Include="ScriptsApp\app\map\SegmentController.js" />
     <Content Include="ScriptsApp\app\map\InterestController.js" />
     <Content Include="ScriptsApp\app\map\MapController.js" />

@@ -5,7 +5,7 @@
 (function (w, ko, _, $, google, ep) {
     var vm = window.ep.vm;
 
-    w.map = w.auth || {};
+    w.map = w.map || {};
     w.map.SegmentController = function (mapCtrl, viewModel) {
         console.log("SegmentController loaded");
 

@@ -35,19 +35,20 @@
                 _this.polylines.setOptions({
                     strokeColor: w.map.MapController.constants.ColorSegmentEdit,
                     strokeWeight: w.map.MapController.constants.StrokeWeightSegmentEdit,
-                    zIndex: 99
+                    zIndex: 1
                 });
             } else {
                 _this.polylines.setOptions({
                     strokeColor: _this.getColor(),
                     strokeWeight: w.map.MapController.constants.StrokeWeightSegmentDefault,
-                    zIndex: 1
+                    zIndex: 20
                 });
             }
         });
 
         _this.polylines = mapCtrl.loadPolyline([], {
             editable: false,
+            zIndex: 20,
             strokeColor: _this.getColor()
         });
 
@@ -145,4 +146,39 @@
         ko.mapping.fromJS(data || {}, { 'copy': ["Polylines"] }, _this);
     };
 
+
+    vm.Map.Track = function (mapCtrl, data, options) {
+
+        var _this = this;
+
+        _this.TrackId = ko.observable(0);
+        _this.Name = ko.observable('');
+
+        _this.polylines = null;
+
+        _this.select = function () {
+
+            if (_this.polylines == null) {
+                _this.polylines = mapCtrl.loadPolyline([], {
+                    editable: false,
+                    zIndex: 15,
+                    strokeColor: w.map.MapController.constants.ColorTrackDefault
+                });
+                 ep.messaging.read('MultiRando.Message.Track.Queries.Line', {
+                    TrackId: _this.TrackId()
+                }, function (r) {
+                var path = r ? mapCtrl.parsePolyLines(r): [];
+                _this.polylines.setPath(path);
+                mapCtrl.map.setCenter(path[0]);
+                });
+            }else{
+
+                if (_this.polylines.getMap())
+                    _this.polylines.setMap(null);
+                else _this.polylines.setMap(mapCtrl.map);
+            }
+        }
+
+        ko.mapping.fromJS(data || {}, {  }, _this);
+    };
 })(window, ko, ep);

@@ -6,6 +6,7 @@ CREATE TABLE MR.tSegment
 	SegmentId		int not null IDENTITY(1,1),
 	CreatorId		int not null,
 	Polylines		geography null ,
+	LineString		geometry null ,
 
 	IsPublic		bit	not null constraint DF_tSegment_IsPublic DEFAULT(0),
 
@@ -18,9 +19,16 @@ CREATE TABLE MR.tSegment
 	Scree tinyint  not null constraint DF_tSegment_Scree default 0,
 	IsRoad bit not null constraint DF_tSegment_IsRoad default 0,
 
+	
+	TrackId		int null,	
+
 	constraint PK_tSegment primary key clustered ( SegmentId ),
+	CONSTRAINT FK_tSegment_TrackId FOREIGN KEY(TrackId)
+		REFERENCES [MR].tTrack(TrackId),
 	CONSTRAINT FK_tSegment_UserId FOREIGN KEY(CreatorId)
 		REFERENCES [MR].[tUser](UserId)
 )
+
+
 
 --[endscript]

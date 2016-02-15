@@ -4,7 +4,7 @@
 
 (function (w, ko, _, $, google, ep) {
 
-    w.map = w.auth || {};
+    w.map = w.map || {};
     w.map.InterestController = function (mapCtrl, viewModel) {
         console.log("InterestController loaded");
 

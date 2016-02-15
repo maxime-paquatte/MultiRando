@@ -4,7 +4,7 @@
 
 (function (w, ko, _, $, Backbone, google, ep) {
 
-    w.map = w.auth || {};
+    w.map = w.map || {};
     w.map.MapController = function (rootCtx, element, va, ava) {
         console.log("MapController loaded");
 
@@ -18,6 +18,7 @@
         var viewModel = rootCtx.Map = {};
         _this.interestsCtrl = new map.InterestController(_this, viewModel);
         _this.segmentController = new map.SegmentController(_this, viewModel);
+        _this.trackController = new map.TrackController(_this, viewModel);
 
         _this.CurrentPolylines = null;
 
@@ -49,7 +50,7 @@
 
 
         _this.parsePolyLines = function (str) {
-            var parts = str.substr('"MULTIPOINT '.length).replace(/\(/g, '').replace(/\)/g, '').split(',');
+            var parts = str.substr('"LINESTRING '.length).replace(/\(/g, '').replace(/\)/g, '').split(',');
             var path = _.map(parts, function (p) {
                 var ll = p.trim().split(' ');
                 return new google.maps.LatLng(ll[1], ll[0]);
@@ -69,12 +70,7 @@
 
             var polyline = new google.maps.Polyline(settings);
 
-            polyline.addListener('dblclick', function (e) {
-                var p = polyline.getPath();
-                p.removeAt(e.vertex);
-                polyline.setPath(p);
-            });
-
+            
             polyline.setMap(_this.map);
 
             polyline.toCommandStr = function () {
@@ -84,7 +80,7 @@
             return polyline;
         }
         _this.toCommandStr = function(a) {
-            return _.toArray(_.map(a, function (p) { return '(' + p.lng() + ' ' + p.lat() + ')'; })).join(',');
+            return _.toArray(_.map(a, function (p) { return + p.lng() + ' ' + p.lat() ; })).join(',');
         }
 
         _this.cancelPolylines = function () {
@@ -173,6 +169,7 @@
         ColorSegmentEdit: '#33ccff',
         ColorSegmentWrongActivityFlag: '#000',
         ColorSegmentDefault: '#00FFFF',
+        ColorTrackDefault: '#ffff66',
         StrokeWeightSegmentDefault: 3,
         StrokeWeightSegmentEdit: 3,
         StrokeWeightSegmentOver: 5

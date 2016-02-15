@@ -85,6 +85,7 @@ namespace MultiRando.Web
             container.Register<IMessageContext, MessageContextWrapper>();
             container.Register<IResourceContext, ResourceContextWrapper>();
             container.Register<IUserIdentityProvider, UserIdentityProvider>();
+            container.Register<UserIdentity>();
         }
     }
 }

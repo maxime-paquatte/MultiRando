@@ -15,8 +15,8 @@ as begin
 --[beginsp]
 
 	
-	DECLARE @boundingRect geography
-	SET @boundingRect = geography::Parse('POLYGON((' + 
+	DECLARE @boundingRect geometry
+	SET @boundingRect = geometry::Parse('POLYGON((' + 
 				@NorthEastLng + ' '  + @NorthEastLat + ', ' + 
 				@SouthWestLng + ' ' + @NorthEastLat + ', ' + 
 				@SouthWestLng + ' ' + @SouthWestLat + ', ' + 
@@ -33,9 +33,9 @@ as begin
 
 		r.ActivityFlag, r.Mudding,r.Scree,r.Elevation, r.IsRoad,
 
-		Polylines = Polylines.ToString()
+		Polylines = LineString.ToString()
 	from  [MR].[tSegment] r 
-	where @boundingRect.STIntersects  ( r.Polylines ) = 1
+	where @boundingRect.STIntersects  ( r.LineString ) = 1
 	ORDER BY CreationDate DESC
 			
 	FOR XML PATH('data'), root('data'),  ELEMENTS, TYPE

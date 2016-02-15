@@ -1,0 +1,23 @@
+﻿@using Nancy
+@inherits MultiRando.Web.Core.Helpers.RazorViewBase<dynamic>
+
+<div class="row">
+    <div class="col-md-6">
+        <h2>@Res("Res.Page.Map.Track.Title")</h2>
+    </div>
+    <div class="col-md-6">
+        <div style="margin-top: 22px;" class="pull-right">
+            <label for="gpxInput" class="btn btn-default" title="@Res("Res.Page.Map.Track.AddGpx.Tooltip")">
+                <span>GPX</span>
+                <sup class="fa fa-plus"></sup>
+            </label>
+        </div>
+        </div>
+</div>
+
+<div class="list-group" data-bind="foreach: tracks">
+    <a href="#" class="list-group-item" data-bind="click: select">
+        <span class="badge">14</span>
+        <span data-bind="text: Name"></span>
+    </a>
+</div>
