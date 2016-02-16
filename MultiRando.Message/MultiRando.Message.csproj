@@ -47,6 +47,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Track\Commands\Rename.cs" />
+    <Compile Include="Track\Commands\Delete.cs" />
+    <Compile Include="Track\Events\Changed.cs" />
+    <Compile Include="Track\Events\Deleted.cs" />
     <Compile Include="Track\Queries\Line.cs" />
     <Compile Include="Track\Queries\ForActor.cs" />
     <Compile Include="Segment\Commands\Split.cs" />
@@ -66,9 +70,7 @@
     <Compile Include="Segment\Events\Deleted.cs" />
     <Compile Include="Segment\Events\Created.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Track\Commands\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />

@@ -44,7 +44,12 @@
                 var xhr = ep.uploadFile(f, '/map/uploadGpx/', function (r) {
                     if (r.result == 'success') {
                         viewModel.progress.remove(p);
-                        _this.fetch();
+                        _this.fetch().then(function() {
+                            var t = _.find(viewModel.tracks(), function(d) {
+                                return d.TrackId() == r.trackId;
+                            });
+                            if (t) t.select();
+                        });
                     } else {
                         p.error(r.message);
                         ep.showException(r.exId);
@@ -59,6 +64,16 @@
                 });
             }
         };
+
+        viewModel.deleteTrack = function(t) {
+            w.alertify.confirm(ep.res('Res.Std.ConfirmDelete'), function(ok) {
+                if (ok) {
+                    ep.messaging.send('MultiRando.Message.Track.Commands.Delete', { TrackId: t.TrackId() }, {
+                        'MultiRando.Message.Track.Events.Deleted': function (r) { _this.fetch().then(ep.stdSuccessCallback); }
+                    });
+                }
+            });
+        }
 
         _this.fetch = function() {
             return ep.messaging.read('MultiRando.Message.Track.Queries.ForActor', {}, function (r) {

@@ -16,8 +16,9 @@
 </div>
 
 <div class="list-group" data-bind="foreach: tracks">
-    <a href="#" class="list-group-item" data-bind="click: select">
-        <span class="badge">14</span>
+    <a href="#" class="list-group-item parent-over" data-bind="click: select">
+        <span href="#" class="pull-right visible-on-parent-over" style="cursor: pointer" data-bind="click: $parent.deleteTrack, clickBubble : false"><i class="fa fa-times"></i></span>
+        <span href="#" class="pull-right visible-on-parent-over" style="cursor: pointer" data-bind="click: rename, clickBubble : false"><i class="fa fa-pencil"></i></span>
         <span data-bind="text: Name"></span>
     </a>
 </div>

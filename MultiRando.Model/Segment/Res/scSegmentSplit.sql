@@ -18,16 +18,16 @@ as begin
 	set xact_abort on
 	Begin tran
 	
-	declare @a varchar(MAX) = 'MULTIPOINT('+ @PolylinesA +')';
-	declare @b varchar(MAX) = 'MULTIPOINT('+ @PolylinesB +')';
+	declare @a varchar(MAX) = 'LINESTRING('+ @PolylinesA +')';
+	declare @b varchar(MAX) = 'LINESTRING('+ @PolylinesB +')';
 	
-	insert into [MR].[tSegment] (CreatorId, ActivityFlag, Mudding, Elevation, Scree, IsRoad, Polylines)
-	select @_ActorId, ActivityFlag, Mudding, Elevation, Scree, IsRoad, geography::Parse(@b)
+	insert into [MR].[tSegment] (CreatorId, ActivityFlag, Mudding, Elevation, Scree, IsRoad, LineString)
+	select @_ActorId, ActivityFlag, Mudding, Elevation, Scree, IsRoad, geometry::Parse(@b)
 	from [MR].[tSegment] where SegmentId = @SegmentId
 
 	declare @NewSegmentId int = SCOPE_IDENTITY();
 
-	update [MR].[tSegment] set Polylines =  geography::Parse(@a)
+	update [MR].[tSegment] set LineString =  geometry::Parse(@a)
 	where SegmentId = @SegmentId
 
 	declare @event xml = (

@@ -14,7 +14,7 @@ as begin
 	select v.LINESTRING.ToString()
 	from [MR].[tTrack] t
 	left outer join MR.vGpxLineString v on v.TrackId = t.TrackId
-	where t.UserId = @TrackId
+	where t.TrackId = @TrackId
 			
 	FOR XML PATH('data'), root('data'),  ELEMENTS, TYPE
 

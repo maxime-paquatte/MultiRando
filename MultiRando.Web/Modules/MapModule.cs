@@ -30,19 +30,19 @@ namespace MultiRando.Web.Modules
                 var file = Request.Files.FirstOrDefault();
                 if (file == null) return Response.AsJson(new { result = "nofiles" });
 
-                
+                int trackId;
                 using (var reader = XmlReader.Create(file.Value))
                 {
                     XmlDocument doc = new XmlDocument();
                     doc.Load(reader);
                     foreach (XmlNode node in doc.Cast<XmlNode>().Where(node => node.NodeType == XmlNodeType.XmlDeclaration))
                         doc.RemoveChild(node);
-                    gpxRepository.CreateGpx(Context.CurrentUser().UserId, file.Name, doc.OuterXml);
+                    trackId = gpxRepository.CreateGpx(Context.CurrentUser().UserId, file.Name, doc.OuterXml);
                 }
 
                 
 
-                return Response.AsJson(new { result = "success" });
+                return Response.AsJson(new { result = "success", trackId });
             };
         }
     }
