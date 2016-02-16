@@ -7,7 +7,7 @@
 
 <div class="container-fluid" data-bind="inject : map.MapController">
     <div class="row" data-bind="with: Map">
-        <div class="col-xs-3">
+        <div class="col-xs-3" data-bind="event : { dragover: dragInOut, dragleave: dragInOut }, style : { height : pageHeight() + 'px' }">
             <div style="margin-top: 22px;" class="pull-right">
                
                 <button class="btn btn-default" title="@Res("Res.Page.Map.AddSegment.Tooltip")" data-bind="click: addSegment">

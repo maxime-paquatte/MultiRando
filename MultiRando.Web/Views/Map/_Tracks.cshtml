@@ -1,24 +1,27 @@
 ﻿@using Nancy
 @inherits MultiRando.Web.Core.Helpers.RazorViewBase<dynamic>
 
-<div class="row">
-    <div class="col-md-6">
-        <h2>@Res("Res.Page.Map.Track.Title")</h2>
-    </div>
-    <div class="col-md-6">
-        <div style="margin-top: 22px;" class="pull-right">
-            <label for="gpxInput" class="btn btn-default" title="@Res("Res.Page.Map.Track.AddGpx.Tooltip")">
-                <span>GPX</span>
-                <sup class="fa fa-plus"></sup>
-            </label>
-        </div>
-        </div>
-</div>
+<div data-bind="event: { drop : drop }, style : { 'border' : isDragover() ? '2px dotted #428bca' : 'none' }">
 
-<div class="list-group" data-bind="foreach: tracks">
-    <a href="#" class="list-group-item parent-over" data-bind="click: select">
-        <span href="#" class="pull-right visible-on-parent-over" style="cursor: pointer" data-bind="click: $parent.deleteTrack, clickBubble : false"><i class="fa fa-times"></i></span>
-        <span href="#" class="pull-right visible-on-parent-over" style="cursor: pointer" data-bind="click: rename, clickBubble : false"><i class="fa fa-pencil"></i></span>
-        <span data-bind="text: Name"></span>
-    </a>
+    <div class="row">
+        <div class="col-md-6">
+            <h2>@Res("Res.Page.Map.Track.Title")</h2>
+        </div>
+        <div class="col-md-6">
+            <div style="margin-top: 22px;" class="pull-right">
+                <label for="gpxInput" class="btn btn-default" title="@Res("Res.Page.Map.Track.AddGpx.Tooltip")">
+                    <span>GPX</span>
+                    <sup class="fa fa-plus"></sup>
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <div class="list-group" data-bind="foreach: tracks">
+        <a href="#" class="list-group-item parent-over" data-bind="click: select, css : { active : isSelected }">
+            <span href="#" class="pull-right visible-on-parent-over" style="cursor: pointer" data-bind="click: $parent.deleteTrack, clickBubble : false"><i class="fa fa-times"></i></span>
+            <span href="#" class="pull-right visible-on-parent-over" style="cursor: pointer" data-bind="click: rename, clickBubble : false"><i class="fa fa-pencil"></i></span>
+            <span data-bind="text: Name"></span>
+        </a>
+    </div>
 </div>

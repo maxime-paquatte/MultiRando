@@ -151,6 +151,7 @@
 
         _this.TrackId = ko.observable(0);
         _this.Name = ko.observable('');
+        _this.isSelected = ko.observable(false);
 
         _this.polylines = null;
         _this.start = null;
@@ -159,6 +160,7 @@
             if (_this.polylines == null) {
                 _this.polylines = mapCtrl.loadPolyline([], {
                     editable: false,
+                    clickable : false,
                     zIndex: 15,
                     strokeColor: w.map.MapController.constants.ColorTrackDefault
                 });
@@ -168,13 +170,18 @@
                     var path = r ? mapCtrl.parsePolyLines(r) : [];
                     _this.polylines.setPath(path);
                     mapCtrl.map.setCenter(_this.start = path[0]);
+                    _this.isSelected(true);
                 });
             } else {
 
                 if (!_this.polylines.getMap()) {
                     _this.polylines.setMap(mapCtrl.map);
                     mapCtrl.map.setCenter(_this.start);
-                } else _this.polylines.setMap(null);
+                    _this.isSelected(true);
+                } else {
+                    _this.polylines.setMap(null);
+                    _this.isSelected(false);
+                }
             }
         }
 
