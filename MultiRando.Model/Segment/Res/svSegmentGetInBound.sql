@@ -28,13 +28,14 @@ as begin
 	select "@json:Array" = 'true',	
 		r.SegmentId, 
 		r.CreationDate, 
-		CreatorId, IsPublic, 
+		IsPublic, CreatorId, CreatorDisplayName = u.DisplayName,
 		CanEdit = IIF(CreatorId = @_ActorId OR r.IsPublic = 1, 1, 0),
 
 		r.ActivityFlag, r.Mudding,r.Scree,r.Elevation, r.IsRoad,
 
 		Polylines = LineString.ToString()
 	from  [MR].[tSegment] r 
+	inner join MR.tUser u on u.UserId = r.CreatorId
 	where @boundingRect.STIntersects  ( r.LineString ) = 1
 	ORDER BY CreationDate DESC
 			

@@ -7,7 +7,8 @@ CREATE TABLE MR.tUser
 	Email			nvarchar(256) not null UNIQUE,
 	EmailLastChange datetime2(0) not null  constraint DF_tUser_EmailLastChange default(GETUTCDATE()),	
 
-
+	
+	DisplayName		nvarchar(256) not null,
 	Passwd			 nvarchar(MAX) null,
 	PasswdLastChange datetime2(0) null,
 
@@ -16,8 +17,6 @@ CREATE TABLE MR.tUser
 	
 	constraint PK_tUser primary key clustered ( UserId )
 )
-
-
 
 --[endscript]
 

@@ -36,7 +36,9 @@
         }
 
         _this.segmentClick = function (s) {
-            viewModel.selectSegment(s);
+            var a = new vm.Map.SegmentSelectedEventArg(s);
+            mapCtrl.trigger("selected.segment.map", a);
+            if (!a.canceled) viewModel.selectSegment(s);
         };
         _this.clearSegments = function () {
             var ss = viewModel.segments();

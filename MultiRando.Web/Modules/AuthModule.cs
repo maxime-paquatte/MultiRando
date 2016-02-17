@@ -45,7 +45,7 @@ namespace MultiRando.Web.Modules
                 return View["Login", new { IsRegister = true, RegisterErrorResMessage = "Res.Register.Messages.EmailExists" }];
 
             var hash = PasswordHash.CreateHash(Request.Form.password);
-            Guid userId = _userRepository.CreateUser(Request.Form.email, hash);
+            Guid userId = _userRepository.CreateUser(Request.Form.email, Request.Form.displayName, hash);
             return this.LoginAndRedirect(userId, fallbackRedirectUrl: FallbackRedirectUrl);
 
         }

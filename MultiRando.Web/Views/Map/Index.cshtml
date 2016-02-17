@@ -9,7 +9,7 @@
     <div class="row" data-bind="with: Map">
         <div class="col-xs-3" data-bind="event : { dragover: dragInOut, dragleave: dragInOut }, style : { height : pageHeight() + 'px' }">
             <div style="margin-top: 22px;" class="pull-right">
-               
+
                 <button class="btn btn-default" title="@Res("Res.Page.Map.AddSegment.Tooltip")" data-bind="click: addSegment">
                     <i class="fa fa-random"></i>
                     <sup class="fa fa-plus"></sup>
@@ -23,7 +23,9 @@
                     <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dLabel">
-                    <li><a href="#">Action</a></li>
+                    <li>
+                        <a href="#">Action</a>
+                    </li>
                     <li role="separator" class="divider"></li>
                     <li class="dropdown-header">@Res("Res.Page.Map.CurrentActivity")</li>
                     <!-- ko foreach: ep.toKeyValues(ActivityFlags) -->
@@ -37,8 +39,9 @@
 
             </div>
             <div class="clearfix"></div>
-                        @Html.Partial("Views/Map/_SegmentsEdit")
-                        @Html.Partial("Views/Map/_Tracks")
+            @Html.Partial("Views/Map/_SegmentsEdit")
+            @Html.Partial("Views/Map/_Routes")
+            @Html.Partial("Views/Map/_Tracks")
         </div>
         <div class="col-xs-9">
             <div id="map-canvas" style="width: 100%; height: 500px" data-bind="style: { height : pageHeight() - 5 + 'px' }"></div>
@@ -46,7 +49,7 @@
 
 
         <input type="file" id="gpxInput" data-bind="event: { change: gpxInputChange }"
-               style="position: fixed; z-index: -2; opacity: 0;" />
+               style="position: fixed; z-index: -2; opacity: 0;"/>
     </div>
 </div>
 

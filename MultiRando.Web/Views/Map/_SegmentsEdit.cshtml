@@ -3,7 +3,33 @@
 
 <!-- ko with: selectedSegment() -->
 <h2>@Res("Res.Page.Map.Segment.Edit.Title")</h2>
- <!-- ko foreach: $root.Map.activityFlags -->
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            <label class="col-lg-6 control-label">@Res("Res.Page.Map.Creator")</label>
+            <div class="col-lg-6">
+                <div class="form-control-static">
+                    <span data-bind="text : CreatorDisplayName"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            <label class="col-lg-6 control-label">@Res("Res.Page.Map.CreationDate")</label>
+            <div class="col-lg-6">
+                <div class="form-control-static">
+                    <span data-bind="date : CreationDate"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<h3>@Res("Res.Page.Map.Activity")</h3>
+<!-- ko foreach: $root.Map.activityFlags -->
 <div class="checkbox">
     <label data-bind="click: function(){ $parent.ActivityFlag.toggleFlag(val); }">
         <i class="fa" data-bind="css: $parent.ActivityFlag.hasFlag(val) ? 'fa-check-square-o' : 'fa-square-o'"></i>
@@ -45,10 +71,11 @@
     <label class="col-lg-4 control-label">@Res("Res.Page.Map.Scree")</label>
     <div class="col-lg-8">
         <div class="form-control-static">
-            <span style=" font-size: 24px;" data-bind="starRating : Scree"></span>
+            <span style="font-size: 24px;" data-bind="starRating : Scree"></span>
         </div>
     </div>
 </div>
+
 <div class="pull-right">
     <button class="btn btn-default" data-bind="click: $parent.cancelSegment">@Res("Res.Std.Cancel")</button>
     <button class="btn btn-primary" data-bind="click: $parent.saveSegment">@Res("Res.Std.Save")</button>

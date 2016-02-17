@@ -1,0 +1,42 @@
+﻿@using Nancy
+@inherits MultiRando.Web.Core.Helpers.RazorViewBase<dynamic>
+
+<div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <h2>@Res("Res.Page.Map.Route.Title")</h2>
+        </div>
+        <div class="col-md-6">
+            <div style="margin-top: 22px;" class="pull-right">
+                <button class="btn btn-default" title="@Res("Res.Page.Map.Route.Add.Tooltip")" data-bind="click: addRoute">
+                    <i class="fa fa-location-arrow"></i>
+                    <sup class="fa fa-plus"></sup>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="panel-group" data-bind="foreach: routes">
+        <div class="panel" data-bind="css :  isSelected() ? 'panel-primary' : 'panel-default' ">
+            <div class="panel-heading parent-over" role="tab" id="headingOne" data-bind="click: select">
+                <h4 class="panel-title">
+                    <span  data-bind="text: Name"></span>
+                    <span href="#" class="visible-on-parent-over" style="cursor: pointer" title="@Res("Res.Std.Rename")"
+                          data-bind="click: rename, clickBubble : false"><i class="fa fa-pencil"></i></span>
+                </h4>
+            </div>
+            <div class="panel-collapse collapse in" role="tabpanel" data-bind="css : { 'in':  isSelected }">
+                <div class="panel-body">
+
+
+                    <div>
+                        <button class="btn btn-primary pull-right" data-bind="click: $parent.saveRoute">@Res("Res.Std.Save")</button>
+                        <button class="btn btn-default pull-right" data-bind="click: cancel">@Res("Res.Std.Cancel")</button>
+                        <button class="btn btn-danger" data-bind="click: $parent.deleteRoute">@Res("Res.Std.Delete")</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

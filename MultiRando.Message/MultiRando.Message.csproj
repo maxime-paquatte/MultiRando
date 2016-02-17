@@ -47,6 +47,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Route\Commands\Delete.cs" />
+    <Compile Include="Route\Commands\UpdateOrCreate.cs" />
+    <Compile Include="Route\Commands\Rename.cs" />
+    <Compile Include="Route\Events\Changed.cs" />
+    <Compile Include="Route\Events\Created.cs" />
+    <Compile Include="Route\Events\Deleted.cs" />
+    <Compile Include="Route\Queries\ForActor.cs" />
+    <Compile Include="Route\Queries\Line.cs" />
     <Compile Include="Track\Commands\Rename.cs" />
     <Compile Include="Track\Commands\Delete.cs" />
     <Compile Include="Track\Events\Changed.cs" />

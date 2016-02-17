@@ -82,6 +82,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Route\RouteHome.cs" />
     <Compile Include="Track\TrackHome.cs" />
     <Compile Include="Track\TrackRepository.cs" />
     <Compile Include="Interest\InterestHome.cs" />
@@ -157,6 +158,24 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Track\Res\scTrackRename.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Route\Res\Model.MR.RouteHome.Install.5.7.11.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Route\Res\svRouteForActor.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Route\Res\svRouteLine.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Route\Res\scRouteDelete.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Route\Res\scRouteRename.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Route\Res\scRouteUpdateOrCreate.sql" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

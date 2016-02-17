@@ -19,6 +19,7 @@
         _this.interestsCtrl = new map.InterestController(_this, viewModel);
         _this.segmentController = new map.SegmentController(_this, viewModel);
         _this.trackController = new map.TrackController(_this, viewModel);
+        _this.routeController = new map.RouteController(_this, viewModel);
 
         _this.CurrentPolylines = null;
 
@@ -29,7 +30,7 @@
             if (nv != initActivity)
                 ep.messaging.send('MultiRando.Message.UserSettings.Commands.SetActivity', { Activity: nv }, {});
         });
-
+         
         viewModel.pageHeight = ko.observable($(w).height());
         $(w).resize(function () { viewModel.pageHeight($(w).height()); });
 
@@ -87,6 +88,10 @@
             if (_this.CurrentPolylines) _this.CurrentPolylines.setMap(null);
             _this.CurrentPolylines = null;
         }
+
+        _this.pointDistance = function (a, b) {
+            return Math.sqrt(Math.pow(a.lat() - b.lat(), 2) + Math.pow(a.lng() - b.lng(), 2));
+        };
 
         _this.changeMapPos = function () {
             var c = _this.map.getCenter();

@@ -160,7 +160,7 @@
             if (_this.polylines == null) {
                 _this.polylines = mapCtrl.loadPolyline([], {
                     editable: false,
-                    clickable : false,
+                    clickable: false,
                     zIndex: 15,
                     strokeColor: w.map.MapController.constants.ColorTrackDefault
                 });
@@ -197,5 +197,104 @@
         }
 
         ko.mapping.fromJS(data || {}, {}, _this);
+    };
+
+
+    vm.Map.Route = function(mapCtrl, data, options) {
+
+        var _this = this;
+
+        _this.RouteId = ko.observable(0);
+        _this.Name = ko.observable('');
+        _this.IsPublic = ko.observable(false);
+        _this.isSelected = ko.observable(false);
+
+        _this.polylines = null;
+        _this.select = function() {
+
+            if (_this.polylines == null) {
+                _this.polylines = mapCtrl.loadPolyline([], {
+                    editable: true,
+                    zIndex: 99,
+                    strokeColor: w.map.MapController.constants.ColorRouteDefault
+                });
+                mapCtrl.CurrentPolylines = _this.polylines;
+                var id = _this.RouteId();
+                if (id) {
+                    ep.messaging.read('MultiRando.Message.Route.Queries.Line', {
+                        RouteId: _this.RouteId()
+                    }, function(r) {
+                        var path = r ? mapCtrl.parsePolyLines(r) : [];
+                        _this.polylines.setPath(path);
+                        if (path.length) mapCtrl.map.setCenter(path[0]);
+                    });
+                }
+            } else {
+
+                var path = _this.polylines.getPath().getArray();
+                if (path.length) mapCtrl.map.setCenter(path[0]);
+
+                _this.polylines.setMap(mapCtrl.map);
+            }
+
+            mapCtrl.trigger("selected.route.map", { route: _this });
+            _this.isSelected(true);
+        }
+
+        _this.cancel = function() {
+             _this.polylines.setMap(null);
+            _this.isSelected(false);
+        }
+
+
+        _this.rename = function() {
+            w.alertify.prompt(ep.res('Res.Page.Map.Route.PrompteName'), _this.Name(), function(ok, str) {
+               if (_this.RouteId()) {
+                    ep.messaging.send('MultiRando.Message.Route.Commands.Rename', { RouteId: _this.RouteId(), Name: str
+                    }, {
+                    'MultiRando.Message.Route.Events.Changed': function(r) {
+                        _this.Name(str);
+                        ep.stdSuccessCallback();
+                    }
+                    });
+               } else _this.Name(str);
+            });
+        }
+
+        _this.addSegment = function(s) {
+            var routePath = _this.polylines.getPath().getArray();
+            var segmentPath = s.polylines.getPath().getArray();
+
+            if (routePath.length) {
+                var routelast = routePath[routePath.length - 1];
+
+                var segmentFirst = segmentPath[0];
+                var segmentLast = segmentPath[segmentPath.length - 1];
+
+                var firstDistance = mapCtrl.pointDistance(routelast, segmentFirst);
+                var lastDistance = mapCtrl.pointDistance(routelast, segmentLast);
+
+                if (firstDistance < lastDistance) {
+                    for (var i = 0; i < segmentPath.length; i++)
+                        mapCtrl.addPoint(segmentPath[i]);
+                } else {
+                    for (var j = segmentPath.length - 1; j >= 0; j--)
+                        mapCtrl.addPoint(segmentPath[j]);
+                }
+            } else {
+                 for (var k = 0; k < segmentPath.length; k++)
+                        mapCtrl.addPoint(segmentPath[k]);
+            }
+        };
+
+        ko.mapping.fromJS(data || {}, {
+            'IsPublic': { update: function (o) { return o.data !== "0" ? true : false; } }
+        }, _this);
+    };
+
+
+    vm.Map.SegmentSelectedEventArg = function(s) {
+        this.segment = s;
+        this.canceled = false;
     };
 })(window, ko, ep);

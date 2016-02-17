@@ -17,13 +17,14 @@ namespace MultiRando.Model.User
             _config = config;
         }
 
-        public Guid CreateUser(string email, string passwordHash)
+        public Guid CreateUser(string email, string displayName, string passwordHash)
         {
             var db = new Database(_config.ConnectionString, "System.Data.SqlClient");
             var userId = (int)db.Insert("MR.tUser", "UserId", true, new
             {
                 Email = email,
                 Passwd = passwordHash,
+                DisplayName = displayName,
                 PasswdLastChange = DateTime.UtcNow
             });
 
@@ -75,6 +76,8 @@ namespace MultiRando.Model.User
             public int UserId { get; set; }
 
             public string Email { get; set; }
+
+            public string DisplayName { get; set; }
 
             public int LastCultureId { get; set; }
         }
