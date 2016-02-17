@@ -27,7 +27,7 @@
 
             return _this.ActivityFlag.hasFlag(options.currentActivity)
                 ? w.map.MapController.constants.ColorSegmentWrongActivityFlag
-                : ep.getGreenToRedColor(max / 5);
+                : ep.getGreenToRedColor((max +1) / 6);
         }
 
         _this.isSelected.subscribe(function(nv) {
@@ -67,7 +67,10 @@
 
         _this.polylines.addListener('mouseover', function(e) {
             _this.polylines.setOptions({ strokeColor: w.map.MapController.constants.ColorSegmentEdit });
-            if (!mapCtrl.CurrentPolylines) mapCtrl.showInfo("<h1>TEST</h1>", new google.maps.LatLng(e.latLng.lat() + 0.00005, e.latLng.lng() + 0.00005));
+            if (!mapCtrl.CurrentPolylines) {
+                var content = ko.renderTemplateX('segment-info-template', _this);
+                mapCtrl.showInfo(content, new google.maps.LatLng(e.latLng.lat(), e.latLng.lng()));
+            }
         });
         _this.polylines.addListener('mouseout', function(e) {
             _this.polylines.setOptions({
@@ -218,6 +221,15 @@
                     zIndex: 99,
                     strokeColor: w.map.MapController.constants.ColorRouteDefault
                 });
+
+                _this.polylines.addListener('rightclick', function (e) {
+                    if (!_.isUndefined(e.vertex)) {
+                        var p = _this.polylines.getPath().getArray();
+                        p.splice(e.vertex, 1);
+                        _this.polylines.setPath(p);
+                    }
+                });
+
                 mapCtrl.CurrentPolylines = _this.polylines;
                 var id = _this.RouteId();
                 if (id) {

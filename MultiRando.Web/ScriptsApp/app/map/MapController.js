@@ -150,7 +150,9 @@
         _this.showInfo = function (contentString, latLng) {
             infowindow = new google.maps.InfoWindow({
                 content: contentString,
-                position: latLng
+                position: latLng,
+                maxWidth : 300,
+                pixelOffset: new google.maps.Size(0,-20)
             });
             infowindow.open(_this.map);
         }
