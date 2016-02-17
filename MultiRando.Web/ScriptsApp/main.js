@@ -3,6 +3,7 @@
 /// <reference path="ep.ModelBase.js" />
 /// <reference path="ep.ViewModelBase.js" />
 /// <reference path="ep.messaging.js" />
+/// <reference path="~/scripts/jquery.qrcode.js" />
 
 
 if (typeof (window.console) == "undefined")
@@ -50,5 +51,20 @@ ko.bindingHandlers.starRating = {
         $("span", element).each(function (index) {
             $(this).toggleClass("chosen", index <= observable());
         });
+    }
+};
+
+
+ko.bindingHandlers.qrcode = {
+    init: function (element, valueAccessor, ava) {
+        var target = valueAccessor();
+        var options = window.ko.unwrap(ava().qrcodeOptions) || {};
+        var settings = window._.extend({},{ text: window.ko.unwrap(target) }, options);
+       
+        $(element).qrcode(settings);
+       
+    },
+    update: function(element, valueAccessor) {
+        
     }
 };

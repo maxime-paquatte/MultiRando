@@ -5,3 +5,5 @@
 *.suo
 packages/
 Private/Logs/
+extractRes.ps
+res.txt

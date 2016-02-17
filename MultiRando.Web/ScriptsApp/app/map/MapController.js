@@ -16,7 +16,7 @@
 
 
         var viewModel = rootCtx.Map = {};
-        _this.interestsCtrl = new map.InterestController(_this, viewModel);
+        //_this.interestsCtrl = new map.InterestController(_this, viewModel);
         _this.segmentController = new map.SegmentController(_this, viewModel);
         _this.trackController = new map.TrackController(_this, viewModel);
         _this.routeController = new map.RouteController(_this, viewModel);
@@ -44,7 +44,6 @@
 
         viewModel.bound = _this.bound =  ko.observable({}).extend({ rateLimit: { timeout: 1000, method: "notifyWhenChangesStop" } });
         viewModel.bound.subscribe(function (nv) {
-            _this.interestsCtrl.fetchInterests(nv);
             _this.segmentController.fetchSegments(nv);
         });
 

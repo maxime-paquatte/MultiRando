@@ -29,6 +29,7 @@
             <div class="panel-collapse collapse in" role="tabpanel" data-bind="css : { 'in':  isSelected }">
                 <div class="panel-body">
 
+                    <div data-bind="qrcode : 'http://google.fr', qrcodeOptions : { size: 100 }" style="margin: 0 auto; width: 100px"></div>
 
                     <div>
                         <button class="btn btn-primary pull-right" data-bind="click: $parent.saveRoute">@Res("Res.Std.Save")</button>
