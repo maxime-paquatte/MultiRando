@@ -25,17 +25,18 @@
 
         viewModel.saveRoute = function (r) {
             var str = r.polylines.toCommandStr();
+            var length = google.maps.geometry.spherical.computeLength(r.polylines.getPath().getArray());
             ep.messaging.send('MultiRando.Message.Route.Commands.UpdateOrCreate', {
-                RouteId: r.RouteId(), Name: r.Name(), IsPublic: r.IsPublic(), LineString: str
+                RouteId: r.RouteId(), Name: r.Name(), IsPublic: r.IsPublic(), LineString: str, RouteLength: parseInt(length)
             }, {
                 'MultiRando.Message.Route.Events.Changed': function (e) {
                     ep.stdSuccessCallback();
-                    r.cancel();
+                    r.RouteLength(length);
                 },
                 'MultiRando.Message.Route.Events.Created': function (e) {
+                    r.RouteId(e.routeId);
+                    r.RouteLength(length);
                     ep.stdSuccessCallback();
-                    r.RouteId(r.routeId);
-                    r.cancel();
                 }
             });
         }
@@ -86,6 +87,11 @@
                     r.cancel();
             });
             _this.selectedRoute = e.route;
+        });
+        mapCtrl.on('canceled.route.map', function (e) {
+            if (_this.selectedRoute == e.route) {
+                _this.selectedRoute = null;
+            }
         });
 
         mapCtrl.on('selected.segment.map', function (e) {

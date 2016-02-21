@@ -83,7 +83,7 @@
         }
         viewModel.saveSegment = function (d) {
             var str = d.polylines.toCommandStr();
-            ep.messaging.send('MultiRando.Message.Segment.Commands.Update', { SegmentId: d.SegmentId(), ActivityFlag: d.ActivityFlag(), Mudding: d.Mudding, Elevation: d.Elevation, Scree: d.Scree, IsRoad: d.IsRoad, Polylines: str }, {
+            ep.messaging.send('MultiRando.Message.Segment.Commands.Update', { SegmentId: d.SegmentId(), ActivityFlag: d.ActivityFlag(), Mudding: d.Mudding, Elevation: d.Elevation, Scree: d.Scree, IsRoad: d.IsRoad(), NoWay: d.NoWay() , Polylines: str }, {
                 'MultiRando.Message.Segment.Events.Changed': function (r) {
                     ep.stdSuccessCallback();
                     viewModel.cancelSegment(d);

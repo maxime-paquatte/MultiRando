@@ -21,8 +21,8 @@ as begin
 	declare @a varchar(MAX) = 'LINESTRING('+ @PolylinesA +')';
 	declare @b varchar(MAX) = 'LINESTRING('+ @PolylinesB +')';
 	
-	insert into [MR].[tSegment] (CreatorId, ActivityFlag, Mudding, Elevation, Scree, IsRoad, LineString)
-	select @_ActorId, ActivityFlag, Mudding, Elevation, Scree, IsRoad, geometry::Parse(@b)
+	insert into [MR].[tSegment] (CreatorId, ActivityFlag, Mudding, Elevation, Scree, IsPrivate, IsRoad, NoWay, LineString)
+	select @_ActorId, ActivityFlag, Mudding, Elevation, Scree, IsPrivate, IsRoad, NoWay, geometry::Parse(@b)
 	from [MR].[tSegment] where SegmentId = @SegmentId
 
 	declare @NewSegmentId int = SCOPE_IDENTITY();

@@ -28,7 +28,7 @@ as begin
 	select "@json:Array" = 'true',	
 		r.SegmentId, 
 		r.CreationDate, 
-		IsPublic, CreatorId, CreatorDisplayName = u.DisplayName,
+		IsPrivate, NoWay, IsPublic, CreatorId, CreatorDisplayName = u.DisplayName,
 		CanEdit = IIF(CreatorId = @_ActorId OR r.IsPublic = 1, 1, 0),
 
 		r.ActivityFlag, r.Mudding,r.Scree,r.Elevation, r.IsRoad,

@@ -11,5 +11,7 @@ namespace MultiRando.Message.Route.Commands
         public bool IsPublic { get; set; }
 
         public string LineString { get; set; }
+
+        public int RouteLength { get; set; }
     }
 }

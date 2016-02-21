@@ -145,6 +145,7 @@
             } 
         }
 
+      
         var infowindow = null;
         _this.showInfo = function (contentString, latLng) {
             infowindow = new google.maps.InfoWindow({
@@ -171,6 +172,8 @@
     };
 
     w.map.MapController.constants = {
+        ColorSegmentIsPrivate: '#000',
+        ColorSegmentNoWay: '#000',
         ColorSegmentRoad: '#9900ff',
         ColorSegmentEdit: '#33ccff',
         ColorSegmentWrongActivityFlag: '#000',

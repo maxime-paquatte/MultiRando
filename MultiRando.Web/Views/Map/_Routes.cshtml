@@ -21,6 +21,7 @@
         <div class="panel" data-bind="css :  isSelected() ? 'panel-primary' : 'panel-default' ">
             <div class="panel-heading parent-over" role="tab" id="headingOne" data-bind="click: select">
                 <h4 class="panel-title">
+                    <span class="badge pull-right" data-bind="text: (RouteLength() / 1000).toFixed(2) + 'km'"></span>
                     <span  data-bind="text: Name"></span>
                     <span href="#" class="visible-on-parent-over" style="cursor: pointer" title="@Res("Res.Std.Rename")"
                           data-bind="click: rename, clickBubble : false"><i class="fa fa-pencil"></i></span>
@@ -28,9 +29,6 @@
             </div>
             <div class="panel-collapse collapse in" role="tabpanel" data-bind="css : { 'in':  isSelected }">
                 <div class="panel-body">
-
-                    <div data-bind="qrcode : 'http://google.fr', qrcodeOptions : { size: 100 }" style="margin: 0 auto; width: 100px"></div>
-
                     <div>
                         <button class="btn btn-primary pull-right" data-bind="click: $parent.saveRoute">@Res("Res.Std.Save")</button>
                         <button class="btn btn-default pull-right" data-bind="click: cancel">@Res("Res.Std.Cancel")</button>

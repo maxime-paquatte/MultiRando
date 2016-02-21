@@ -11,6 +11,8 @@
 
         _this.defaultColor = '#00FFFF';
         _this.SegmentId = ko.observable(0);
+        _this.CreatorDisplayName = ko.observable('');
+        _this.CreationDate = ko.observable(w.moment().toISOString());
         _this.isSelected = ko.observable(false);
         _this.isCut = ko.observable(false);
         _this.ActivityFlag = ko.observable(0).extend({ bitFlag: {} });
@@ -18,11 +20,15 @@
         _this.Mudding = ko.observable(0);
         _this.Elevation = ko.observable(0);
         _this.Scree = ko.observable(0);
+        _this.IsPrivate = ko.observable(false);
         _this.IsRoad = ko.observable(false);
+        _this.NoWay = ko.observable(false);
 
         _this.getColor = function() {
             if (_this.isSelected()) return w.map.MapController.constants.ColorSegmentEdit;
+            if (_this.IsPrivate()) return w.map.MapController.constants.ColorSegmentIsPrivate;
             if (_this.IsRoad()) return w.map.MapController.constants.ColorSegmentRoad;
+            if (_this.NoWay()) return w.map.MapController.constants.ColorSegmentNoWay;
             var max = Math.max(parseInt(_this.Mudding()), parseInt(_this.Elevation()), parseInt(_this.Scree()));
 
             return _this.ActivityFlag.hasFlag(options.currentActivity)
@@ -84,12 +90,16 @@
             ko.mapping.fromJS(data, {
                 'IsPublic': { create: function(o) { return parseInt(o.data); } },
                 'IsRoad': { update: function(o) { return o.data !== "0" ? true : false; } },
+                'IsPrivate': { update: function(o) { return o.data !== "0" ? true : false; } },
+                'NoWay': { update: function(o) { return o.data !== "0" ? true : false; } },
                 'ignore': ["Polylines"]
             }, _this);
 
-            var path = data.Polylines ? mapCtrl.parsePolyLines(data.Polylines) : [];
-            _this.polylines.setPath(path);
-            _this.polylines.setOptions({ strokeColor: _this.getColor() });
+            if ( _this.isCut() || !_this.isSelected()){
+                var path = data.Polylines ? mapCtrl.parsePolyLines(data.Polylines) : [];
+                _this.polylines.setPath(path);
+                _this.polylines.setOptions({ strokeColor: _this.getColor() });
+            }
         };
 
 
@@ -172,14 +182,13 @@
                 }, function(r) {
                     var path = r ? mapCtrl.parsePolyLines(r) : [];
                     _this.polylines.setPath(path);
-                    mapCtrl.map.setCenter(_this.start = path[0]);
+                    _this.start = path[0];
                     _this.isSelected(true);
                 });
             } else {
 
                 if (!_this.polylines.getMap()) {
                     _this.polylines.setMap(mapCtrl.map);
-                    mapCtrl.map.setCenter(_this.start);
                     _this.isSelected(true);
                 } else {
                     _this.polylines.setMap(null);
@@ -187,6 +196,10 @@
                 }
             }
         }
+
+        _this.showStart = function() {
+            mapCtrl.map.setCenter(_this.start);
+        };
 
         _this.rename = function() {
             w.alertify.prompt(ep.res('Res.Page.Map.Track.PrompteName'), _this.Name(), function(ok, str) {
@@ -209,6 +222,7 @@
 
         _this.RouteId = ko.observable(0);
         _this.Name = ko.observable('');
+        _this.RouteLength = ko.observable(0);
         _this.IsPublic = ko.observable(false);
         _this.isSelected = ko.observable(false);
 
@@ -244,8 +258,8 @@
             } else {
 
                 var path = _this.polylines.getPath().getArray();
-                if (path.length) mapCtrl.map.setCenter(path[0]);
-
+                if (path.length) mapCtrl.map.setCenter(path[path.length-1]);
+                mapCtrl.CurrentPolylines = _this.polylines;
                 _this.polylines.setMap(mapCtrl.map);
             }
 
@@ -253,9 +267,11 @@
             _this.isSelected(true);
         }
 
-        _this.cancel = function() {
+        _this.cancel = function () {
+            mapCtrl.CurrentPolylines = null;
              _this.polylines.setMap(null);
-            _this.isSelected(false);
+             _this.isSelected(false);
+             mapCtrl.trigger("canceled.route.map", { route: _this });
         }
 
 
@@ -276,7 +292,7 @@
         _this.addSegment = function(s) {
             var routePath = _this.polylines.getPath().getArray();
             var segmentPath = s.polylines.getPath().getArray();
-
+            var p = _this.polylines.getPath();
             if (routePath.length) {
                 var routelast = routePath[routePath.length - 1];
 
@@ -286,17 +302,20 @@
                 var firstDistance = mapCtrl.pointDistance(routelast, segmentFirst);
                 var lastDistance = mapCtrl.pointDistance(routelast, segmentLast);
 
+                
                 if (firstDistance < lastDistance) {
                     for (var i = 0; i < segmentPath.length; i++)
-                        mapCtrl.addPoint(segmentPath[i]);
+                        p.push(segmentPath[i]);
                 } else {
                     for (var j = segmentPath.length - 1; j >= 0; j--)
-                        mapCtrl.addPoint(segmentPath[j]);
+                        p.push(segmentPath[j]);
                 }
             } else {
                  for (var k = 0; k < segmentPath.length; k++)
-                        mapCtrl.addPoint(segmentPath[k]);
+                     p.push(segmentPath[k]);
+                
             }
+            _this.polylines.setPath(p);
         };
 
         ko.mapping.fromJS(data || {}, {

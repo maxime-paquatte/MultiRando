@@ -1,0 +1,1 @@
+Get-ChildItem ./ -Recurse | Select-String -Pattern "Res\.[\w|\.]*\w" -casesensitive  | % { $_.Matches } | % { $_.Value } | where {$_ -notlike "*.sql"} > 'res.txt'

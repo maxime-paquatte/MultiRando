@@ -49,6 +49,11 @@ namespace MultiRando.Model.User
             var db = new Database(_config.ConnectionString, "System.Data.SqlClient");
             db.Execute("update MR.tUser set Passwd = @1 where Email = @0", email, passwordHash);
         }
+        public void SetApiKey(int userId, string apiKey)
+        {
+            var db = new Database(_config.ConnectionString, "System.Data.SqlClient");
+            db.Execute("update MR.tUser set ApiKey = @1 where UserId = @0", userId, apiKey);
+        }
 
         public bool EmailExists(string email)
         {
@@ -56,10 +61,15 @@ namespace MultiRando.Model.User
             return db.Single<bool>("select count(*) from MR.tUser where Email = @0", email);
         }
 
-        public User GetUser(string eamil)
+        public User GetUser(string email)
         {
             var db = new Database(_config.ConnectionString, "System.Data.SqlClient");
-            return db.SingleOrDefault<User>("select * from MR.tUser where Email = @0", eamil);
+            return db.SingleOrDefault<User>("select * from MR.tUser where Email = @0", email);
+        }
+        public User GetUserByApiKey(string apiKey)
+        {
+            var db = new Database(_config.ConnectionString, "System.Data.SqlClient");
+            return db.SingleOrDefault<User>("select * from MR.tUser where ApiKey = @0", apiKey);
         }
 
         public User GetUser(Guid authId)
@@ -78,6 +88,8 @@ namespace MultiRando.Model.User
             public string Email { get; set; }
 
             public string DisplayName { get; set; }
+
+            public string Passwd { get; set; }
 
             public int LastCultureId { get; set; }
         }

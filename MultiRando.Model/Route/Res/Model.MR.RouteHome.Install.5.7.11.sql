@@ -7,7 +7,8 @@ CREATE TABLE MR.tRoute
 		constraint DF_tRoute_ActivityFlag default 0,
 
 	LineString		geometry  not null ,
-
+	RouteLength		int not null
+		constraint DF_tRoute_RouteLength default(0),
 	
 	IsPublic	bit not null
 		constraint DF_tRoute_IsPublic default(0),
@@ -20,6 +21,5 @@ CREATE TABLE MR.tRoute
 	CONSTRAINT FK_tRoute_UserId FOREIGN KEY(CreatorUserId)
 		REFERENCES [MR].[tUser](UserId)
 )
-
 
 --[endscript]

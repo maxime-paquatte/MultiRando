@@ -54,8 +54,7 @@ namespace MultiRando.Web.Modules
         {
             var u = _userRepository.GetUser((string)Request.Form.email);
             if (u != null) { 
-                var hash = PasswordHash.CreateHash(Request.Form.password);
-                if (PasswordHash.ValidatePassword(Request.Form.password, hash))
+                if (PasswordHash.ValidatePassword(Request.Form.password, u.Passwd))
                     return this.LoginAndRedirect(u.AuthId, fallbackRedirectUrl: FallbackRedirectUrl);
             }
 

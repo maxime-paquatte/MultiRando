@@ -14,7 +14,9 @@ ALTER procedure MR.scSegmentUpdate
 	@Mudding	tinyint = null,
 	@Elevation	tinyint = null,
 	@Scree		tinyint = null,
+	@IsPrivate		bit = null,
 	@IsRoad		bit = null,
+	@NoWay		bit = null,
 
 	@Polylines nvarchar(MAX)= null
 )
@@ -53,7 +55,9 @@ as begin
 			Mudding = ISNULL(@Mudding, Mudding),
 			Elevation = ISNULL(@Elevation, Elevation),
 			Scree = ISNULL(@Scree, Scree),
-			IsRoad = ISNULL(@IsRoad, IsRoad)
+			IsPrivate = ISNULL(@IsPrivate, IsPrivate),
+			IsRoad = ISNULL(@IsRoad, IsRoad),
+			NoWay = ISNULL(@NoWay, NoWay)
 		where SegmentId = @SegmentId
 	END
 	commit

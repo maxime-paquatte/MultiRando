@@ -17,7 +17,10 @@ CREATE TABLE MR.tSegment
 	Mudding tinyint  not null constraint DF_tSegment_Mudding default 0,
 	Elevation tinyint  not null constraint DF_tSegment_Elevation default 0,
 	Scree tinyint  not null constraint DF_tSegment_Scree default 0,
+	
+	IsPrivate bit not null constraint DF_tSegment_IsPrivate default 0,
 	IsRoad bit not null constraint DF_tSegment_IsRoad default 0,
+	NoWay bit not null constraint DF_tSegment_NoWay default 0,
 
 	
 	TrackId		int null,	

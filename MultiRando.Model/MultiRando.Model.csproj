@@ -83,6 +83,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Route\RouteHome.cs" />
+    <Compile Include="Route\RouteRepository.cs" />
     <Compile Include="Track\TrackHome.cs" />
     <Compile Include="Track\TrackRepository.cs" />
     <Compile Include="Interest\InterestHome.cs" />

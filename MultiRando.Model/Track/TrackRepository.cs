@@ -23,5 +23,11 @@ namespace MultiRando.Model.Track
             return db.ExecuteScalar<int>("insert into [MR].[tTrack] ([UserId],[Name],[Gpx]) VALUES(@0, @1, @2); select SCOPE_IDENTITY();", userId, name, data);
         }
 
+        public int CreatePlt(int userId, string name, string data, string line)
+        {
+            var db = new Database(_config.ConnectionString, "System.Data.SqlClient");
+            return db.ExecuteScalar<int>("insert into [MR].[tTrack] ([UserId],[Name],[Plt], LineString) VALUES(@0, @1, @2, @3); select SCOPE_IDENTITY();", userId, name, data, line);
+        }
+
     }
 }

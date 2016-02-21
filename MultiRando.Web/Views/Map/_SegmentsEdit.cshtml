@@ -27,20 +27,16 @@
     </div>
 </div>
 
-
-<h3>@Res("Res.Page.Map.Activity")</h3>
-<!-- ko foreach: $root.Map.activityFlags -->
 <div class="checkbox">
-    <label data-bind="click: function(){ $parent.ActivityFlag.toggleFlag(val); }">
-        <i class="fa" data-bind="css: $parent.ActivityFlag.hasFlag(val) ? 'fa-check-square-o' : 'fa-square-o'"></i>
-        <span data-bind="res : 'Res.Page.Map.activityFlags.' + key"></span>
+    <label data-bind="click: function(){ IsPrivate(!IsPrivate()); }">
+        <i class="fa" data-bind="css: IsPrivate() ? 'fa-check-square-o' : 'fa-square-o'"></i>
+        <span>@Res("Res.Page.Map.IsPrivate")</span>
     </label>
 </div>
-<!-- /ko -->
 <div class="checkbox">
-    <label data-bind="click: function(){ ActivityFlag.toggleFlag(ActivityFlags.Private); }">
-        <i class="fa" data-bind="css: ActivityFlag.hasFlag(ActivityFlags.Private) ? 'fa-check-square-o' : 'fa-square-o'"></i>
-        <span>@Res("Res.Page.Map.Private")</span>
+    <label data-bind="click: function(){ NoWay(!NoWay()); }">
+        <i class="fa" data-bind="css: NoWay() ? 'fa-check-square-o' : 'fa-square-o'"></i>
+        <span>@Res("Res.Page.Map.NoWay")</span>
     </label>
 </div>
 <div class="checkbox">
@@ -49,6 +45,18 @@
         <span>@Res("Res.Page.Map.IsRoad")</span>
     </label>
 </div>
+
+
+<h3>@Res("Res.Page.Map.NoWayFor")</h3>
+<!-- ko foreach: $root.Map.activityFlags -->
+<div class="checkbox">
+    <label data-bind="click: function(){ $parent.ActivityFlag.toggleFlag(val); }">
+        <i class="fa" data-bind="css: $parent.ActivityFlag.hasFlag(val) ? 'fa-check-square-o' : 'fa-square-o'"></i>
+        <span data-bind="res : 'Res.Page.Map.ActivityFlags.' + key"></span>
+    </label>
+</div>
+<!-- /ko -->
+
 
 <h3>@Res("Res.Page.Map.Difficulty")</h3>
 <div class="form-group">

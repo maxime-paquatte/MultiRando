@@ -1,4 +1,4 @@
-﻿-- Version = 5.8.15, Requires={   }
+﻿-- Version = 6.2.19, Requires={   }
 
 
 ALTER procedure MR.scRouteUpdateOrCreate
@@ -12,6 +12,7 @@ ALTER procedure MR.scRouteUpdateOrCreate
 
 	@Name		nvarchar(128),
 	@IsPublic	bit,
+	@RouteLength	int,
 	@LineString	nvarchar(Max)
 )
 as begin
@@ -26,14 +27,14 @@ set xact_abort on
 		declare @event xml;
 		IF @RouteId > 0
 		BEGIN
-			update [MR].tRoute set LineString = geometry::Parse(@p), Name = @Name, IsPublic = @IsPublic where RouteId = @RouteId
+			update [MR].tRoute set LineString = geometry::Parse(@p), Name = @Name, IsPublic = @IsPublic, RouteLength = @RouteLength where RouteId = @RouteId
 
 			set @event = ( select "@Name" = 'MultiRando.Message.Route.Events.Changed', RouteId  = @RouteId
 			FOR XML PATH('Event'), ELEMENTS )
 		END
 		ELSE
 		BEGIN
-			insert into [MR].tRoute (CreatorUserId, Name, IsPublic, LineString) values(@_ActorId, @Name, @IsPublic,geometry::Parse(@p))
+			insert into [MR].tRoute (CreatorUserId, Name, IsPublic, RouteLength, LineString) values(@_ActorId, @Name, @IsPublic, @RouteLength, geometry::Parse(@p))
 			set @RouteId = SCOPE_IDENTITY();
 			set @event = ( select "@Name" = 'MultiRando.Message.Route.Events.Created', RouteId  = @RouteId
 			FOR XML PATH('Event'), ELEMENTS )

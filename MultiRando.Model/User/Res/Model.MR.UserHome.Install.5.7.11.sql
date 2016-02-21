@@ -11,7 +11,8 @@ CREATE TABLE MR.tUser
 	DisplayName		nvarchar(256) not null,
 	Passwd			 nvarchar(MAX) null,
 	PasswdLastChange datetime2(0) null,
-
+		
+	ApiKey			 nvarchar(128) null,
 	
 	LastCultureId	int not null constraint DF_tUser_LastCultureId default(9),
 	
