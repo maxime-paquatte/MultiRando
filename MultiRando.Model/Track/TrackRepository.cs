@@ -17,10 +17,10 @@ namespace MultiRando.Model.Track
             _config = config;
         }
 
-        public int CreateGpx(int userId, string name, string data)
+        public int CreateGpx(int userId, string name, string data, string line)
         {
             var db = new Database(_config.ConnectionString, "System.Data.SqlClient");
-            return db.ExecuteScalar<int>("insert into [MR].[tTrack] ([UserId],[Name],[Gpx]) VALUES(@0, @1, @2); select SCOPE_IDENTITY();", userId, name, data);
+            return db.ExecuteScalar<int>("insert into [MR].[tTrack] ([UserId],[Name],[Gpx], LineString) VALUES(@0, @1, @2, @3); select SCOPE_IDENTITY();", userId, name, data, line);
         }
 
         public int CreatePlt(int userId, string name, string data, string line)

@@ -33,7 +33,7 @@
 
             return _this.ActivityFlag.hasFlag(options.currentActivity)
                 ? w.map.MapController.constants.ColorSegmentWrongActivityFlag
-                : ep.getGreenToRedColor((max +1) / 6);
+                : ep.getGreenToRedColor((max + 1) / 6);
         }
 
         _this.isSelected.subscribe(function(nv) {
@@ -95,7 +95,7 @@
                 'ignore': ["Polylines"]
             }, _this);
 
-            if ( _this.isCut() || !_this.isSelected()){
+            if (_this.isCut() || !_this.isSelected()) {
                 var path = data.Polylines ? mapCtrl.parsePolyLines(data.Polylines) : [];
                 _this.polylines.setPath(path);
                 _this.polylines.setOptions({ strokeColor: _this.getColor() });
@@ -157,7 +157,6 @@
         ko.mapping.fromJS(data || {}, { 'copy': ["Polylines"] }, _this);
     };
 
-
     vm.Map.Track = function(mapCtrl, data, options) {
 
         var _this = this;
@@ -215,7 +214,6 @@
         ko.mapping.fromJS(data || {}, {}, _this);
     };
 
-
     vm.Map.Route = function(mapCtrl, data, options) {
 
         var _this = this;
@@ -225,18 +223,19 @@
         _this.RouteLength = ko.observable(0);
         _this.IsPublic = ko.observable(false);
         _this.isSelected = ko.observable(false);
+        _this.isEdit = ko.observable(false);
 
         _this.polylines = null;
         _this.select = function() {
 
             if (_this.polylines == null) {
                 _this.polylines = mapCtrl.loadPolyline([], {
-                    editable: true,
+                    editable: false,
                     zIndex: 99,
                     strokeColor: w.map.MapController.constants.ColorRouteDefault
                 });
 
-                _this.polylines.addListener('rightclick', function (e) {
+                _this.polylines.addListener('rightclick', function(e) {
                     if (!_.isUndefined(e.vertex)) {
                         var p = _this.polylines.getPath().getArray();
                         p.splice(e.vertex, 1);
@@ -252,13 +251,9 @@
                     }, function(r) {
                         var path = r ? mapCtrl.parsePolyLines(r) : [];
                         _this.polylines.setPath(path);
-                        if (path.length) mapCtrl.map.setCenter(path[0]);
                     });
                 }
             } else {
-
-                var path = _this.polylines.getPath().getArray();
-                if (path.length) mapCtrl.map.setCenter(path[path.length-1]);
                 mapCtrl.CurrentPolylines = _this.polylines;
                 _this.polylines.setMap(mapCtrl.map);
             }
@@ -267,25 +262,43 @@
             _this.isSelected(true);
         }
 
+        _this.isEdit.subscribe(function(nv) {
+            if (nv) _this.polylines.setOptions({ editable: true });
+            else _this.polylines.setOptions({ editable: false });
+        });
+
+        _this.edit = function () {
+            _this.isEdit(true);
+        }
+
+        _this.showStart = function() {
+            var path = _this.polylines.getPath().getArray();
+            if (path.length) mapCtrl.map.setCenter(path[path.length - 1]);
+        }
+
         _this.cancel = function () {
-            mapCtrl.CurrentPolylines = null;
-             _this.polylines.setMap(null);
-             _this.isSelected(false);
-             mapCtrl.trigger("canceled.route.map", { route: _this });
+            if (!_this.isEdit()){
+                _this.polylines.setMap(null);
+                _this.isSelected(false);
+                mapCtrl.CurrentPolylines = null;
+                mapCtrl.trigger("canceled.route.map", { route: _this });
+            } else _this.isEdit(false);
         }
 
 
         _this.rename = function() {
             w.alertify.prompt(ep.res('Res.Page.Map.Route.PrompteName'), _this.Name(), function(ok, str) {
-               if (_this.RouteId()) {
-                    ep.messaging.send('MultiRando.Message.Route.Commands.Rename', { RouteId: _this.RouteId(), Name: str
+                if (_this.RouteId()) {
+                    ep.messaging.send('MultiRando.Message.Route.Commands.Rename', {
+                        RouteId: _this.RouteId(),
+                        Name: str
                     }, {
-                    'MultiRando.Message.Route.Events.Changed': function(r) {
-                        _this.Name(str);
-                        ep.stdSuccessCallback();
-                    }
+                        'MultiRando.Message.Route.Events.Changed': function(r) {
+                            _this.Name(str);
+                            ep.stdSuccessCallback();
+                        }
                     });
-               } else _this.Name(str);
+                } else _this.Name(str);
             });
         }
 
@@ -302,7 +315,7 @@
                 var firstDistance = mapCtrl.pointDistance(routelast, segmentFirst);
                 var lastDistance = mapCtrl.pointDistance(routelast, segmentLast);
 
-                
+
                 if (firstDistance < lastDistance) {
                     for (var i = 0; i < segmentPath.length; i++)
                         p.push(segmentPath[i]);
@@ -311,15 +324,15 @@
                         p.push(segmentPath[j]);
                 }
             } else {
-                 for (var k = 0; k < segmentPath.length; k++)
-                     p.push(segmentPath[k]);
-                
+                for (var k = 0; k < segmentPath.length; k++)
+                    p.push(segmentPath[k]);
+
             }
             _this.polylines.setPath(p);
         };
 
         ko.mapping.fromJS(data || {}, {
-            'IsPublic': { update: function (o) { return o.data !== "0" ? true : false; } }
+            'IsPublic': { update: function(o) { return o.data !== "0" ? true : false; } }
         }, _this);
     };
 

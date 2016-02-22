@@ -38,14 +38,31 @@ namespace MultiRando.Web.Modules
                 using (var reader = XmlReader.Create(file.Value))
                 {
                     var x = XDocument.Load(reader);
-                    var xName = x.Descendants().FirstOrDefault(e => e.Name.LocalName == "name");
+                    XNamespace df = x.Root.Name.Namespace;
+                    var xName = x.Element(df.GetName("gpx")).Element(df.GetName("trk")).Element(df.GetName("name"));
                     if (xName != null) name = xName.Value;
+
+                    var sb = new StringBuilder("LINESTRING(");
+                    foreach (var seg in x.Element(df.GetName("gpx")).Element(df.GetName("trk")).Elements(df.GetName("trkseg")))
+                    {
+                        foreach (var pt in seg.Elements(df.GetName("trkpt")))
+                        {
+                            sb.Append(pt.Attribute("lon").Value).Append(" ").Append(pt.Attribute("lat").Value).Append(',');
+                        }
+                    }
+
+                    //remove last ,
+                    sb.Remove(sb.Length - 1, 1);
+                    sb.Append(")");;
 
                     XmlDocument doc = new XmlDocument();
                     doc.Load(reader);
                     foreach (XmlNode node in doc.Cast<XmlNode>().Where(node => node.NodeType == XmlNodeType.XmlDeclaration))
                         doc.RemoveChild(node);
-                    trackId = gpxRepository.CreateGpx(Context.CurrentUser().UserId, name, doc.OuterXml);
+
+                    string rawXml = doc.OuterXml;
+
+                    trackId = gpxRepository.CreateGpx(Context.CurrentUser().UserId, name, rawXml, sb.ToString());
                 }
                 return Response.AsJson(new { result = "success", trackId });
             };

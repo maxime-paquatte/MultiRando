@@ -56,13 +56,16 @@
             //Save current before create new
             var s = viewModel.selectedSegment();
             if (s) {
-                viewModel.saveSegment(s);
-                viewModel.cancelSegment(s);
+                _this.saveSegment(d).then(function() {
+                    s = new vm.Map.Segment(mapCtrl, { onClick: _this.segmentClick });
+                    viewModel.segments.push(s);
+                    viewModel.selectSegment(s);
+                });
+            } else {
+                s = new vm.Map.Segment(mapCtrl, { onClick: _this.segmentClick });
+                viewModel.segments.push(s);
+                viewModel.selectSegment(s);
             }
-
-            s = new vm.Map.Segment(mapCtrl,{ onClick: _this.segmentClick });
-            viewModel.segments.push(s);
-            viewModel.selectSegment(s);
         }
         viewModel.selectSegment = function (r) {
             if (viewModel.selectedSegment())
@@ -81,9 +84,35 @@
             viewModel.selectedSegment(null);
             mapCtrl.CurrentPolylines = null;
         }
-        viewModel.saveSegment = function (d) {
+        viewModel.saveSegment = function(d) {
+            _this.saveSegment(d);
+        }
+       
+        viewModel.saveSegmentAndContinue = function(d) {
+            _this.saveSegment(d).then(function()
+            {
+                var s = new vm.Map.Segment(mapCtrl, { onClick: _this.segmentClick });
+                s.ActivityFlag(d.ActivityFlag());
+                s.Mudding(d.Mudding());
+                s.Elevation(d.Elevation());
+                s.Scree(d.Scree());
+                s.IsPrivate(d.IsPrivate());
+                s.IsRoad(d.IsRoad());
+                s.NoWay(d.NoWay());
+
+                var dp = d.polylines.getPath().getArray();
+                var sp = s.polylines.getPath().getArray();
+                sp.push(dp[dp.length - 1]);
+                s.polylines.setPath(sp);
+
+                viewModel.segments.push(s);
+                viewModel.selectSegment(s);
+            });
+        }
+
+        _this.saveSegment = function (d) {
             var str = d.polylines.toCommandStr();
-            ep.messaging.send('MultiRando.Message.Segment.Commands.Update', { SegmentId: d.SegmentId(), ActivityFlag: d.ActivityFlag(), Mudding: d.Mudding, Elevation: d.Elevation, Scree: d.Scree, IsRoad: d.IsRoad(), NoWay: d.NoWay() , Polylines: str }, {
+            return ep.messaging.send('MultiRando.Message.Segment.Commands.Update', { SegmentId: d.SegmentId(), ActivityFlag: d.ActivityFlag(), Mudding: d.Mudding(), Elevation: d.Elevation(), Scree: d.Scree(), IsPrivate: d.IsPrivate(), IsRoad: d.IsRoad(), NoWay: d.NoWay(), Polylines: str }, {
                 'MultiRando.Message.Segment.Events.Changed': function (r) {
                     ep.stdSuccessCallback();
                     viewModel.cancelSegment(d);
@@ -95,6 +124,7 @@
                 }
             });
         }
+
 
         viewModel.deleteSegment = function (r) {
             w.alertify.confirm(ep.res('Res.Std.ConfirmDelete'), function () {
