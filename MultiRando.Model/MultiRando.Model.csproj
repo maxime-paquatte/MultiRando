@@ -82,6 +82,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Point.cs" />
     <Compile Include="Route\RouteHome.cs" />
     <Compile Include="Route\RouteRepository.cs" />
     <Compile Include="Track\TrackHome.cs" />

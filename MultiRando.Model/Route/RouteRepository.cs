@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -29,6 +30,17 @@ namespace MultiRando.Model.Route
         {
             var db = new Database(_config.ConnectionString, "System.Data.SqlClient");
             return db.ExecuteScalar<string>(@"select r.LineString.ToString() from MR.tRoute r where r.RouteId = @0", routeId);
+        }
+
+        public IEnumerable<Point> RoutesPoints(int routeId)
+        {
+            var routeline = RoutesLine(routeId);
+            routeline = routeline.Substring("LINESTRING (".Length).Trim(')');
+            foreach (var s in routeline.Split(new [] {','}, StringSplitOptions.RemoveEmptyEntries))
+            {
+                var parts = s.Split(new[] {' '}, StringSplitOptions.RemoveEmptyEntries);
+                yield return new Point() { Lat = double.Parse(parts[1], CultureInfo.InvariantCulture), Lon = double.Parse(parts[0], CultureInfo.InvariantCulture) };
+            }
         }
     }
 

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,6 +12,7 @@ using MultiRando.Web.Core.Messaging;
 using Nancy;
 using Nancy.Authentication.Forms;
 using Nancy.Bootstrapper;
+using Nancy.Responses;
 using Nancy.Session;
 using Nancy.TinyIoc;
 using Neva.Messaging;
@@ -31,6 +33,11 @@ namespace MultiRando.Web
 
             CookieBasedSessions.Enable(pipelines);
             FormsAuthentication.Enable(pipelines, new AuthenticationConfiguration(container));
+
+            var rootPath = container.Resolve<IRootPathProvider>().GetRootPath();
+
+
+            GenericFileResponse.SafePaths.Add(Path.GetFullPath(Path.Combine(rootPath, "..\\Private\\")));
 
 
             Config.Current.MailingRootUrl = ConfigurationManager.AppSettings["multiRando:mailing:RootUrl"];

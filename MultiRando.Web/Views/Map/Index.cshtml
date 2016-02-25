@@ -6,8 +6,8 @@
 }
 
 <div class="container-fluid" data-bind="inject : map.MapController">
-    <div class="row" data-bind="with: Map">
-        <div class="col-xs-3" style="overflow-y: scroll" data-bind="event : { dragover: dragInOut, dragleave: dragInOut }, style : { height : pageHeight() + 'px' }">
+    <div class="map-page" data-bind="with: Map">
+        <div class="col-left" style="overflow-y: scroll" data-bind="event : { dragover: dragInOut, dragleave: dragInOut }, style : { height : pageHeight() + 'px' }">
             <div class="row" style="margin-top: 22px;">
                 <div class="col-md-6">
                     <div class="dropdown" >
@@ -44,22 +44,17 @@
             
             
             <div class="clearfix"></div>
-            @Html.Partial("Views/Map/_SegmentsEdit")
             @Html.Partial("Views/Map/_Routes")
             @Html.Partial("Views/Map/_Tracks")
-
-         
         </div>
 
-        <div class="col-xs-9">
-            <div id="map-canvas" style="width: 100%; height: 500px" data-bind="style: { height : pageHeight() - 5 + 'px' }"></div>
+        <div class="col-right" style="overflow-y: scroll" data-bind="event : { dragover: dragInOut, dragleave: dragInOut }, style : { height : pageHeight() + 'px' }">
+            @Html.Partial("Views/Map/_SegmentsEdit")
         </div>
 
-
-        <input type="file" id="gpxInput" data-bind="event: { change: gpxInputChange }"
-               style="position: fixed; z-index: -2; opacity: 0;"/>
-        <input type="file" id="pltInput" data-bind="event: { change: pltInputChange }"
-               style="position: fixed; z-index: -2; opacity: 0;" />
+        <div class="col-map">
+            <div id="map-canvas" style="height: 500px" data-bind="style: { height : pageHeight() - 5 + 'px' }"></div>
+        </div>
     </div>
 </div>
 
@@ -79,7 +74,14 @@
             <span>@Res("Res.Page.Map.IsPrivate")</span>
         </div>
         <!--/ko-->
-        <!--ko ifnot: NoWay() || IsPrivate()-->
+        <!--ko if: CurrentActivityNoWay-->
+        <div style="font-size: 30px;">
+            <i class="fa fa-ban" style="color: red;"></i>
+            <span>@Res("Res.Page.Map.NoWayFor")</span>
+            <span data-bind="text: ep.res('Res.Page.Map.ActivityFlags.' + currentActivityName)"></span>
+        </div>
+        <!--/ko-->
+        <!--ko ifnot: NoWay() || IsPrivate() || CurrentActivityNoWay()-->
         <div class="form-group">
             <label class="col-lg-4 control-label">@Res("Res.Page.Map.Mudding")</label>
             <div class="col-lg-8">

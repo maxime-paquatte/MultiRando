@@ -10,7 +10,7 @@ as begin
 --[beginsp]
 
 	WITH XMLNAMESPACES ('http://james.newtonking.com/projects/json' as json)	
-	select "@json:Array" = 'true', t.TrackId, t.Name, t.Creationdate
+	select "@json:Array" = 'true', t.TrackId, t.Name, t.Creationdate, TrackLength = CAST(LineString.STLength() * 89550 as int)
 	from [MR].[tTrack] t
 	where t.UserId = @_ActorId
 			

@@ -10,7 +10,7 @@ as begin
 --[beginsp]
 
 	WITH XMLNAMESPACES ('http://james.newtonking.com/projects/json' as json)	
-	select "@json:Array" = 'true', t.RouteId, t.Name, t.Creationdate, t.IsPublic, t.RouteLength
+	select "@json:Array" = 'true', t.RouteId, t.Name, t.Creationdate, t.IsPublic, RouteLength = CAST(LineString.STLength() * 89550 as int)
 	from [MR].tRoute t
 	where t.CreatorUserId = @_ActorId
 			

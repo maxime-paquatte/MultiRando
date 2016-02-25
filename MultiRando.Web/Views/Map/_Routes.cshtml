@@ -32,6 +32,7 @@
             <div class="panel-collapse collapse in" role="tabpanel" data-bind="css : { 'in':  isSelected }">
                 <div class="panel-body">
                     <div>
+                        <button class="btn pull-right" data-bind="click: function(){ isShortcutMode(!isShortcutMode());  }, visible: isEdit, css : isShortcutMode() ? 'btn-success' : 'btn-default'">@Res("Res.Std.Shortcut")</button>
                         <button class="btn btn-primary pull-right" data-bind="click: $parent.saveRoute, visible: isEdit">@Res("Res.Std.Save")</button>
                         <button class="btn btn-default pull-right" data-bind="click: edit, visible: !isEdit()">@Res("Res.Std.Edit")</button>
                         <button class="btn btn-default pull-right" data-bind="click: cancel">@Res("Res.Std.Cancel")</button>

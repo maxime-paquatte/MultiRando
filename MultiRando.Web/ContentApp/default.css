@@ -64,6 +64,22 @@
     }
 
 
+.map-page {
+        
+}
+
+    .map-page > .col-left {
+        float: left;
+        width: 350px;
+
+    }
+    .map-page > .col-map {
+        margin: 0 360px;
+    }
+    .map-page > .col-right {
+        width: 350px;
+        float: right;
+    }
 
     
 .visible-on-parent-over
@@ -81,10 +97,20 @@
     display: inline;
 }
 
-*:hover > i.visible-on-parent-over, tr:hover i.visible-on-parent-over, .parent-over:hover i.visible-on-parent-over , .parent-over:hover span.visible-on-parent-over
+*:hover > i.visible-on-parent-over, 
+tr:hover i.visible-on-parent-over, 
+.parent-over:hover i.visible-on-parent-over 
 {
     display: inline;
 }
+
+*:hover > span.visible-on-parent-over, 
+tr:hover span.visible-on-parent-over, 
+.parent-over:hover span.visible-on-parent-over 
+{
+    display: inline;
+}
+
 
 *:hover > .caret.visible-on-parent-over, tr:hover .caret.visible-on-parent-over, .parent-over:hover .caret.visible-on-parent-over
 {

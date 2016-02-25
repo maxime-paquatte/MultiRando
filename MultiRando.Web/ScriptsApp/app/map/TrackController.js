@@ -14,12 +14,7 @@
         viewModel.tracks = ko.observableArray();
 
         viewModel.progress = ko.observableArray();
-        viewModel.gpxInputChange = function (data, event) {
-            _this.uploadFiles(event.target.files, '/map/uploadGpx/');
-        };
-        viewModel.pltInputChange = function (data, event) {
-            _this.uploadFiles(event.target.files, '/map/uploadPlt');
-        };
+
 
         viewModel.isDragover = ko.observable(false);
         viewModel.dragInOut = function (d, e) {
@@ -35,8 +30,11 @@
             var files = e.originalEvent.dataTransfer.files;
             _this.uploadFiles(files);
         };
+        viewModel.trackInputChange = function(data, event) {
+            _this.uploadFiles(event.target.files);
+        }
 
-        _this.uploadFiles = function (files, url) {
+        _this.uploadFiles = function (files) {
             for (var i = 0; i < files.length; i++) {
                 var f = files[i];
                 var p = {
@@ -58,15 +56,10 @@
                 viewModel.progress.push(p);
 
 
-                var xhr = ep.uploadFile(f, url, function (r) {
+                var xhr = ep.uploadFile(f, '/map/uploadTrack', function (r) {
                     if (r.result == 'success') {
                         viewModel.progress.remove(p);
-                        _this.fetch().then(function() {
-                            var t = _.find(viewModel.tracks(), function(d) {
-                                return d.TrackId() == r.trackId;
-                            });
-                            if (t) t.select();
-                        });
+                        _this.fetch();
                     } else {
                         p.error(r.message);
                         ep.showException(r.exId);

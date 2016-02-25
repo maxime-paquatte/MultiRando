@@ -9,6 +9,8 @@
 
         var _this = this;
 
+        var a = _.find(ep.toKeyValues(w.ActivityFlags), function(v) { return v.val == options.currentActivity });
+        _this.currentActivityName = a ? a.key : '';
         _this.defaultColor = '#00FFFF';
         _this.SegmentId = ko.observable(0);
         _this.CreatorDisplayName = ko.observable('');
@@ -24,6 +26,10 @@
         _this.IsRoad = ko.observable(false);
         _this.NoWay = ko.observable(false);
 
+        _this.CurrentActivityNoWay = ko.computed(function() {
+            return _this.ActivityFlag.hasFlag(options.currentActivity);
+        });
+
         _this.getColor = function() {
             if (_this.isSelected()) return w.map.MapController.constants.ColorSegmentEdit;
             if (_this.IsPrivate()) return w.map.MapController.constants.ColorSegmentIsPrivate;
@@ -31,7 +37,7 @@
             if (_this.NoWay()) return w.map.MapController.constants.ColorSegmentNoWay;
             var max = Math.max(parseInt(_this.Mudding()), parseInt(_this.Elevation()), parseInt(_this.Scree()));
 
-            return _this.ActivityFlag.hasFlag(options.currentActivity)
+            return _this.CurrentActivityNoWay()
                 ? w.map.MapController.constants.ColorSegmentWrongActivityFlag
                 : ep.getGreenToRedColor((max + 1) / 6);
         }
@@ -163,6 +169,7 @@
 
         _this.TrackId = ko.observable(0);
         _this.Name = ko.observable('');
+        _this.TrackLength = ko.observable(0);
         _this.isSelected = ko.observable(false);
 
         _this.polylines = null;
@@ -211,7 +218,9 @@
             });
         }
 
-        ko.mapping.fromJS(data || {}, {}, _this);
+        ko.mapping.fromJS(data || {}, {
+            TrackLength: { update: function (o) { return parseInt(o.data); } }
+        }, _this);
     };
 
     vm.Map.Route = function(mapCtrl, data, options) {
@@ -225,6 +234,9 @@
         _this.isSelected = ko.observable(false);
         _this.isEdit = ko.observable(false);
 
+        _this.isShortcutMode = ko.observable(false);
+        _this.shortcutStart = null;
+
         _this.polylines = null;
         _this.select = function() {
 
@@ -234,7 +246,20 @@
                     zIndex: 99,
                     strokeColor: w.map.MapController.constants.ColorRouteDefault
                 });
+                _this.polylines.addListener('click', function (e) {
+                    if (_this.isShortcutMode() && !_.isUndefined(e.vertex)) {
+                        if (_this.shortcutStart != null) {
+                            var a = _this.shortcutStart < e.vertex ? _this.shortcutStart : e.vertex;
+                            var b = _this.shortcutStart > e.vertex ? _this.shortcutStart : e.vertex;
+                            var p = _this.polylines.getPath().getArray();
+                            p.splice(a, b-a);
+                            _this.polylines.setPath(p);
+                            _this.shortcutStart = null;
+                            _this.isShortcutMode(false);
+                        } else _this.shortcutStart = e.vertex;
 
+                    }
+                });
                 _this.polylines.addListener('rightclick', function(e) {
                     if (!_.isUndefined(e.vertex)) {
                         var p = _this.polylines.getPath().getArray();
@@ -242,6 +267,7 @@
                         _this.polylines.setPath(p);
                     }
                 });
+    
 
                 mapCtrl.CurrentPolylines = _this.polylines;
                 var id = _this.RouteId();

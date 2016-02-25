@@ -158,6 +158,7 @@
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.IO.Compression.FileSystem" />
     <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.Helpers.dll</HintPath>
@@ -201,6 +202,9 @@
     <Compile Include="Core\Messaging\IoCActivator.cs" />
     <Compile Include="Core\Services\ExceptionLoggerService.cs" />
     <Compile Include="Core\Services\MailService.cs" />
+    <Compile Include="Core\Services\TilesService.cs" />
+    <Compile Include="Models\Cell.cs" />
+    <Compile Include="Models\Tile.cs" />
     <Compile Include="Modules\Admin\DatabaseModule.cs" />
     <Compile Include="Modules\Admin\MessagingModule.cs" />
     <Compile Include="Modules\Admin\ResourcesModule.cs" />
@@ -210,6 +214,7 @@
     <Compile Include="Modules\HomeModule.cs" />
     <Compile Include="Modules\MessagingModule.cs" />
     <Compile Include="Modules\StatusCodeHandlers.cs" />
+    <Compile Include="Modules\TilesModule.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />

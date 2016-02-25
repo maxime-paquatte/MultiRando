@@ -189,8 +189,7 @@
         Equestrian: Math.pow(2, 2),
         Quad: Math.pow(2, 3),
         Enduro: Math.pow(2, 4),
-        Car: Math.pow(2, 5),
-        Private: Math.pow(2, 30)
+        Car: Math.pow(2, 5)
     }
 
 }(window, window.ko, window._, window.$, window.Backbone, window.google, window.ep));

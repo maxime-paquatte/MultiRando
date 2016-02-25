@@ -3,30 +3,75 @@
 
 <div data-bind="event: { drop : drop }, style : { 'border' : isDragover() ? '2px dotted #428bca' : 'none' }">
 
-    <div class="row">
+    <input type="file" id="trackInput" data-bind="event: { change: trackInputChange }"
+           style="position: fixed; z-index: -2; opacity: 0;" />
+    <label for="trackInput" class="btn btn-default pull-right" title="@Res("Res.Page.Map.Track.Upload.Tooltip")">
+        <i class="fa fa-upload"></i>
+    </label>
+    <h2>@Res("Res.Page.Map.Track.Title")</h2>
+    @*<div class="row">
         <div class="col-md-6">
-            <h2>@Res("Res.Page.Map.Track.Title")</h2>
+           
         </div>
         <div class="col-md-6">
             <div style="margin-top: 22px;" class="pull-right">
                 <label for="pltInput" class="btn btn-default" title="@Res("Res.Page.Map.Track.AddPlt.Tooltip")">
                     <span>PLT</span>
-                    <sup class="fa fa-plus"></sup>
+                    <sup class="fa fa-upload"></sup>
                 </label>
                 <label for="gpxInput" class="btn btn-default" title="@Res("Res.Page.Map.Track.AddGpx.Tooltip")">
                     <span>GPX</span>
-                    <sup class="fa fa-plus"></sup>
+                    <sup class="fa fa-upload"></sup>
                 </label>
             </div>
         </div>
-    </div>
+    </div>*@
 
-    <div class="list-group" data-bind="foreach: tracks">
-        <a href="#" class="list-group-item parent-over" data-bind="click: select, css : { active : isSelected }">
-            <span href="#" class="pull-right visible-on-parent-over" style="cursor: pointer" title="@Res("Res.Std.Locate")" data-bind="click: showStart, clickBubble : false, visible: isSelected()"><i class="fa fa-location-arrow"></i></span>
-            <span href="#" class="pull-right visible-on-parent-over" style="cursor: pointer" title="@Res("Res.Std.Delete")" data-bind="click: $parent.deleteTrack, clickBubble : false"><i class="fa fa-times"></i></span>
-            <span href="#" class="pull-right visible-on-parent-over" style="cursor: pointer" title="@Res("Res.Std.Rename")" data-bind="click: rename, clickBubble : false"><i class="fa fa-pencil"></i></span>
-            <span data-bind="text: Name"></span>
-        </a>
+    <!--ko foreach: progress-->
+    <div class="progress">
+        <div class="progress-bar" style="min-width: 2em;" data-bind="style : { width : progress() + '%' }">
+           <span data-bind="text:  progress() + '%'"></span>
+        </div>
     </div>
+    <!--/ko-->
+
+    <table class="table table-condensed">
+        <tbody  data-bind="foreach: tracks">
+        <tr>
+            <td>
+                <span data-bind="text: Name"></span>
+                <span href="#" class="visible-on-parent-over" style="cursor: pointer" title="@Res("Res.Std.Delete")" data-bind="click: $parent.deleteTrack, clickBubble : false"><i class="fa fa-times"></i></span>
+                <span href="#" class="visible-on-parent-over" style="cursor: pointer" title="@Res("Res.Std.Rename")" data-bind="click: rename, clickBubble : false"><i class="fa fa-pencil"></i></span>
+            </td>
+            <td style="text-align: center">
+                <span class="badge pull-right" data-bind="text: (TrackLength() / 1000).toFixed(2) + 'km'"></span>
+                <br/>
+                <span href="#" class="visible-on-parent-over" style="cursor: pointer" title="@Res("Res.Page.Map.Track.Show.Tooltip")" data-bind="click: select, hidden: isSelected, clickBubble : false"><i class="fa fa-eye-slash"></i></span>
+                <span href="#" style="cursor: pointer" title="@Res("Res.Page.Map.Track.Hide.Tooltip")" data-bind="click: select, visible: isSelected, clickBubble : false"><i class="fa fa-eye"></i></span>
+                <span href="#" style="cursor: pointer" title="@Res("Res.Std.Locate")" data-bind="click: showStart, clickBubble : false, visible: isSelected()"><i class="fa fa-location-arrow"></i></span>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    @*<div class="panel-group" data-bind="foreach: tracks">
+        <div class="panel" data-bind="css :  isSelected() ? 'panel-primary' : 'panel-default' ">
+            <div class="panel-heading parent-over" role="tab" id="headingOne" data-bind="click: select">
+                <h4 class="panel-title">
+                    <span class="badge pull-right" data-bind="text: (TrackLength() / 1000).toFixed(2) + 'km'"></span>
+                    <span data-bind="text: Name"></span>
+
+                </h4>
+            </div>
+            <div class="panel-collapse collapse in" role="tabpanel" data-bind="css : { 'in':  isSelected }">
+                <div class="panel-body">
+                    <div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>*@
+
+
 </div>
