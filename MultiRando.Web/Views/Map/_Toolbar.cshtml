@@ -1,0 +1,42 @@
+﻿@using Nancy
+@inherits MultiRando.Web.Core.Helpers.RazorViewBase<dynamic>
+
+<input type="file" id="trackInput" data-bind="event: { change: trackInputChange }"
+       style="position: fixed; z-index: -2; opacity: 0;" />
+
+<div class="pull-right">
+    <div class="dropdown">
+        <button id="dLabel" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn btn-default">
+            <i class="fa fa-cog"></i>
+            <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="dLabel">
+            <li class="dropdown-header">@Res("Res.Page.Map.CurrentActivity")</li>
+            <!-- ko foreach: ep.toKeyValues(ActivityFlags) -->
+            <li data-bind="css: { disabled : $parent.currentActivity() == val }">
+                <a href="#" data-bind="click: function(){ $parent.currentActivity(val); }">
+                    <span data-bind="text: ep.res('Res.Page.Map.ActivityFlags.' + key)"></span>
+                </a>
+            </li>
+            <!-- /ko -->
+        </ul>
+    </div>
+</div>
+
+
+<label for="trackInput" class="btn btn-default" title="@Res("Res.Page.Map.Track.Upload.Tooltip")">
+    <i class="fa fa-upload"></i>
+</label>
+
+<button class="btn btn-default" title="@Res("Res.Page.Map.Route.Add.Tooltip")" data-bind="click: addRoute">
+    <i class="fa fa-location-arrow"></i>
+    <sup class="fa fa-plus"></sup>
+</button>
+<button class="btn btn-default" title="@Res("Res.Page.Map.AddSegment.Tooltip")" data-bind="click: addSegment">
+    <i class="fa fa-random"></i>
+    <sup class="fa fa-plus"></sup>
+</button>
+<button class="btn btn-default" title="@Res("Res.Page.Map.AddInterest.Tooltip")" data-bind="">
+    <i class="fa fa-map-marker"></i>
+    <sup class="fa fa-plus"></sup>
+</button>

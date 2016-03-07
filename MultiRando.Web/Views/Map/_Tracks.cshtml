@@ -3,11 +3,7 @@
 
 <div data-bind="event: { drop : drop }, style : { 'border' : isDragover() ? '2px dotted #428bca' : 'none' }">
 
-    <input type="file" id="trackInput" data-bind="event: { change: trackInputChange }"
-           style="position: fixed; z-index: -2; opacity: 0;" />
-    <label for="trackInput" class="btn btn-default pull-right" title="@Res("Res.Page.Map.Track.Upload.Tooltip")">
-        <i class="fa fa-upload"></i>
-    </label>
+
     <h2>@Res("Res.Page.Map.Track.Title")</h2>
     @*<div class="row">
         <div class="col-md-6">
@@ -37,7 +33,7 @@
 
     <table class="table table-condensed">
         <tbody  data-bind="foreach: tracks">
-        <tr>
+        <tr style="min-height: 50px">
             <td>
                 <span data-bind="text: Name"></span>
                 <span href="#" class="visible-on-parent-over" style="cursor: pointer" title="@Res("Res.Std.Delete")" data-bind="click: $parent.deleteTrack, clickBubble : false"><i class="fa fa-times"></i></span>

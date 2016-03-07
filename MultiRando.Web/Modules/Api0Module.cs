@@ -38,18 +38,14 @@ namespace MultiRando.Web.Modules
                 var u = userRepository.GetUserByApiKey((string)Request.Query.apiKey);
                 if (u != null)
                 {
-                    var routes = routeRepository.RoutesForUser(u.UserId).ToArray();
+                    long ts = long.TryParse((string) Request.Query.ts ?? "", out ts) ? ts : 0;
+
+                    var routes = routeRepository.RoutesForUser(u.UserId, ts).ToArray();
                     return Response.AsJson(new { result = "success", routes });
                 }
                 return Response.AsJson(new { result = "error", message = "InvalidApiKey" });
             };
 
-            Get["/RouteLine/{id}"] = _ =>
-            {
-                var routeline = routeRepository.RoutesLine((int)_.id);
-                routeline = routeline.Substring("LINESTRING (".Length).Trim(')');
-                return Response.AsJson(new { result = "success", routeline });
-            };
         }
     }
 }

@@ -54,8 +54,8 @@
             <form method="POST" action="/Auth/Register">
                 <input type="hidden" name="returnUrl" value="@Request.Query.returnUrl" />
                 <div>
-                    <label for="email" class="sr-only">Email address</label>
-                    <input type="email" id="email" name="email" class="form-control" placeholder="Email address" required="" data-bind="textInput: email">
+                    <label for="email" class="sr-only">@Res("Res.Model.Email")</label>
+                    <input type="email" id="email" name="email" class="form-control" placeholder="@Res("Res.Model.DisplayName")" required="" data-bind="textInput: email">
                 </div>
                 <div>
                     <label for="password" class="sr-only">@Res("Res.Model.Password")</label>
@@ -64,6 +64,10 @@
                 <div data-bind="css: { 'has-error' : password() != passwordConfirm() }">
                     <label for="passwordConfirm" class="sr-only">@Res("Res.Model.PasswordConfirm")</label>
                     <input type="password" id="passwordConfirm" class="form-control" placeholder="@Res("Res.Model.PasswordConfirm")" required="" data-bind="textInput: passwordConfirm">
+                </div>
+                <div>
+                    <label for="displayName" class="sr-only">@Res("Res.Model.DisplayName")</label>
+                    <input type="text" id="displayName" name="displayName" class="form-control" placeholder="@Res("Res.Model.DisplayName")" required="" data-bind="textInput: displayName">
                 </div>
                 <button class="btn btn-lg btn-primary btn-block" type="submit">@Res("Res.Register.Submit")</button>
             </form>

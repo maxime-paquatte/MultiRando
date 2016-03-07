@@ -16,10 +16,14 @@ CREATE TABLE MR.tRoute
 	CreatorUserId	int not null,
 	Creationdate	datetime2(0) not null
 		constraint DF_tRoute_Creationdate default(GETUTCDATE()),
+
+	timestamp,
 	
 	constraint PK_tRoute primary key clustered ( RouteId ),
 	CONSTRAINT FK_tRoute_UserId FOREIGN KEY(CreatorUserId)
 		REFERENCES [MR].[tUser](UserId)
 )
+
+
 
 --[endscript]

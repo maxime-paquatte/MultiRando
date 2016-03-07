@@ -18,24 +18,18 @@ namespace MultiRando.Model.Route
             _config = config;
         }
 
-        public IEnumerable<Route> RoutesForUser(int userId)
+        public IEnumerable<Route> RoutesForUser(int userId, long ts)
         {
             var db = new Database(_config.ConnectionString, "System.Data.SqlClient");
-            return db.Query<Route>(@"select r.*, CreatorDisplayName = u.DisplayName
-                        from MR.tRoute r inner join MR.tUser u on u.UserId = r.CreatorUserId  
-                        where r.CreatorUserId = @0", userId);
-        }
-
-        public string RoutesLine(int routeId)
-        {
-            var db = new Database(_config.ConnectionString, "System.Data.SqlClient");
-            return db.ExecuteScalar<string>(@"select r.LineString.ToString() from MR.tRoute r where r.RouteId = @0", routeId);
+            return db.Query<Route>(@"select v.* from MR.vRoute v inner join MR.tRoute r on r.RouteId = v.RouteId where v.CreatorUserId = @0 and r.timestamp > @1", userId, ts);
         }
 
         public IEnumerable<Point> RoutesPoints(int routeId)
         {
-            var routeline = RoutesLine(routeId);
-            routeline = routeline.Substring("LINESTRING (".Length).Trim(')');
+
+            var db = new Database(_config.ConnectionString, "System.Data.SqlClient");
+            var routeline = db.ExecuteScalar<string>(@"select r.LineString from MR.vRoute r where r.RouteId = @0", routeId);
+            
             foreach (var s in routeline.Split(new [] {','}, StringSplitOptions.RemoveEmptyEntries))
             {
                 var parts = s.Split(new[] {' '}, StringSplitOptions.RemoveEmptyEntries);
@@ -60,6 +54,9 @@ namespace MultiRando.Model.Route
         public bool IsPublic { get; set; }
 
         public DateTime Creationdate { get; set; }
+
+        public long Timestamp { get; set; }
+        public string LineString { get; set; }
 
         public long CreationDateEpoch => (long)Creationdate.ToUniversalTime().Subtract(
             new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)

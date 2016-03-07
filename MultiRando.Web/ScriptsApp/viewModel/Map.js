@@ -42,6 +42,7 @@
                 : ep.getGreenToRedColor((max + 1) / 6);
         }
 
+        var startMarker, endMarker;
         _this.isSelected.subscribe(function(nv) {
             if (nv) {
                 _this.polylines.setOptions({
@@ -49,12 +50,17 @@
                     strokeWeight: w.map.MapController.constants.StrokeWeightSegmentEdit,
                     zIndex: 1
                 });
+                var p = _this.polylines.getPath().getArray();
+                startMarker = new w.google.maps.Marker({ position: p[0], label: 'A', title: 'début', map: mapCtrl.map });
+                endMarker = new w.google.maps.Marker({ position: p[p.length - 1], label: 'B', title: 'fin', map: mapCtrl.map });
             } else {
                 _this.polylines.setOptions({
                     strokeColor: _this.getColor(),
                     strokeWeight: w.map.MapController.constants.StrokeWeightSegmentDefault,
                     zIndex: 20
                 });
+                if (startMarker != null) startMarker.setMap(null);
+                if (endMarker != null) endMarker.setMap(null);
             }
         });
 
@@ -143,6 +149,10 @@
                 zIndex: 1,
                 editable: false
             });
+
+
+            if (startMarker != null) startMarker.setMap(null);
+            if (endMarker != null) endMarker.setMap(null);
         }
 
 

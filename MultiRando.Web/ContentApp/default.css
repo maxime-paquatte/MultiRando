@@ -75,6 +75,9 @@
     }
     .map-page > .col-map {
         margin: 0 360px;
+    } 
+    .map-page > .col-map > .toolbar{
+        height: 40px;
     }
     .map-page > .col-right {
         width: 350px;

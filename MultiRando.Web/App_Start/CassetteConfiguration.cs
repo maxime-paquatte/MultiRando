@@ -18,8 +18,10 @@ namespace MultiRando.Web
             if (string.IsNullOrEmpty(epcdnUrl)) throw new Exception("Missing configuration: multiRando:cdn:RootUrl");
 
             bundles.AddPerSubDirectory<StylesheetBundle>("Content");
+            bundles.AddUrlWithAlias<StylesheetBundle>("//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css", "Content/bootstrap.css");
+            bundles.AddUrlWithAlias<StylesheetBundle>("//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css", "Content/font-awesome.css", b => b.AddReference("~/Content/bootstrap.css"));
+
             bundles.Add<StylesheetBundle>("ContentApp/default.css", b => b.AddReference("~/Content/"));
-            bundles.AddUrlWithAlias("//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css", "Content/font-awesome.css");
 
 
 

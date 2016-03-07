@@ -30,6 +30,7 @@
         registerVm.email = ko.observable('');
         registerVm.password = ko.observable('');
         registerVm.passwordConfirm = ko.observable('');
+        registerVm.displayName = ko.observable('');
 
 
     };

@@ -15,7 +15,7 @@ using NevaUtils;
 namespace MultiRando.Model.Segment
 {
     [SqlTable("tSegment", Package = typeof(Package), ResourcePath = "Segment.Res"), Versions("5.7.11")]
-    [SqlObjectItem("svSegmentGetInBound")]
+    [SqlObjectItem("vSegmentDistance,svSegmentGetInBound")]
     [SqlObjectItem("scSegmentDelete,scSegmentUpdate,scSegmentSplit")]
     public class SegmentHome : SqlTable
     {

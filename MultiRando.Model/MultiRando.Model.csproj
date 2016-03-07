@@ -179,6 +179,12 @@
   <ItemGroup>
     <EmbeddedResource Include="Route\Res\scRouteUpdateOrCreate.sql" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Route\Res\vRoute.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Segment\Res\vSegmentDistance.sql" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

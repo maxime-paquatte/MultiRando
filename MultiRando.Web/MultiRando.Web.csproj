@@ -228,6 +228,7 @@
     <None Include="Views\Auth\Login.cshtml" />
     <None Include="Views\Home\Index.cshtml" />
     <None Include="Views\Map\_Routes.cshtml" />
+    <None Include="Views\Map\_Toolbar.cshtml" />
     <None Include="Views\Map\_Tracks.cshtml" />
     <None Include="Views\Map\_SegmentsEdit.cshtml" />
     <None Include="Views\Map\Index.cshtml" />

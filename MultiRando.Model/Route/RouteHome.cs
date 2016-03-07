@@ -15,7 +15,7 @@ using NevaUtils;
 namespace MultiRando.Model.Route
 {
     [SqlTable("tRoute", Package = typeof(Package), ResourcePath = "Route.Res"), Versions("6.2.16")]
-    [SqlObjectItem("svRouteForActor,svRouteLine")]
+    [SqlObjectItem("vRoute,svRouteForActor,svRouteLine")]
     [SqlObjectItem("scRouteUpdateOrCreate,scRouteRename,scRouteDelete")]
     public class RouteHome : SqlTable
     {

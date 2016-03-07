@@ -160,6 +160,7 @@
             if (infowindow) infowindow.close();
         }
 
+
         ep.messaging.read('MultiRando.Message.UserSettings.Queries.Get', {}, function (r) {
             var mapOptions = { center: { lat: parseFloat(r.MapCenterLat) || 46.3240998, lng: parseFloat(r.MapCenterLong) || 2.5689203 }, zoom: parseFloat(r.MapZoom) || 15, mapTypeId: r.MapTypeId || google.maps.MapTypeId.SATELLITE };
             _this.initMap(mapOptions);

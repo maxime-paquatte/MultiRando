@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -35,11 +36,6 @@ namespace MultiRando.Web.Modules
             Get["/Map"] = x => View["Index"];
             Get["/Map/Route/DownloadRt2/{id}"] = DownloadRt2;
             Post["/Map/uploadTrack"] = UploadTrack;
-
-
-
-
-
         }
 
         private dynamic UploadTrack(dynamic _)
@@ -125,26 +121,24 @@ namespace MultiRando.Web.Modules
 
         private dynamic DownloadRt2(dynamic _)
         {
-            var rawline = _routeRepository.RoutesLine((int)_.id);
-            if (string.IsNullOrEmpty(rawline)) return new NotFoundResponse();
+            var pts = _routeRepository.RoutesPoints((int)_.id);
 
             string date = DateTime.Now.ToString("dd-MM-yyyy hh:mm:ss");
-
-            var toRemoveStr = "LINESTRING (";
-            rawline = rawline.Substring(toRemoveStr.Length, rawline.Length - toRemoveStr.Length - 1);
+            
             var sb = new StringBuilder();
             sb.AppendLine("H1,OziExplorer CE Route2 File Version 1.0");
             sb.AppendLine("H2,WGS 84");
             sb.Append("H3,").Append(date).AppendLine(",,0");
 
             int lineNumber = 1;
-            foreach (var line in rawline.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+            foreach (var pt in pts)
             {
-                var parts = line.Split(new [] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
                 sb.Append("W,RW").Append(lineNumber.ToString().PadLeft(3,'0')).Append(",")
-                    .Append(parts[1].PadLeft(20, ' ')).Append(",").Append(parts[0].PadLeft(20, ' ')).AppendLine(",0");
+                    .Append(pt.Lat.ToString(CultureInfo.InvariantCulture).PadLeft(20,' '))
+                    .Append(",").Append(pt.Lon.ToString(CultureInfo.InvariantCulture).PadLeft(20, ' '))
+                    .AppendLine(",0");
             }
-
+            
             var tmpPath = _cfg.AppPath + @"..\Private\Routes\";
             Directory.CreateDirectory(tmpPath);
             var filePath = Path.Combine(tmpPath, date.Replace(':', '-') + ".rt2");
