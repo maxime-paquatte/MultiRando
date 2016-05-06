@@ -1,0 +1,28 @@
+﻿@using Nancy
+@inherits MultiRando.Web.Core.Helpers.RazorViewBase<dynamic>
+
+<div data-bind="with: selectedInterest">
+    <div class="pull-right">
+        <button class="btn btn-default" data-bind="click: addYoutube"><i class="fa fa-youtube"></i></button>
+        <button class="btn btn-default" data-bind="click: $parent.cancelInterest"><i class="fa fa-times"></i></button>
+    </div>
+    <h2>@Res("Res.Page.Map.Interest.Edit.Title")</h2>
+
+    <div data-bind="if: currentUser.UserId == CreatorUserId">
+        <div class="form-group">
+            <label for="interest-comment">@Res("Res.Home.Interest.Comment")</label>
+            <textarea id="interest-comment" class="form-control" data-bind="value: Comment"></textarea>
+        </div>
+
+        <button class="btn btn-danger pull-right" data-bind="click: $parent.deleteInterest">@Res("Res.Std.Delete")</button>
+        <button class="btn btn-primary" data-bind="click: save">@Res("Res.Std.Save")</button>
+    </div>
+    <div data-bind="ifnot: currentUser.UserId == CreatorUserId">
+        <pre data-bind="text: Comment"></pre>
+    </div>
+    <div>
+        <br/><span>@Res("Res.Page.Map.Creator") <span data-bind="text: CreatorDisplayName"></span></span>
+        <br/><span>@Res("Res.Page.Map.CreationDate") <span data-bind="date: CreationDate"></span></span>
+        <br/><span>@Res("Res.Page.Map.InterestId") <span data-bind="text: InterestId"></span></span>
+    </div>
+</div>

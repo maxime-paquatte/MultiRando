@@ -220,7 +220,9 @@
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
+    <None Include="app.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="packages.config" />
     <None Include="Views\Admin\Messaging\Index.cshtml" />
     <None Include="Views\Admin\Resources\Index.cshtml" />
@@ -228,6 +230,7 @@
     <None Include="Views\Auth\Login.cshtml" />
     <None Include="Views\Home\Index.cshtml" />
     <None Include="Views\Map\_Routes.cshtml" />
+    <None Include="Views\Map\_InterestEdit.cshtml" />
     <None Include="Views\Map\_Toolbar.cshtml" />
     <None Include="Views\Map\_Tracks.cshtml" />
     <None Include="Views\Map\_SegmentsEdit.cshtml" />
@@ -238,7 +241,9 @@
     <None Include="Views\Shared\_LayoutDefault.cshtml" />
     <None Include="Views\status\404.cshtml" />
     <None Include="Views\status\500.cshtml" />
-    <None Include="web.config" />
+    <None Include="web.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Content\" />

@@ -1,19 +1,23 @@
 ﻿--[beginscript]	
+
 CREATE TABLE MR.tInterest
 (
 	InterestId		int not null identity(1,1),
 
-	ActivityFlag int not null constraint DF_tInterest_ActivityFlag default 0,
-	Mudding tinyint  not null constraint DF_tInterest_Mudding default 0,
-	Elevation tinyint  not null constraint DF_tInterest_Elevation default 0,
-	Scree tinyint  not null constraint DF_tInterest_Scree default 0,
+	Lat float not null,
+	Lon float not null,
 
+	Category varchar(16) not null,
+	Comment nvarchar(256) not null
+		constraint DF_tInterest_Comment default(''),
 
-	Polylines		geography  not null ,
+	IsPublic bit not null
+		constraint DF_tInterest_IsPublic default(1),
+
 
 	
 	CreatorUserId	int not null,
-	Creationdate	datetime2(0) not null
+	CreationDate	datetime2(0) not null
 		constraint DF_tInterest_Creationdate default(GETUTCDATE()),
 	
 	constraint PK_tInterest primary key clustered ( InterestId ),

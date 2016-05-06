@@ -4,6 +4,8 @@
 
 (function (w, ko, _, $, Backbone, google, ep) {
 
+    var vm = ep.vm;
+
     w.map = w.map || {};
     w.map.MapController = function (rootCtx, element, va, ava) {
         console.log("MapController loaded");
@@ -16,12 +18,19 @@
 
 
         var viewModel = rootCtx.Map = {};
-        //_this.interestsCtrl = new map.InterestController(_this, viewModel);
+        _this.interestsCtrl = new map.InterestController(_this, viewModel);
         _this.segmentController = new map.SegmentController(_this, viewModel);
         _this.trackController = new map.TrackController(_this, viewModel);
         _this.routeController = new map.RouteController(_this, viewModel);
 
         _this.CurrentPolylines = null;
+
+        _this.currentTopPolylinesCallback = null;
+        _this.setTopPolylines = function (p, callback) {
+            if (callback) callback();
+            p.setOptions({ zIndex: 99 });
+            _this.currentTopPolylinesCallback = callback;
+        }
 
         var initActivity = 0;
         viewModel.currentActivity = ko.observable();
@@ -45,6 +54,7 @@
         viewModel.bound = _this.bound =  ko.observable({}).extend({ rateLimit: { timeout: 1000, method: "notifyWhenChangesStop" } });
         viewModel.bound.subscribe(function (nv) {
             _this.segmentController.fetchSegments(nv);
+            _this.interestsCtrl.fetchInterests(nv);
         });
 
 
@@ -125,11 +135,15 @@
             _this.map.addListener('maptypeid_changed', _this.changeMapPos);
 
             _this.map.addListener('click', function (e) {
-                _this.addPoint(e.latLng, false);
+                var a = { canceled: false, lat: e.latLng.lat(), lng: e.latLng.lng() }
+                _this.trigger("click.map", a);
+                if(!a.canceled)_this.addPoint(e.latLng, false);
             });
 
             _this.map.addListener('rightclick', function (e) {
-                _this.addPoint(e.latLng, true);
+                var a = { canceled: false, lat: e.latLng.lat(), lng: e.latLng.lng() }
+                _this.trigger("rightclick.map", a);
+                if (!a.canceled) _this.addPoint(e.latLng, true);
             });
 
             _this.loadBound();

@@ -2,7 +2,7 @@
 
 namespace MultiRando.Message.Interest.Events
 {
-    public class Changed : IEvent
+    public class Created : IEvent
     {
         public string Source { get; set; }
 

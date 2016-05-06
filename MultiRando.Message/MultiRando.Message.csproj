@@ -47,6 +47,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Interest\Commands\Update.cs" />
+    <Compile Include="Interest\Commands\Move.cs" />
+    <Compile Include="Interest\Commands\Delete.cs" />
+    <Compile Include="Interest\Events\Deleted.cs" />
+    <Compile Include="Interest\Events\Changed.cs" />
     <Compile Include="Route\Commands\Delete.cs" />
     <Compile Include="Route\Commands\UpdateOrCreate.cs" />
     <Compile Include="Route\Commands\Rename.cs" />
@@ -70,8 +75,8 @@
     <Compile Include="UserSettings\Queries\Get.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Segment\Commands\Update.cs" />
-    <Compile Include="Interest\Commands\UpdateOrCreate.cs" />
-    <Compile Include="Interest\Events\Changed.cs" />
+    <Compile Include="Interest\Commands\Create.cs" />
+    <Compile Include="Interest\Events\Created.cs" />
     <Compile Include="Interest\Queries\GetInBound.cs" />
     <Compile Include="Segment\Commands\Delete.cs" />
     <Compile Include="Segment\Events\Changed.cs" />

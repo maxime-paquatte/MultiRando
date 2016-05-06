@@ -1,6 +1,5 @@
 ﻿
 /// <reference path="~/ScriptsApp/main.js" />
-/// <reference path="~/scripts/google.map.js" />
 
 (function (w, ko, _, $, google, ep) {
     var vm = window.ep.vm;

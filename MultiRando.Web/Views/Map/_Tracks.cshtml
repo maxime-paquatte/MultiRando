@@ -1,8 +1,14 @@
 ﻿@using Nancy
 @inherits MultiRando.Web.Core.Helpers.RazorViewBase<dynamic>
 
+<input type="file" id="trackInput" data-bind="event: { change: trackInputChange }"
+       style="position: fixed; z-index: -2; opacity: 0;"/>
+
 <div data-bind="event: { drop : drop }, style : { 'border' : isDragover() ? '2px dotted #428bca' : 'none' }">
 
+    <label for="trackInput" class="btn btn-default pull-right" title="@Res("Res.Page.Map.Track.Upload.Tooltip")">
+        <i class="fa fa-upload"></i>
+    </label>
 
     <h2>@Res("Res.Page.Map.Track.Title")</h2>
     @*<div class="row">
@@ -45,6 +51,7 @@
                 <span href="#" class="visible-on-parent-over" style="cursor: pointer" title="@Res("Res.Page.Map.Track.Show.Tooltip")" data-bind="click: select, hidden: isSelected, clickBubble : false"><i class="fa fa-eye-slash"></i></span>
                 <span href="#" style="cursor: pointer" title="@Res("Res.Page.Map.Track.Hide.Tooltip")" data-bind="click: select, visible: isSelected, clickBubble : false"><i class="fa fa-eye"></i></span>
                 <span href="#" style="cursor: pointer" title="@Res("Res.Std.Locate")" data-bind="click: showStart, clickBubble : false, visible: isSelected()"><i class="fa fa-location-arrow"></i></span>
+                <span href="#" style="cursor: pointer" title="@Res("Res.Std.ToggleZIndex")" data-bind="click: toggleZIndex, clickBubble : false, visible: isSelected()"><i class="fa fa-caret-square-o-up "></i></span>
             </td>
         </tr>
         </tbody>

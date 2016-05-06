@@ -16,25 +16,40 @@ namespace MultiRando.Model.Interest
 {
     [SqlTable("tInterest", Package = typeof(Package), ResourcePath = "Interest.Res"), Versions("5.7.11")]
     [SqlObjectItem("svInterestGetInBound")]
-    [SqlObjectItem("scInterestUpdateOrCreate")]
+    [SqlObjectItem("scInterestCreate,scInterestMove,scInterestDelete,scInterestUpdate")]
     public class InterestHome : SqlTable
     {
         void Construct(UserHome user) { }
     }
 
 
-    public class CommandHandler : SqlCommandHandlerBase, ICommandHandler<UpdateOrCreate>
+    public class CommandHandler : SqlCommandHandlerBase, ICommandHandler<Create>, ICommandHandler<Move>
+        , ICommandHandler<Delete>, ICommandHandler<Update>
     {
         public CommandHandler(IDbConfig config, IBus bus)
             : base(bus, config.ConnectionString)
         {
         }
 
-        public void Handle(IEventDispatcher d, IMessageContext context, string commandId, UpdateOrCreate command)
+        public void Handle(IEventDispatcher d, IMessageContext context, string commandId, Create command)
         {
-            Handle(d, context, commandId, command, "MR.scInterestUpdateOrCreate");
+            Handle(d, context, commandId, command, "MR.scInterestCreate");
         }
 
+        public void Handle(IEventDispatcher d, IMessageContext context, string commandId, Move command)
+        {
+            Handle(d, context, commandId, command, "MR.scInterestMove");
+        }
+
+        public void Handle(IEventDispatcher d, IMessageContext context, string commandId, Delete command)
+        {
+            Handle(d, context, commandId, command, "MR.scInterestDelete");
+        }
+
+        public void Handle(IEventDispatcher d, IMessageContext context, string commandId, Update command)
+        {
+            Handle(d, context, commandId, command, "MR.scInterestUpdate");
+        }
     }
 
     public class QueryReader : SqlQueryJSonReader, IQueryJSonReader<GetInBound>

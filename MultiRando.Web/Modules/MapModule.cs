@@ -22,14 +22,14 @@ namespace MultiRando.Web.Modules
     public class MapModule : NancyModule
     {
         private readonly Config _cfg;
-        private readonly TrackRepository _gpxRepository;
+        private readonly TrackRepository _trackRepository;
         private readonly RouteRepository _routeRepository;
         private const string FilePrivatePath = @"..\Private\Files\GPX\";
 
-        public MapModule(Config cfg, TrackRepository gpxRepository, RouteRepository routeRepository)
+        public MapModule(Config cfg, TrackRepository trackRepository, RouteRepository routeRepository)
         {
             _cfg = cfg;
-            _gpxRepository = gpxRepository;
+            _trackRepository = trackRepository;
             _routeRepository = routeRepository;
             this.RequiresAuthentication();
 
@@ -80,7 +80,7 @@ namespace MultiRando.Web.Modules
                 sb.Append(")");
             }
 
-            return _gpxRepository.CreatePlt(Context.CurrentUser().UserId, file.Name, rawFile, sb.ToString());
+            return _trackRepository.CreatePlt(Context.CurrentUser().UserId, file.Name, sb.ToString());
         }
 
         private int UploadTrackGpx(HttpFile file)
@@ -94,27 +94,32 @@ namespace MultiRando.Web.Modules
                 var xName = x.Element(df.GetName("gpx")).Element(df.GetName("trk")).Element(df.GetName("name"));
                 if (xName != null) name = xName.Value;
 
+                List<TrackRepository.TrackPoint> points= new List<TrackRepository.TrackPoint>();
                 var sb = new StringBuilder("LINESTRING(");
                 foreach (var seg in x.Element(df.GetName("gpx")).Element(df.GetName("trk")).Elements(df.GetName("trkseg")))
                 {
                     foreach (var pt in seg.Elements(df.GetName("trkpt")))
                     {
-                        sb.Append(pt.Attribute("lon").Value).Append(" ").Append(pt.Attribute("lat").Value).Append(',');
+                        var p = new TrackRepository.TrackPoint
+                        {
+                            Lat = float.Parse(pt.Attribute("lat").Value, CultureInfo.InvariantCulture),
+                            Lon = float.Parse(pt.Attribute("lon").Value, CultureInfo.InvariantCulture),
+                            Elevation = float.Parse(pt.Element(df.GetName("ele")).Value, CultureInfo.InvariantCulture),
+                            PointTime = DateTime.ParseExact(pt.Element(df.GetName("time")).Value, "yyyy-MM-ddThh:mm:ssZ", CultureInfo.InvariantCulture),
+                        };
+                        points.Add(p);
+                        sb.Append(p.Lon.ToString(CultureInfo.InvariantCulture)).Append(" ").Append(p.Lat.ToString(CultureInfo.InvariantCulture)).Append(',');
                     }
                 }
 
                 //remove last ,
                 sb.Remove(sb.Length - 1, 1);
                 sb.Append(")"); ;
+                
 
-                XmlDocument doc = new XmlDocument();
-                doc.Load(reader);
-                foreach (XmlNode node in doc.Cast<XmlNode>().Where(node => node.NodeType == XmlNodeType.XmlDeclaration))
-                    doc.RemoveChild(node);
-
-                string rawXml = doc.OuterXml;
-
-                return _gpxRepository.CreateGpx(Context.CurrentUser().UserId, name, rawXml, sb.ToString());
+                var trackId = _trackRepository.CreateGpx(Context.CurrentUser().UserId, name, sb.ToString());
+                _trackRepository.SetPoints(trackId, points.ToArray());
+                return trackId;
             }
 
         }

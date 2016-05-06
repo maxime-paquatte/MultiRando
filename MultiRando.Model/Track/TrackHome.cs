@@ -1,7 +1,5 @@
 ﻿using CK.Setup;
 using CK.Setup.SqlServer;
-using MultiRando.Message.Interest.Commands;
-using MultiRando.Message.Interest.Queries;
 using MultiRando.Message.Track.Commands;
 using MultiRando.Message.Track.Queries;
 using MultiRando.Model.User;

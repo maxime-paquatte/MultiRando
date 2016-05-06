@@ -126,7 +126,7 @@
     <EmbeddedResource Include="Interest\Res\Model.MR.InterestHome.Install.5.7.11.sql" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Interest\Res\scInterestUpdateOrCreate.sql" />
+    <EmbeddedResource Include="Interest\Res\scInterestCreate.sql" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Interest\Res\svInterestGetInBound.sql" />
@@ -184,6 +184,15 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Segment\Res\vSegmentDistance.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Interest\Res\scInterestMove.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Interest\Res\scInterestDelete.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Interest\Res\scInterestUpdate.sql" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

@@ -25,9 +25,10 @@
         _this.IsPrivate = ko.observable(false);
         _this.IsRoad = ko.observable(false);
         _this.NoWay = ko.observable(false);
-
+        
+        
         _this.CurrentActivityNoWay = ko.computed(function() {
-            return _this.ActivityFlag.hasFlag(options.currentActivity);
+            return options.currentActivity != 0 && _this.ActivityFlag.hasFlag(options.currentActivity);
         });
 
         _this.getColor = function() {
@@ -137,6 +138,7 @@
                 }, {
                     'MultiRando.Message.Segment.Events.Splitted': function(r) {
                         mapCtrl.segmentController.fetchSegments(null, false);
+                        _this.isCut(false);
                     }
                 });
             }
@@ -162,15 +164,78 @@
         });
     };
 
-    vm.Map.Interest = function(data, options) {
+    vm.Map.Interest = function (mapCtrl, data, options) {
 
         var _this = this;
 
-        _this.InterestId = ko.observable(0);
-        _this.ActivityFlag = ko.observable(0).extend({ bitFlag: {} });
+        var marker = new w.google.maps.Marker({
+            position: new w.google.maps.LatLng(data.Lat, data.Lon),
+            title: data.Comment,
+            icon: '/Content/Images/Poi/' + data.Category + '.png',
+            draggable: false,
+            map: mapCtrl.map
+        });
 
 
-        ko.mapping.fromJS(data || {}, { 'copy': ["Polylines"] }, _this);
+        _this.InterestId = parseInt(data.InterestId);
+        _this.Category = data.Category;
+        _this.CreatorUserId = parseInt(data.CreatorUserId);
+        _this.CreationDate = data.CreationDate;
+        _this.CreatorDisplayName = data.CreatorDisplayName;
+
+
+        _this.Comment = ko.observable(data.Comment);
+        _this.Comment.subscribe(function(nv) {
+            marker.setOptions({ title: nv });
+        });
+        _this.IsPublic = ko.observable(data.IsPublic == "1");
+
+        _this.select = function () {
+            marker.setDraggable(true);
+            marker.setAnimation(w.google.maps.Animation.BOUNCE);
+        }
+        _this.cancel = function () {
+            marker.setDraggable(false);
+            marker.setAnimation(null);
+        };
+
+        _this.remove = function() {
+            marker.setMap(null);
+        }
+
+        _this.save = function() {
+            ep.messaging.send('MultiRando.Message.Interest.Commands.Update', { InterestId: _this.InterestId, Comment: _this.Comment() }, {
+                'MultiRando.Message.Interest.Events.Changed': function (r) { ep.stdSuccessCallback(); }
+            });
+        }
+
+
+        _this.addYoutube = function() {
+
+        };
+
+        _this.loadData = function(data) {
+            _this.Comment(data.Comment);
+            _this.IsPublic(data.IsPublic == "1");
+
+            marker.setPosition(new w.google.maps.LatLng(data.Lat, data.Lon));
+        };
+
+         marker.addListener('click', function () {
+             options.click(_this);
+         });
+
+        
+
+         marker.addListener('dragend', function (e) {
+             ep.messaging.send('MultiRando.Message.Interest.Commands.Move', {
+                 InterestId: _this.InterestId,
+                 Lat: e.latLng.lat(), Lon: e.latLng.lng()
+             }, {
+                 'MultiRando.Message.Interest.Events.Changed': function (r) { ep.stdSuccessCallback(); }
+             });
+
+         });
     };
 
     vm.Map.Track = function(mapCtrl, data, options) {
@@ -189,7 +254,7 @@
             if (_this.polylines == null) {
                 _this.polylines = mapCtrl.loadPolyline([], {
                     editable: false,
-                    clickable: false,
+                    clickable: true,
                     zIndex: 15,
                     strokeColor: w.map.MapController.constants.ColorTrackDefault
                 });
@@ -201,6 +266,14 @@
                     _this.start = path[0];
                     _this.isSelected(true);
                 });
+
+                _this.polylines.addListener('mouseover', function (e) {
+                    console.log({lat : e.latLng.lat(), lng: e.latLng.lng()});
+                });
+                _this.polylines.addListener('mouseout', function (e) {
+                   
+                });
+
             } else {
 
                 if (!_this.polylines.getMap()) {
@@ -211,6 +284,14 @@
                     _this.isSelected(false);
                 }
             }
+
+
+        }
+
+        _this.toggleZIndex = function () {           
+            mapCtrl.setTopPolylines(_this.polylines, function () {
+                _this.polylines.setOptions({ zIndex: 15 });
+            });
         }
 
         _this.showStart = function() {
@@ -279,7 +360,6 @@
                 });
     
 
-                mapCtrl.CurrentPolylines = _this.polylines;
                 var id = _this.RouteId();
                 if (id) {
                     ep.messaging.read('MultiRando.Message.Route.Queries.Line', {
@@ -290,7 +370,6 @@
                     });
                 }
             } else {
-                mapCtrl.CurrentPolylines = _this.polylines;
                 _this.polylines.setMap(mapCtrl.map);
             }
 
@@ -299,7 +378,10 @@
         }
 
         _this.isEdit.subscribe(function(nv) {
-            if (nv) _this.polylines.setOptions({ editable: true });
+            if (nv) {
+                mapCtrl.CurrentPolylines = _this.polylines;
+                _this.polylines.setOptions({ editable: true });
+            }
             else _this.polylines.setOptions({ editable: false });
         });
 
@@ -372,6 +454,8 @@
         }, _this);
     };
 
+
+    vm.Map.InterestCategories = ['Landscape', 'Mud'];
 
     vm.Map.SegmentSelectedEventArg = function(s) {
         this.segment = s;

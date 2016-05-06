@@ -20,3 +20,23 @@ CREATE TABLE MR.tTrack
 
 
 --[endscript]
+
+
+--[beginscript]	
+CREATE TABLE MR.tTrackPoint
+(
+	TrackId		int not null,
+	Idx			int not null,
+
+	Lat		float not null,
+	Lon		float not null,
+	Elevation	float null,
+	PointTime datetime2(0),
+		
+	constraint PK_tTrackPoint primary key clustered ( TrackId, Idx ),
+	CONSTRAINT FK_tTrackPoint_TrackId FOREIGN KEY(TrackId)
+		REFERENCES [MR].tTrack(TrackId)
+)
+
+
+--[endscript]
