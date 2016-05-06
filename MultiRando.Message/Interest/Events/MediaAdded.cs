@@ -2,10 +2,11 @@
 
 namespace MultiRando.Message.Interest.Events
 {
-    public class Created : IEvent
+    public class MediaAdded : IEvent
     {
         public string Source { get; set; }
 
         public int InterestId { get; set; }
+        public int InterestMediaId { get; set; }
     }
 }

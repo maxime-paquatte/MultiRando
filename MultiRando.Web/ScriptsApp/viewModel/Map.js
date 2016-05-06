@@ -183,6 +183,8 @@
         _this.CreationDate = data.CreationDate;
         _this.CreatorDisplayName = data.CreatorDisplayName;
 
+        _this.medias = ko.observableArray();
+
 
         _this.Comment = ko.observable(data.Comment);
         _this.Comment.subscribe(function(nv) {
@@ -191,8 +193,9 @@
         _this.IsPublic = ko.observable(data.IsPublic == "1");
 
         _this.select = function () {
-            marker.setDraggable(true);
+            marker.setDraggable(_this.CreatorUserId == currentUser.UserId);
             marker.setAnimation(w.google.maps.Animation.BOUNCE);
+            _this.fetchMedia();
         }
         _this.cancel = function () {
             marker.setDraggable(false);
@@ -211,7 +214,34 @@
 
 
         _this.addYoutube = function() {
+            alertify.prompt(ep.res("Res.Page.Map.Interest.Edit.PromptYoutubeUrl"), '', function (ok, str) {
+                if (ok) {
+                    var v = str.indexOf('v=');
+                    if (v >= 0) {
+                        var a = str.indexOf('&', v);
+                        str = str.substring(v + 2, a >= 0 ? a : 9999);
+                    } else {
+                        var q = str.indexOf('?');
+                        if (q >= 0) str = str.substr(0, q);
+                        str = str.trim('/');
+                        var s = str.lastIndexOf('/');
+                        if (s >= 0) str = str.substr(s + 1);
+                    }
+                    if (str) _this.addMedia("YOUTUBE", str);
+                }
+            });
+        };
 
+        _this.addImage = function() {
+            alertify.prompt(ep.res("Res.Page.Map.Interest.Edit.PromptImageUrl"), '', function(ok, str) {
+                if (ok && str) _this.addMedia("IMAGE", str);
+            });
+        }
+
+        _this.addMedia = function(mediaType, value) {
+            ep.messaging.send('MultiRando.Message.Interest.Commands.AddMedia', { InterestId: _this.InterestId, MediaType: mediaType, Value: value }, {
+                'MultiRando.Message.Interest.Events.MediaAdded': function (r) { _this.fetchMedia().then(ep.stdSuccessCallback); }
+            });
         };
 
         _this.loadData = function(data) {
@@ -219,6 +249,12 @@
             _this.IsPublic(data.IsPublic == "1");
 
             marker.setPosition(new w.google.maps.LatLng(data.Lat, data.Lon));
+        };
+
+        _this.fetchMedia = function() {
+            return ep.messaging.read('MultiRando.Message.Interest.Queries.Medias', { InterestId: _this.InterestId }, function (r) {
+                _this.medias(_.isArray(r) ? r : []);
+            });
         };
 
          marker.addListener('click', function () {

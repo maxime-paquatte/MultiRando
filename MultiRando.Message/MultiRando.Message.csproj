@@ -47,11 +47,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Interest\Commands\AddMedia.cs" />
     <Compile Include="Interest\Commands\Update.cs" />
     <Compile Include="Interest\Commands\Move.cs" />
     <Compile Include="Interest\Commands\Delete.cs" />
+    <Compile Include="Interest\Events\MediaAdded.cs" />
     <Compile Include="Interest\Events\Deleted.cs" />
     <Compile Include="Interest\Events\Changed.cs" />
+    <Compile Include="Interest\Queries\Medias.cs" />
     <Compile Include="Route\Commands\Delete.cs" />
     <Compile Include="Route\Commands\UpdateOrCreate.cs" />
     <Compile Include="Route\Commands\Rename.cs" />

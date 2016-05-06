@@ -15,8 +15,8 @@ using NevaUtils;
 namespace MultiRando.Model.Interest
 {
     [SqlTable("tInterest", Package = typeof(Package), ResourcePath = "Interest.Res"), Versions("5.7.11")]
-    [SqlObjectItem("svInterestGetInBound")]
-    [SqlObjectItem("scInterestCreate,scInterestMove,scInterestDelete,scInterestUpdate")]
+    [SqlObjectItem("scInterestCreate,scInterestMove,scInterestDelete,scInterestUpdate,scInterestAddMedia")]
+    [SqlObjectItem("svInterestGetInBound,svInterestMedias")]
     public class InterestHome : SqlTable
     {
         void Construct(UserHome user) { }
@@ -24,7 +24,7 @@ namespace MultiRando.Model.Interest
 
 
     public class CommandHandler : SqlCommandHandlerBase, ICommandHandler<Create>, ICommandHandler<Move>
-        , ICommandHandler<Delete>, ICommandHandler<Update>
+        , ICommandHandler<Delete>, ICommandHandler<Update>, ICommandHandler<AddMedia>
     {
         public CommandHandler(IDbConfig config, IBus bus)
             : base(bus, config.ConnectionString)
@@ -50,9 +50,14 @@ namespace MultiRando.Model.Interest
         {
             Handle(d, context, commandId, command, "MR.scInterestUpdate");
         }
+
+        public void Handle(IEventDispatcher d, IMessageContext context, string commandId, AddMedia command)
+        {
+            Handle(d, context, commandId, command, "MR.scInterestAddMedia");
+        }
     }
 
-    public class QueryReader : SqlQueryJSonReader, IQueryJSonReader<GetInBound>
+    public class QueryReader : SqlQueryJSonReader, IQueryJSonReader<GetInBound>, IQueryJSonReader<Medias>
     {
         public QueryReader(IDbConfig config)
             : base(config.ConnectionString)
@@ -62,6 +67,11 @@ namespace MultiRando.Model.Interest
         public string Read(IMessageContext context, GetInBound query)
         {
             return Read(context, query, "MR.svInterestGetInBound");
+        }
+
+        public string Read(IMessageContext context, Medias query)
+        {
+            return Read(context, query, "MR.svInterestMedias");
         }
     }
 }

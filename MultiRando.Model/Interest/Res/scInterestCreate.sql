@@ -1,4 +1,4 @@
-﻿-- Version = 6.3.30, Package = MR.InterestHome, Requires={   }
+﻿-- Version = 6.3.30,  Requires={   }
 
 
 ALTER procedure MR.scInterestCreate

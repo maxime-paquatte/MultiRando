@@ -27,3 +27,27 @@ CREATE TABLE MR.tInterest
 
 
 --[endscript]
+
+
+--[beginscript]	
+
+CREATE TABLE MR.tInterestMedia
+(
+	InterestMediaId		int not null identity(1,1),
+
+	InterestId int not null,
+
+	MediaType varchar(32) not null,
+	Value nvarchar(MAX) not null,
+	
+	CreatorUserId	int not null,
+	CreationDate	datetime2(0) not null
+		constraint DF_tInterestMedia_Creationdate default(GETUTCDATE()),
+	
+	constraint PK_tInterestMedia primary key clustered ( InterestMediaId ),
+	CONSTRAINT FK_tInterestMedia_InterestId FOREIGN KEY(InterestId)
+		REFERENCES [MR].tInterest(InterestId),
+	CONSTRAINT FK_tInterestMedia_UserId FOREIGN KEY(CreatorUserId)
+		REFERENCES [MR].[tUser](UserId)
+)
+--[endscript]

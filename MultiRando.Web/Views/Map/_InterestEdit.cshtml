@@ -3,6 +3,7 @@
 
 <div data-bind="with: selectedInterest">
     <div class="pull-right">
+        <button class="btn btn-default" data-bind="click: addImage"><i class="fa fa-picture-o"></i></button>
         <button class="btn btn-default" data-bind="click: addYoutube"><i class="fa fa-youtube"></i></button>
         <button class="btn btn-default" data-bind="click: $parent.cancelInterest"><i class="fa fa-times"></i></button>
     </div>
@@ -19,6 +20,14 @@
     </div>
     <div data-bind="ifnot: currentUser.UserId == CreatorUserId">
         <pre data-bind="text: Comment"></pre>
+    </div>
+    <div data-bind="foreach: medias" style="margin-top: 20px">
+        <!--ko if: MediaType == 'YOUTUBE'-->
+        <iframe width="345" height="260" frameborder="0" allowfullscreen data-bind="attr:{  src : 'https://www.youtube.com/embed/' + Value }"></iframe>
+        <!--/ko-->
+        <!--ko if: MediaType == 'IMAGE'-->
+        <img data-bind="attr:{ src : Value }" style="width: 345px"/>
+        <!--/ko-->
     </div>
     <div>
         <br/><span>@Res("Res.Page.Map.Creator") <span data-bind="text: CreatorDisplayName"></span></span>
