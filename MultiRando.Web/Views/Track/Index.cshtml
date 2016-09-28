@@ -1,0 +1,10 @@
+﻿@inherits MultiRando.Web.Core.Helpers.RazorViewBase<dynamic>
+@{
+    Layout = "Views/Shared/_LayoutDefault.cshtml";
+    Reference("~/ScriptsApp/app/track/EmbedController.js");
+}
+
+<div  data-bind="inject : map.EmbedController, trackId: @Model">
+    <div id="map-canvas" style="height: 500px" data-bind="style: { height : pageHeight()  + 'px' }"></div>
+
+</div>

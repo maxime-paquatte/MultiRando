@@ -210,6 +210,7 @@
     <Compile Include="Modules\Admin\ResourcesModule.cs" />
     <Compile Include="Modules\AuthModule.cs" />
     <Compile Include="Modules\Api0Module.cs" />
+    <Compile Include="Modules\TrackModule.cs" />
     <Compile Include="Modules\MapModule.cs" />
     <Compile Include="Modules\HomeModule.cs" />
     <Compile Include="Modules\MessagingModule.cs" />
@@ -229,6 +230,7 @@
     <None Include="Views\Auth\AskPassword.cshtml" />
     <None Include="Views\Auth\Login.cshtml" />
     <None Include="Views\Home\Index.cshtml" />
+    <None Include="Views\Track\Index.cshtml" />
     <None Include="Views\Map\_Routes.cshtml" />
     <None Include="Views\Map\_InterestEdit.cshtml" />
     <None Include="Views\Map\_Toolbar.cshtml" />
@@ -261,6 +263,7 @@
     <Content Include="ScriptsApp\app\map\InterestController.js" />
     <Content Include="ScriptsApp\app\map\MapController.js" />
     <Content Include="ScriptsApp\app\auth\LoginRegisterController.js" />
+    <Content Include="ScriptsApp\app\track\EmbedController.js" />
     <Content Include="ScriptsApp\app\urls.js" />
     <Content Include="ScriptsApp\main.js" />
     <Content Include="ScriptsApp\model\Resource.js" />

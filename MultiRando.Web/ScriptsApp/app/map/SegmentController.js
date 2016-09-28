@@ -86,8 +86,15 @@
         viewModel.saveSegment = function(d) {
             _this.saveSegment(d);
         }
-       
-        viewModel.saveSegmentAndContinue = function(d) {
+
+
+        viewModel.saveSegmentAndContinueStart = function (d) {
+            _this.saveSegmentAndContinue(d, true);
+        }
+        viewModel.saveSegmentAndContinueEnd = function (d) {
+            _this.saveSegmentAndContinue(d, false);
+        }
+        _this.saveSegmentAndContinue = function(d, start) {
             _this.saveSegment(d).then(function()
             {
                 var s = new vm.Map.Segment(mapCtrl, { onClick: _this.segmentClick });
@@ -100,8 +107,8 @@
                 s.NoWay(d.NoWay());
 
                 var dp = d.polylines.getPath().getArray();
-                var sp = s.polylines.getPath().getArray();
-                sp.push(dp[dp.length - 1]);
+                var p = start ? dp[0] : dp[dp.length - 1];
+                var sp = [p];
                 s.polylines.setPath(sp);
 
                 viewModel.segments.push(s);

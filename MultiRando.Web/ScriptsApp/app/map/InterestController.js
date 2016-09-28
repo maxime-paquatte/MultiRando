@@ -87,9 +87,9 @@
                     }
                 });
                 _this.catToAdd = null;
+                e.canceled = true;
             }
             else _this.selected(null);
-            e.canceled = true;
         });
     };
 

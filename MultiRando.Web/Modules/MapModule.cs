@@ -105,7 +105,7 @@ namespace MultiRando.Web.Modules
                             Lat = float.Parse(pt.Attribute("lat").Value, CultureInfo.InvariantCulture),
                             Lon = float.Parse(pt.Attribute("lon").Value, CultureInfo.InvariantCulture),
                             Elevation = float.Parse(pt.Element(df.GetName("ele")).Value, CultureInfo.InvariantCulture),
-                            PointTime = DateTime.ParseExact(pt.Element(df.GetName("time")).Value, "yyyy-MM-ddThh:mm:ssZ", CultureInfo.InvariantCulture),
+                            PointTime = DateTime.Parse(pt.Element(df.GetName("time")).Value,  CultureInfo.InvariantCulture),
                         };
                         points.Add(p);
                         sb.Append(p.Lon.ToString(CultureInfo.InvariantCulture)).Append(" ").Append(p.Lat.ToString(CultureInfo.InvariantCulture)).Append(',');

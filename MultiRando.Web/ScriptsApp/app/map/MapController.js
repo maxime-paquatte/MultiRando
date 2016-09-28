@@ -58,15 +58,8 @@
         });
 
 
+        _this.parsePolyLines = w.map.MapController.parsePolyLines;
 
-        _this.parsePolyLines = function (str) {
-            var parts = str.substr('"LINESTRING '.length).replace(/\(/g, '').replace(/\)/g, '').split(',');
-            var path = _.map(parts, function (p) {
-                var ll = p.trim().split(' ');
-                return new google.maps.LatLng(ll[1], ll[0]);
-            });
-            return path;
-        }
         _this.loadPolyline = function (path, options) {
 
             var settings = _.defaults(options, {
@@ -185,6 +178,15 @@
 
         viewModel.activityFlags = _.filter(ep.toKeyValues(w.ActivityFlags), function (v) { return v.key != 'Private'; });
     };
+
+    w.map.MapController.parsePolyLines = function (str) {
+        var parts = str.substr('"LINESTRING '.length).replace(/\(/g, '').replace(/\)/g, '').split(',');
+        var path = _.map(parts, function (p) {
+            var ll = p.trim().split(' ');
+            return new google.maps.LatLng(ll[1], ll[0]);
+        });
+        return path;
+    }
 
     w.map.MapController.constants = {
         ColorSegmentIsPrivate: '#000',

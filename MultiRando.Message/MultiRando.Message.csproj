@@ -32,8 +32,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Neva.Messaging">
+    <Reference Include="Neva.Messaging, Version=5.0.16.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Neva.Messaging.5.0.16.0\lib\net45\Neva.Messaging.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\packages\Newtonsoft.Json.6.0.7\lib\net45\Newtonsoft.Json.dll</HintPath>
@@ -67,6 +68,7 @@
     <Compile Include="Track\Commands\Delete.cs" />
     <Compile Include="Track\Events\Changed.cs" />
     <Compile Include="Track\Events\Deleted.cs" />
+    <Compile Include="Track\Queries\ById.cs" />
     <Compile Include="Track\Queries\Line.cs" />
     <Compile Include="Track\Queries\ForActor.cs" />
     <Compile Include="Segment\Commands\Split.cs" />

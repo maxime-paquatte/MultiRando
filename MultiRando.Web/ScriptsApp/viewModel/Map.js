@@ -303,12 +303,12 @@
                     _this.isSelected(true);
                 });
 
-                _this.polylines.addListener('mouseover', function (e) {
-                    console.log({lat : e.latLng.lat(), lng: e.latLng.lng()});
-                });
-                _this.polylines.addListener('mouseout', function (e) {
+                //_this.polylines.addListener('mouseover', function (e) {
+                //    console.log({lat : e.latLng.lat(), lng: e.latLng.lng()});
+                //});
+                //_this.polylines.addListener('mouseout', function (e) {
                    
-                });
+                //});
 
             } else {
 
@@ -324,10 +324,9 @@
 
         }
 
-        _this.toggleZIndex = function () {           
-            mapCtrl.setTopPolylines(_this.polylines, function () {
-                _this.polylines.setOptions({ zIndex: 15 });
-            });
+        _this.toggleZIndex = function () {
+            var z = _this.polylines.get('zIndex');
+            _this.polylines.setOptions({ zIndex: z == 15 ? 99 : 15 });
         }
 
         _this.showStart = function() {
