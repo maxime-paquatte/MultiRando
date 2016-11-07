@@ -20,7 +20,7 @@ namespace MultiRando.Web.Modules
     public class MessagingModule : NancyModule
     {
 
-        public MessagingModule(Config cfg, IBus bus, IQueryJSonBus reader, IStore store, IResourceContext resContext, IExceptionLoggerService exceptionLoggerService)
+        public MessagingModule(Config cfg, IBus bus, IQueryJSonBus reader, IStore store, IResourceContext ctx, IExceptionLoggerService exceptionLoggerService)
         {
             Get["/query/{name}"] = _ =>
             {
@@ -55,7 +55,11 @@ namespace MultiRando.Web.Modules
                     if (t == null) throw new Exception("Command not found : " + _["name"]);
                     var c = (ICommand)Activator.CreateInstance(t);
 
-                    NevaUtils.ObjectHelper.FillFromString(c, n => Request.Form[n], new CultureInfo(resContext.CurrentCultureId));
+                    //var ci = ctx.CurrentCultureId == 12
+                    //    ? new System.Globalization.CultureInfo("fr-FR")
+                    //    : new System.Globalization.CultureInfo("en-GB");
+                    var ci = CultureInfo.InvariantCulture;
+                    NevaUtils.ObjectHelper.FillFromString(c, n => Request.Form[n], ci);
 
                     var eWrapper = new EventDispatcherWrapper(bus);
 
@@ -66,17 +70,13 @@ namespace MultiRando.Web.Modules
                     var r = (CommandResult)generic.Invoke(bus, new object[] { c, eWrapper });
 
                     cmdId = r.CommandId;
-
-                    var jsonSerializerSettings = new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() };
-                    var json = JsonConvert.SerializeObject(new
+                    return Response.AsJson(new
                     {
-                        exceptionId = 0,
+                        ExceptionId = 0,
                         r.CommandId,
                         r.CommandValidationErrors,
                         Events = eWrapper.Events.Select(e => new { Name = e.GetType().FullName, Payload = e }).ToArray()
-                    }, Formatting.Indented, jsonSerializerSettings);
-
-                    return Response.AsText(json, "application/json");
+                    });
                 }
                 catch (Exception ex)
                 {

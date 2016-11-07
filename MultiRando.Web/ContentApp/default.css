@@ -87,37 +87,37 @@
     
 .visible-on-parent-over
 {
-    display: none;
+    visibility: hidden;
 }
 
 *:hover > .visible-on-parent-over, tr:hover .visible-on-parent-over, .parent-over:hover .visible-on-parent-over
 {
-    display: block;
+    visibility: visible;
 }
 
 *:hover > a.visible-on-parent-over, tr:hover a.visible-on-parent-over, .parent-over:hover a.visible-on-parent-over
 {
-    display: inline;
+   visibility: visible;
 }
 
 *:hover > i.visible-on-parent-over, 
 tr:hover i.visible-on-parent-over, 
 .parent-over:hover i.visible-on-parent-over 
 {
-    display: inline;
+   visibility: visible;
 }
 
 *:hover > span.visible-on-parent-over, 
 tr:hover span.visible-on-parent-over, 
 .parent-over:hover span.visible-on-parent-over 
 {
-    display: inline;
+    visibility: visible;
 }
 
 
 *:hover > .caret.visible-on-parent-over, tr:hover .caret.visible-on-parent-over, .parent-over:hover .caret.visible-on-parent-over
 {
-    display: inline-block;
+    visibility: visible;
 }
 
 *:hover > .black-on-hover, tr:hover .black-on-hover, .parent-over:hover .black-on-hover

@@ -15,7 +15,7 @@ namespace MultiRando.Web.Modules
 
         public HomeModule(Config cfg)
         {
-            Get["/"] = x => View["Index"];
+            Get["/"] = x => Response.AsRedirect("/Map");
             Get["/Home/ExceptionDetails"] = _ =>
             {
                 //this.RequiresAnyClaim(new []{"Claim.System.ExceptionLog.View"});

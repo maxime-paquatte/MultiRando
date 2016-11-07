@@ -8,9 +8,11 @@
         var _this = this;
         var loginVm = viewModel.Login = {};
 
+        var lastEmail = ko.unwrap(ava().email) || localStorage.getItem("lastLoginEmail");
+
         loginVm.succesMessage = ko.observable();
         loginVm.failMessage = ko.observable();
-        loginVm.email = ko.observable(ko.unwrap(ava().email));
+        loginVm.email = ko.observable(lastEmail);
         loginVm.password = ko.observable('');
         loginVm.forgotPassword = function () {
             loginVm.succesMessage('');
@@ -32,7 +34,11 @@
         registerVm.passwordConfirm = ko.observable('');
         registerVm.displayName = ko.observable('');
 
-
+        var saveEmail = function(email) {
+            localStorage.setItem("lastLoginEmail", email);
+        };
+        loginVm.email.subscribe(saveEmail);
+        registerVm.email.subscribe(saveEmail);
     };
 
 
