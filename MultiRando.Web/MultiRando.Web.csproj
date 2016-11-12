@@ -270,6 +270,7 @@
     <Content Include="ScriptsApp\admin\Messaging\MessagingController.js" />
     <Content Include="ScriptsApp\admin\Resources\ResourcesListController.js" />
     <Content Include="ScriptsApp\app\auth\AskPasswordController.js" />
+    <Content Include="ScriptsApp\app\map\MediaPlayerController.js" />
     <Content Include="ScriptsApp\app\map\RouteController.js" />
     <Content Include="ScriptsApp\app\map\TrackController.js" />
     <Content Include="ScriptsApp\app\map\SegmentController.js" />
@@ -281,6 +282,7 @@
     <Content Include="ScriptsApp\main.js" />
     <Content Include="ScriptsApp\model\Resource.js" />
     <Content Include="ScriptsApp\viewModel\Map.js" />
+    <Content Include="ScriptsApp\viewModel\SnapToRoute.js" />
     <Content Include="ScriptsApp\viewModel\Resource.js" />
   </ItemGroup>
   <ItemGroup>

@@ -73,10 +73,32 @@
                 <i class="fa fa-random"></i>
                 <sup class="fa fa-plus"></sup>
             </button>
+            <label for="mediaInput" class="btn btn-default" title="@Res("Res.Page.Map.AddMedia.Tooltip")">
+                <i class="fa fa-play"></i>
+            </label>
             <div class="clearfix"></div>
 
                 @Html.Partial("Views/Map/_SegmentsEdit")
                 @Html.Partial("Views/Map/_InterestEdit")
+
+            <div data-bind="visible: mediaUrl">
+                <video id="localMediaplayer" controls autoplay data-bind="attr: {src: mediaUrl}, event: {timeupdate : timeupdate}"></video>
+                <div class="form-horizontal">
+                    <div class="form-group">
+                        <label for="localMediaplayerDelta" class="col-sm-2 control-label">@Res("Res.Page.Map.LocalMediaplayer.Delta")</label>
+                        <div class="col-sm-10">
+                            <div class="input-group">
+                                <input type="number" class="form-control" id="localMediaplayerDelta" placeholder="0"
+                                       data-bind="value: localMediaplayerDelta">
+                                <span class="input-group-addon" id="basic-addon2">s</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <input type="file" id="mediaInput" data-bind="event: { change: mediaInputChange }"
+                   style="position: fixed; z-index: -2; opacity: 0;" />
         </div>
 
         <div class="col-map">

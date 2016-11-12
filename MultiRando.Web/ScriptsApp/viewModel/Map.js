@@ -301,6 +301,7 @@
                     _this.polylines.setPath(path);
                     _this.start = path[0];
                     _this.isSelected(true);
+                    mapCtrl.trigger("selected.track.map", { track: _this });
                 });
 
                 //_this.polylines.addListener('mouseover', function (e) {
@@ -315,13 +316,13 @@
                 if (!_this.polylines.getMap()) {
                     _this.polylines.setMap(mapCtrl.map);
                     _this.isSelected(true);
+                    mapCtrl.trigger("selected.track.map", { track: _this });
                 } else {
                     _this.polylines.setMap(null);
                     _this.isSelected(false);
+                    mapCtrl.trigger("unselected.track.map", { track: _this });
                 }
             }
-
-
         }
 
         _this.toggleZIndex = function () {
@@ -332,6 +333,8 @@
         _this.showStart = function() {
             mapCtrl.map.setCenter(_this.start);
         };
+
+
 
         _this.rename = function() {
             w.alertify.prompt(ep.res('Res.Page.Map.Track.PrompteName'), _this.Name(), function(ok, str) {

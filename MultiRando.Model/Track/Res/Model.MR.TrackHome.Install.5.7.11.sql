@@ -28,9 +28,9 @@ CREATE TABLE MR.tTrackPoint
 	TrackId		int not null,
 	Idx			int not null,
 
-	Lat		float not null,
-	Lon		float not null,
-	Elevation	float null,
+	Lat		decimal(16,12) not null,
+	Lon		decimal(16,12) not null,
+	Elevation	int null,
 	PointTime datetime2(0),
 		
 	constraint PK_tTrackPoint primary key clustered ( TrackId, Idx ),

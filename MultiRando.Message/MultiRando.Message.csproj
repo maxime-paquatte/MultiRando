@@ -97,6 +97,8 @@
     <Compile Include="Track\Commands\Delete.cs" />
     <Compile Include="Track\Events\Changed.cs" />
     <Compile Include="Track\Events\Deleted.cs" />
+    <Compile Include="Track\Queries\TimeAtPoint.cs" />
+    <Compile Include="Track\Queries\PointAtTime.cs" />
     <Compile Include="Track\Queries\ById.cs" />
     <Compile Include="Track\Queries\Line.cs" />
     <Compile Include="Track\Queries\ForActor.cs" />

@@ -10,7 +10,7 @@ using NevaUtils;
 namespace MultiRando.Model.Track
 {
     [SqlTable("tTrack", Package = typeof(Package), ResourcePath = "Track.Res"), Versions("5.7.11")]
-    [SqlObjectItem("vGpxLineString,svTrackForActor,svTrackLine,svTrackById")]
+    [SqlObjectItem("vGpxLineString,svTrackForActor,svTrackLine,svTrackById,svTrackPointAtTime,svTrackTimeAtPoint")]
     [SqlObjectItem("scTrackDelete,scTrackRename")]
     public class TrackHome : SqlTable
     {
@@ -37,7 +37,7 @@ namespace MultiRando.Model.Track
     }
 
     public class QueryReader : SqlQueryJSonReader, IQueryJSonReader<ForActor>, IQueryJSonReader<Line>
-        , IQueryJSonReader<ById>
+        , IQueryJSonReader<ById>, IQueryJSonReader<PointAtTime>, IQueryJSonReader<TimeAtPoint>
     {
         public QueryReader(IDbConfig config)
             : base(config.ConnectionString)
@@ -56,6 +56,16 @@ namespace MultiRando.Model.Track
         public string Read(IMessageContext context, ById query)
         {
             return Read(context, query, "MR.svTrackById");
+        }
+
+        public string Read(IMessageContext context, PointAtTime query)
+        {
+            return Read(context, query, "MR.svTrackPointAtTime");
+        }
+
+        public string Read(IMessageContext context, TimeAtPoint query)
+        {
+            return Read(context, query, "MR.svTrackTimeAtPoint");
         }
     }
 }

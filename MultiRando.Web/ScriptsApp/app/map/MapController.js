@@ -22,6 +22,7 @@
         _this.segmentController = new map.SegmentController(_this, viewModel);
         _this.trackController = new map.TrackController(_this, viewModel);
         _this.routeController = new map.RouteController(_this, viewModel);
+        _this.mediaController = new map.MediaPlayerController(_this, viewModel, $(element).find('#localMediaplayer')[0]);
 
         _this.CurrentPolylines = null;
 
@@ -140,6 +141,8 @@
             });
 
             _this.loadBound();
+
+            _this.trigger("initialized.map", _this.map);
         }
 
         _this.addPoint = function (latLng, atFirst) {
