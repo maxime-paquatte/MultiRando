@@ -31,12 +31,18 @@
             </div>
             <div class="panel-collapse collapse in" role="tabpanel" data-bind="css : { 'in':  isSelected }">
                 <div class="panel-body">
-                    <div>
-                        <button class="btn pull-right" data-bind="click: function(){ isShortcutMode(!isShortcutMode());  }, visible: isEdit, css : isShortcutMode() ? 'btn-success' : 'btn-default'">@Res("Res.Std.Shortcut")</button>
-                        <button class="btn btn-primary pull-right" data-bind="click: $parent.saveRoute, visible: isEdit">@Res("Res.Std.Save")</button>
-                        <button class="btn btn-default pull-right" data-bind="click: edit, visible: !isEdit()">@Res("Res.Std.Edit")</button>
-                        <button class="btn btn-default pull-right" data-bind="click: cancel">@Res("Res.Std.Cancel")</button>
-                        <button class="btn btn-danger" data-bind="click: $parent.deleteRoute">@Res("Res.Std.Delete")</button>
+                    <div class="btn-group btn-group-justified" role="group" data-bind="hidden: isEdit">
+                        <a href="#" class="btn btn-danger" data-bind="click: $parent.deleteRoute">@Res("Res.Std.Delete")</a>
+                        <a href="#" class="btn btn-primary" data-bind="click: edit, visible: !isEdit()">@Res("Res.Std.Edit")</a>
+                        <a href="#" class="btn btn-default" data-bind="click: cancel">@Res("Res.Std.Cancel")</a>
+                    </div>
+                    <div class="btn-group btn-group-justified" role="group" data-bind="visible: isEdit">
+                        <a href="#" class="btn" data-bind="click: function(){ isShortcutMode(!isShortcutMode());  }, css : isShortcutMode() ? 'btn-success' : 'btn-default'">@Res("Res.Std.Shortcut")</a>
+                        <a href="#" class="btn btn-default" data-bind="click: reverse">@Res("Res.Std.Reverse")</a>
+                    </div>
+                    <div class="btn-group btn-group-justified" role="group" data-bind="visible: isEdit">
+                        <a href="#" class="btn btn-primary" data-bind="click: $parent.saveRoute">@Res("Res.Std.Save")</a>
+                        <a href="#" class="btn btn-default" data-bind="click: cancel">@Res("Res.Std.Cancel")</a>
                     </div>
                 </div>
             </div>

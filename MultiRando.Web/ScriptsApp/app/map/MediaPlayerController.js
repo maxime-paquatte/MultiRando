@@ -48,9 +48,11 @@
                if (_this.marker && _this.lastSelectedTrack) {
                    var pos = _this.marker.getPosition();
                    ep.messaging.read('MultiRando.Message.Track.Queries.TimeAtPoint', { TrackId: _this.lastSelectedTrack.TrackId(), Lat: pos.lat(), Lon: pos.lng() }, function (r) {
-                       var pos = new google.maps.LatLng(r.Lat, r.Lon);
-                       _this.marker.setPosition(pos);
-                       mediaPlayer.currentTime = parseInt(r.NbSeconds) - parseInt(viewModel.localMediaplayerDelta());
+                       if (r.NbSeconds) {
+                         var pos = new google.maps.LatLng(r.Lat, r.Lon);
+                         _this.marker.setPosition(pos);
+                         mediaPlayer.currentTime = parseInt(r.NbSeconds) - parseInt(viewModel.localMediaplayerDelta());
+                     }
                    });
                }
             });

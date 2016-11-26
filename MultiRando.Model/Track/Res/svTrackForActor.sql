@@ -13,6 +13,7 @@ as begin
 	select "@json:Array" = 'true', t.TrackId, t.Name, t.Creationdate, TrackLength = CAST(LineString.STLength() * 89550 as int)
 	from [MR].[tTrack] t
 	where t.UserId = @_ActorId
+	order by TrackId DESC
 			
 	FOR XML PATH('data'), root('data'),  ELEMENTS, TYPE
 

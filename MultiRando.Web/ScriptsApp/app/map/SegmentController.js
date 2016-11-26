@@ -143,6 +143,14 @@
             });
         }
 
+        mapCtrl.on('click.map', function(e) {
+            var s = viewModel.selectedSegment();
+            if (s) s.setEndMarker(e.latLng);
+        });
+        mapCtrl.on('rightclick.map', function (e) {
+            var s = viewModel.selectedSegment();
+            if (s) s.setStartMarker(e.latLng);
+        });
     };
 
 

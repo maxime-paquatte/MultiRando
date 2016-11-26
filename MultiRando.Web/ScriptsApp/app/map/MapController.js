@@ -129,13 +129,13 @@
             _this.map.addListener('maptypeid_changed', _this.changeMapPos);
 
             _this.map.addListener('click', function (e) {
-                var a = { canceled: false, lat: e.latLng.lat(), lng: e.latLng.lng() }
+                var a = { canceled: false, latLng : e.latLng, lat: e.latLng.lat(), lng: e.latLng.lng() }
                 _this.trigger("click.map", a);
                 if(!a.canceled)_this.addPoint(e.latLng, false);
             });
 
             _this.map.addListener('rightclick', function (e) {
-                var a = { canceled: false, lat: e.latLng.lat(), lng: e.latLng.lng() }
+                var a = { canceled: false, latLng: e.latLng, lat: e.latLng.lat(), lng: e.latLng.lng() }
                 _this.trigger("rightclick.map", a);
                 if (!a.canceled) _this.addPoint(e.latLng, true);
             });
@@ -161,7 +161,8 @@
             infowindow = new google.maps.InfoWindow({
                 content: contentString,
                 position: latLng,
-                maxWidth : 300,
+                maxWidth: 300,
+                disableAutoPan : true,
                 pixelOffset: new google.maps.Size(0,-20)
             });
             infowindow.open(_this.map);

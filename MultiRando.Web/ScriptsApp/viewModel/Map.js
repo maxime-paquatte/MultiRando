@@ -52,8 +52,8 @@
                     zIndex: 1
                 });
                 var p = _this.polylines.getPath().getArray();
-                startMarker = new w.google.maps.Marker({ position: p[0], label: 'A', title: 'début', map: mapCtrl.map });
-                endMarker = new w.google.maps.Marker({ position: p[p.length - 1], label: 'B', title: 'fin', map: mapCtrl.map });
+                startMarker = new w.google.maps.Marker({ clickable : false, position: p[0], label: 'A', title: 'début', map: mapCtrl.map });
+                endMarker = new w.google.maps.Marker({ clickable: false, position: p[p.length - 1], label: 'B', title: 'fin', map: mapCtrl.map });
             } else {
                 _this.polylines.setOptions({
                     strokeColor: _this.getColor(),
@@ -64,6 +64,13 @@
                 if (endMarker != null) endMarker.setMap(null);
             }
         });
+
+        _this.setStartMarker = function(pos) {
+            if (startMarker != null) startMarker.setPosition(pos);
+        }
+        _this.setEndMarker = function (pos) {
+            if (endMarker != null) endMarker.setPosition(pos);
+        }
 
         _this.polylines = mapCtrl.loadPolyline([], {
             editable: false,
@@ -290,7 +297,7 @@
             if (_this.polylines == null) {
                 _this.polylines = mapCtrl.loadPolyline([], {
                     editable: false,
-                    clickable: true,
+                    clickable: false,
                     zIndex: 15,
                     strokeColor: w.map.MapController.constants.ColorTrackDefault
                 });
@@ -304,12 +311,6 @@
                     mapCtrl.trigger("selected.track.map", { track: _this });
                 });
 
-                //_this.polylines.addListener('mouseover', function (e) {
-                //    console.log({lat : e.latLng.lat(), lng: e.latLng.lng()});
-                //});
-                //_this.polylines.addListener('mouseout', function (e) {
-                   
-                //});
 
             } else {
 
@@ -334,7 +335,7 @@
             mapCtrl.map.setCenter(_this.start);
         };
 
-
+        
 
         _this.rename = function() {
             w.alertify.prompt(ep.res('Res.Page.Map.Track.PrompteName'), _this.Name(), function(ok, str) {
@@ -486,6 +487,13 @@
             }
             _this.polylines.setPath(p);
         };
+
+
+        _this.reverse = function () {
+            var path = _this.polylines.getPath().getArray();
+            path.reverse();
+            _this.polylines.setPath(path);
+        }
 
         ko.mapping.fromJS(data || {}, {
             'IsPublic': { update: function(o) { return o.data !== "0" ? true : false; } }
