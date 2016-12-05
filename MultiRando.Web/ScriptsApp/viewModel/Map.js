@@ -144,7 +144,7 @@
                     PolylinesB: strB
                 }, {
                     'MultiRando.Message.Segment.Events.Splitted': function(r) {
-                        mapCtrl.segmentController.fetchSegments(null, false);
+                        mapCtrl.segmentController.fetchSegments(null, true);
                         _this.isCut(false);
                     }
                 });

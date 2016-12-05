@@ -44,7 +44,7 @@ namespace MultiRando.Web.Modules
             foreach (var file in Request.Files)
             {
                 if (Path.GetExtension(file.Name)?.ToLower() == ".gpx")
-                    ids.Add(UploadTrackGpx(file));
+                    ids.AddRange(UploadTrackGpx(file));
                 else if (Path.GetExtension(file.Name)?.ToLower() == ".plt")
                     ids.Add(UploadTrackPlt(file));
             }
@@ -83,7 +83,7 @@ namespace MultiRando.Web.Modules
             return _trackRepository.CreatePlt(Context.CurrentUser().UserId, file.Name, sb.ToString());
         }
 
-        private int UploadTrackGpx(HttpFile file)
+        private IEnumerable<int> UploadTrackGpx(HttpFile file)
         {
             var name = file.Name;
             
@@ -91,35 +91,52 @@ namespace MultiRando.Web.Modules
             {
                 var x = XDocument.Load(reader);
                 XNamespace df = x.Root.Name.Namespace;
-                var xName = x.Element(df.GetName("gpx")).Element(df.GetName("trk")).Element(df.GetName("name"));
-                if (xName != null) name = xName.Value;
 
-                List<TrackRepository.TrackPoint> points= new List<TrackRepository.TrackPoint>();
-                var sb = new StringBuilder("LINESTRING(");
-                foreach (var seg in x.Element(df.GetName("gpx")).Element(df.GetName("trk")).Elements(df.GetName("trkseg")))
+                var tracks = x.Element(df.GetName("gpx"))?.Elements()
+                    .Where(p=> p.Name == df.GetName("trk") || p.Name == df.GetName("rte"));
+
+                foreach (var track in tracks ?? Enumerable.Empty<XElement>())
                 {
-                    foreach (var pt in seg.Elements(df.GetName("trkpt")))
+                    var xName = track.Element(df.GetName("name"));
+                    if (xName != null) name = xName.Value;
+
+                    List<TrackRepository.TrackPoint> points = new List<TrackRepository.TrackPoint>();
+                    var sb = new StringBuilder("LINESTRING(");
+                    foreach (var seg in track.Elements(df.GetName("trkseg")))
+                    {
+                        foreach (var pt in seg.Elements(df.GetName("trkpt")))
+                        {
+                            var p = new TrackRepository.TrackPoint
+                            {
+                                Lat = float.Parse(pt.Attribute("lat").Value, CultureInfo.InvariantCulture),
+                                Lon = float.Parse(pt.Attribute("lon").Value, CultureInfo.InvariantCulture),
+                                Elevation = float.Parse(pt.Element(df.GetName("ele")).Value, CultureInfo.InvariantCulture),
+                                PointTime = DateTime.Parse(pt.Element(df.GetName("time")).Value, CultureInfo.InvariantCulture),
+                            };
+                            points.Add(p);
+                            sb.Append(p.Lon.ToString(CultureInfo.InvariantCulture)).Append(" ").Append(p.Lat.ToString(CultureInfo.InvariantCulture)).Append(',');
+                        }
+                    }
+                    foreach (var pt in track.Elements(df.GetName("rtept")))
                     {
                         var p = new TrackRepository.TrackPoint
                         {
                             Lat = float.Parse(pt.Attribute("lat").Value, CultureInfo.InvariantCulture),
-                            Lon = float.Parse(pt.Attribute("lon").Value, CultureInfo.InvariantCulture),
-                            Elevation = float.Parse(pt.Element(df.GetName("ele")).Value, CultureInfo.InvariantCulture),
-                            PointTime = DateTime.Parse(pt.Element(df.GetName("time")).Value,  CultureInfo.InvariantCulture),
+                            Lon = float.Parse(pt.Attribute("lon").Value, CultureInfo.InvariantCulture)
                         };
                         points.Add(p);
                         sb.Append(p.Lon.ToString(CultureInfo.InvariantCulture)).Append(" ").Append(p.Lat.ToString(CultureInfo.InvariantCulture)).Append(',');
                     }
+
+                    //remove last ,
+                    sb.Remove(sb.Length - 1, 1);
+                    sb.Append(")"); ;
+
+
+                    var trackId = _trackRepository.CreateGpx(Context.CurrentUser().UserId, name, sb.ToString());
+                    _trackRepository.SetPoints(trackId, points.ToArray());
+                    yield return trackId;
                 }
-
-                //remove last ,
-                sb.Remove(sb.Length - 1, 1);
-                sb.Append(")"); ;
-                
-
-                var trackId = _trackRepository.CreateGpx(Context.CurrentUser().UserId, name, sb.ToString());
-                _trackRepository.SetPoints(trackId, points.ToArray());
-                return trackId;
             }
 
         }
