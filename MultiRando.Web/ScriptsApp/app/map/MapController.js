@@ -128,6 +128,9 @@
             _this.map.addListener('zoom_changed', _this.changeMapPos);
             _this.map.addListener('maptypeid_changed', _this.changeMapPos);
 
+
+            _this.map.mapTypes.set('carte', geoportailLayer("Carte IGN", 'mb3mp2757n4jqgzulticzcx2', "GEOGRAPHICALGRIDSYSTEMS.MAPS", { maxZoom: 18 }));
+
             _this.map.addListener('click', function (e) {
                 var a = { canceled: false, latLng : e.latLng, lat: e.latLng.lat(), lng: e.latLng.lng() }
                 _this.trigger("click.map", a);
@@ -173,14 +176,41 @@
 
 
         ep.messaging.read('MultiRando.Message.UserSettings.Queries.Get', {}, function (r) {
-            var mapOptions = { center: { lat: parseFloat(r.MapCenterLat) || 46.3240998, lng: parseFloat(r.MapCenterLong) || 2.5689203 }, zoom: parseFloat(r.MapZoom) || 15, mapTypeId: r.MapTypeId || google.maps.MapTypeId.SATELLITE };
+            var mapOptions = {
+                center: { lat: parseFloat(r.MapCenterLat) || 46.3240998, lng: parseFloat(r.MapCenterLong) || 2.5689203 },
+                zoom: parseFloat(r.MapZoom) || 15,
+                mapTypeId: r.MapTypeId || google.maps.MapTypeId.SATELLITE,
+                mapTypeControlOptions: { mapTypeIds: ['carte', google.maps.MapTypeId.SATELLITE, google.maps.MapTypeId.ROADMAP] },
+            };
             _this.initMap(mapOptions);
+
             initActivity = r.Activity;
             viewModel.currentActivity(r.Activity);
         });
 
 
         viewModel.activityFlags = _.filter(ep.toKeyValues(w.ActivityFlags), function (v) { return v.key != 'Private'; });
+    };
+
+    function geoportailLayer(name, key, layer, options) {
+        var l = new google.maps.ImageMapType
+        ({
+            getTileUrl: function (coord, zoom) {
+
+                return "http://wxs.ign.fr/" + key + "/geoportail/wmts?service=WMTS" +
+                    "&request=GetTile&version=1.0.0" +
+                    "&tilematrixset=PM&tilematrix=" + zoom + 
+                    "&tilecol=" + coord.x + "&tilerow=" + coord.y +
+                    "&layer=GEOGRAPHICALGRIDSYSTEMS.PLANIGN" +
+                    "&format=image/jpeg&style=normal";
+            },
+            tileSize: new google.maps.Size(256, 256),
+            name: name,
+            minZoom: (options.minZoom ? options.minZoom : 0),
+            maxZoom: (options.maxZoom ? options.maxZoom : 18)
+        });
+        l.attribution = ' &copy; <a href="http://www.ign.fr/">IGN-France</a>';
+        return l;
     };
 
     w.map.MapController.parsePolyLines = function (str) {

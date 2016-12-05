@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,12 +23,15 @@ namespace MultiRando.Web.Modules
         private readonly UserRepository _userRepository;
         private readonly IMailingService _mailingService;
         private readonly IResourcesTemplateService _resourcesTemplateService;
+        private readonly IExceptionLoggerService _exceptionLogger;
 
-        public AuthModule(UserRepository userRepository, IMailingService mailingService, IResourcesTemplateService resourcesTemplateService)
+        public AuthModule(UserRepository userRepository, IMailingService mailingService,
+            IResourcesTemplateService resourcesTemplateService, IExceptionLoggerService exceptionLogger)
         {
             _userRepository = userRepository;
             _mailingService = mailingService;
             _resourcesTemplateService = resourcesTemplateService;
+            _exceptionLogger = exceptionLogger;
             Get["/Auth/Login"] = x => View["Login"];
             Post["/Auth/Login"] = Login;
 
@@ -41,11 +45,33 @@ namespace MultiRando.Web.Modules
 
         dynamic Register(dynamic x)
         {
-            if (_userRepository.EmailExists(Request.Form.email))
+            var email = Request.Form.email;
+            if (_userRepository.EmailExists(email))
                 return View["Login", new { IsRegister = true, RegisterErrorResMessage = "Res.Register.Messages.EmailExists" }];
 
             var hash = PasswordHash.CreateHash(Request.Form.password);
-            Guid userId = _userRepository.CreateUser(Request.Form.email, Request.Form.displayName, hash);
+            Guid userId = _userRepository.CreateUser(email, Request.Form.displayName, hash);
+
+
+            try
+            {
+                var adminEmail = ConfigurationManager.AppSettings["multiRando:adminEmail"];
+                var p = new MailParam
+                {
+                    Subject = _resourcesTemplateService.GetRes("Res.Mail.NewUserAlert.Subject"),
+                    ContentText = _resourcesTemplateService.GetRes("Res.Mail.NewUserAlert.ContentText", new
+                    {
+                        Email = email,
+                        DisplayName = Request.Form.displayName
+                    })
+                };
+                _mailingService.Send(p, adminEmail);
+            }
+            catch (Exception ex)
+            {
+                _exceptionLogger.Log(ex);
+            }
+
             return this.LoginAndRedirect(userId, fallbackRedirectUrl: FallbackRedirectUrl);
 
         }

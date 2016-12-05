@@ -36,7 +36,7 @@
                     var pos = new google.maps.LatLng(r.Lat, r.Lon);
                     _this.marker.setPosition(pos);
                     //if (mapCtrl.pointDistance(mapCtrl.map.getCenter(), pos) > 0.02)
-                    mapCtrl.map.setCenter(pos);
+                    //mapCtrl.map.setCenter(pos);
                     fetching = false;
                 });
             }

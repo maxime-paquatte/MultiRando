@@ -45,8 +45,14 @@ namespace MultiRando.Web.Core.Services
      
                 using (var wc = new WebClient())
                 {
-                    wc.Headers.Add("Referer", "http://localhost");
-                    wc.DownloadFile(url, filePath);
+                    try
+                    {
+                        wc.DownloadFile(url, filePath);
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new Exception("Unable to download: " + url, ex);
+                    }
                 }
             }
             return filePath;
