@@ -44,6 +44,7 @@
                 <span data-bind="text: Name"></span>
                 <span href="#" class="visible-on-parent-over" style="cursor: pointer" title="@Res("Res.Std.Delete")" data-bind="click: $parent.deleteTrack, clickBubble : false"><i class="fa fa-times"></i></span>
                 <span href="#" class="visible-on-parent-over" style="cursor: pointer" title="@Res("Res.Std.Rename")" data-bind="click: rename, clickBubble : false"><i class="fa fa-pencil"></i></span>
+                <a href="#" class="visible-on-parent-over" target="_blank" title="@Res("Res.Page.Map.Track.OpenExternal")" data-bind="attr: { href : '/Track?TrackId=' + TrackId() }"><i class="fa fa-external-link"></i></a>
             </td>
             <td style="text-align: center">
                 <span class="badge pull-right" data-bind="text: (TrackLength() / 1000).toFixed(2) + 'km'"></span>

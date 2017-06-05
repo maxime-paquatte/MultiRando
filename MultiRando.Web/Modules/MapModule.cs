@@ -144,6 +144,7 @@ namespace MultiRando.Web.Modules
         private dynamic DownloadRt2(dynamic _)
         {
             var pts = _routeRepository.RoutesPoints((int)_.id);
+            var route = _routeRepository.ById((int) _.id);
 
             string date = DateTime.Now.ToString("dd-MM-yyyy hh:mm:ss");
             
@@ -158,7 +159,7 @@ namespace MultiRando.Web.Modules
                 sb.Append("W,RW").Append(lineNumber.ToString().PadLeft(3,'0')).Append(",")
                     .Append(pt.Lat.ToString(CultureInfo.InvariantCulture).PadLeft(20,' '))
                     .Append(",").Append(pt.Lon.ToString(CultureInfo.InvariantCulture).PadLeft(20, ' '))
-                    .AppendLine(",0");
+                    .AppendLine(",1");
             }
             
             var tmpPath = _cfg.AppPath + @"..\Private\Routes\";
@@ -167,7 +168,8 @@ namespace MultiRando.Web.Modules
 
             File.AppendAllText(filePath, sb.ToString());
             
-            return Response.AsFile(filePath);
+            return Response.AsFile(filePath)
+                .WithHeader("Content-Disposition", $"inline; filename=\"{route.Name}.rt2\"");
         }
     }
 }

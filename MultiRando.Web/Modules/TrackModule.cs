@@ -15,7 +15,7 @@ namespace MultiRando.Web.Modules
 
         public TrackModule(Config cfg)
         {
-            Get["/Track/{id}"] = _ => View["Index", _.id];
+            Get["/Track"] = _ => View["Index"];
         }
     }
 }

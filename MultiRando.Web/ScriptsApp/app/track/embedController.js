@@ -41,7 +41,7 @@
             var polyline = new google.maps.Polyline({
                 path: points,
                 geodesic: true,
-                strokeColor: w.map.MapController.constants.ColorSegmentDefault,
+                strokeColor: 'red',
                 strokeWeight: w.map.MapController.constants.StrokeWeightSegmentDefault,
                 strokeOpacity: 1.0,
                 editable: false

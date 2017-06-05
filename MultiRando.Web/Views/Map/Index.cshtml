@@ -7,7 +7,7 @@
 <div class="container-fluid" data-bind="inject : map.MapController">
     <div class="map-page" data-bind="with: Map">
 
-        <div class="col-left" data-bind=" style : { height : pageHeight() + 'px' }">
+        <div class="col-left">
 
             <!-- Nav tabs -->
             <ul class="nav nav-tabs" role="tablist">
@@ -17,7 +17,7 @@
             </ul>
 
             <!-- Tab panes -->
-            <div class="tab-content" style="overflow-y: scroll; overflow-x: hidden; padding-right: 10px" data-bind="event : { dragover: dragInOut, dragleave: dragInOut }">
+            <div class="tab-content" style="overflow-y: scroll; overflow-x: hidden; padding-right: 10px" data-bind="event : { dragover: dragInOut, dragleave: dragInOut }, style : { height : (pageHeight() - 50) + 'px' }">
                 <div role="tabpanel" class="tab-pane active" id="Route">
                     @Html.Partial("Views/Map/_Routes")
                 </div>
