@@ -27,6 +27,8 @@
                           data-bind="click: rename, clickBubble : false"><i class="fa fa-pencil"></i></span>
                     <span href="#" class="visible-on-parent-over" style="cursor: pointer" title="@Res("Res.Std.Locate")"
                           data-bind="click: showStart, clickBubble : false"><i class="fa fa-location-arrow"></i></span>
+                    <a href="#" class="visible-on-parent-over" style="cursor: pointer" title="@Res(" Res.Std.DownloadRT2")"
+                          data-bind="attr:{ href: '/Map/Route/DownloadRt2/' + RouteId() }, click: function(){}, clickBubble : false"><i class="fa fa-download"></i></a>
                 </h4>
             </div>
             <div class="panel-collapse collapse in" role="tabpanel" data-bind="css : { 'in':  isSelected }">

@@ -109,10 +109,12 @@ namespace MultiRando.Web.Modules
                             var p = new TrackRepository.TrackPoint
                             {
                                 Lat = float.Parse(pt.Attribute("lat").Value, CultureInfo.InvariantCulture),
-                                Lon = float.Parse(pt.Attribute("lon").Value, CultureInfo.InvariantCulture),
-                                Elevation = float.Parse(pt.Element(df.GetName("ele")).Value, CultureInfo.InvariantCulture),
-                                PointTime = DateTime.Parse(pt.Element(df.GetName("time")).Value, CultureInfo.InvariantCulture),
+                                Lon = float.Parse(pt.Attribute("lon").Value, CultureInfo.InvariantCulture)
                             };
+                            if (pt.Element(df.GetName("ele")) != null)
+                                p.Elevation = float.Parse(pt.Element(df.GetName("ele")).Value, CultureInfo.InvariantCulture);
+                            if (pt.Element(df.GetName("time")) != null)
+                                p.PointTime = DateTime.Parse(pt.Element(df.GetName("time")).Value, CultureInfo.InvariantCulture);
                             points.Add(p);
                             sb.Append(p.Lon.ToString(CultureInfo.InvariantCulture)).Append(" ").Append(p.Lat.ToString(CultureInfo.InvariantCulture)).Append(',');
                         }
@@ -160,6 +162,7 @@ namespace MultiRando.Web.Modules
                     .Append(pt.Lat.ToString(CultureInfo.InvariantCulture).PadLeft(20,' '))
                     .Append(",").Append(pt.Lon.ToString(CultureInfo.InvariantCulture).PadLeft(20, ' '))
                     .AppendLine(",1");
+                lineNumber++;
             }
             
             var tmpPath = _cfg.AppPath + @"..\Private\Routes\";

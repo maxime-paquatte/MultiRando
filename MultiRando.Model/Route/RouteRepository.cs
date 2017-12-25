@@ -24,6 +24,12 @@ namespace MultiRando.Model.Route
             return db.Query<Route>(@"select v.* from MR.vRoute v inner join MR.tRoute r on r.RouteId = v.RouteId where v.CreatorUserId = @0 and r.timestamp > @1", userId, ts);
         }
 
+        public Route ById(int routeId)
+        {
+            var db = new Database(_config.ConnectionString, "System.Data.SqlClient");
+            return db.SingleOrDefault<Route>(@"select * from MR.vRoute  where RouteId= @0", routeId);
+        }
+
         public IEnumerable<Point> RoutesPoints(int routeId)
         {
 
